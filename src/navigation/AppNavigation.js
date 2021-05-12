@@ -4,6 +4,7 @@ import {createStackNavigator} from '@react-navigation/stack';
 import Colors from '../constants/Colors';
 
 import UserMixesScreen from '../screens/mix/UserMixesScreen';
+import CreateMixScreen from '../screens/mix/CreateMixScreen';
 
 function AppNavigator() {
   const Stack = createStackNavigator();
@@ -16,6 +17,7 @@ function AppNavigator() {
         headerTintColor: Platform.OS == 'android' ? 'white' : Colors.primary,
       }}>
       <Stack.Screen name="UserMixesScreen" component={UserMixesScreen} />
+      <Stack.Screen name="CreateMixScreen" component={CreateMixScreen} />
     </Stack.Navigator>
   );
 }

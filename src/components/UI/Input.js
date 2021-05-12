@@ -11,6 +11,7 @@ const INPUT_CLEAR = 'INPUT_CLEAR';
 const inputReducer = (state, action) => {
   switch (action.type) {
     case INPUT_CHANGE:
+      console.log('INPUT CHANGE');
       return {
         ...state,
         value: action.value,
@@ -48,7 +49,7 @@ const Input = props => {
   }, [onInputChange, clearAfterSubmit]);
 
   useEffect(() => {
-    if (inputState.touched) {
+    if (inputState.touched || inputState.value) {
       onInputChange(id, inputState.value, inputState.isValid);
     }
   }, [inputState, onInputChange, id]);
@@ -80,7 +81,6 @@ const Input = props => {
   };
   return (
     <View style={styles.inputContainer}>
-      {/* <Text style={styles.label}>{props.label}</Text> */}
       <TextInput
         {...props}
         placeholderTextColor={Colors.textPlaceholder}
