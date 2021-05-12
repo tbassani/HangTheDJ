@@ -83,6 +83,7 @@ const Input = props => {
       {/* <Text style={styles.label}>{props.label}</Text> */}
       <TextInput
         {...props}
+        placeholderTextColor={Colors.textPlaceholder}
         style={styles.input}
         value={inputState.value}
         onChangeText={text => {
@@ -102,6 +103,7 @@ const Input = props => {
 const styles = StyleSheet.create({
   inputContainer: {
     width: '100%',
+    margin: Sizes.tiny,
   },
   label: {
     fontWeight: 'bold',
@@ -110,16 +112,19 @@ const styles = StyleSheet.create({
   input: {
     paddingHorizontal: '1%',
     paddingVertical: '2%',
-    borderBottomWidth: 2,
     backgroundColor: Colors.light,
+    borderRadius: Sizes.large,
+    fontSize: Sizes.medium,
+    textAlign: 'center',
+    color: Colors.textDefault,
   },
   errorContainer: {
     marginVertical: '2%',
   },
   errorText: {
-    fontFamily: 'open-sans',
-    color: 'red',
-    fontSize: Sizes.small,
+    color: Colors.highlight,
+    fontSize: Sizes.medium,
+    textAlign: 'center',
   },
 });
 

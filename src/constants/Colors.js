@@ -5,6 +5,7 @@ export default {
   secondery: '#791CD6',
   textDefault: '#FFF',
   textAlt: '#CCC',
-  dark: '#333',
+  textPlaceholder: '#333',
+  dark: '#222',
   light: '#555',
 };
