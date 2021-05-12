@@ -104,6 +104,7 @@ const styles = StyleSheet.create({
   inputContainer: {
     width: '100%',
     margin: Sizes.tiny,
+    height: Sizes.max + Sizes.medium,
   },
   label: {
     fontWeight: 'bold',

@@ -1,53 +1,16 @@
 import React, {useState, useEffect, useReducer, useCallback} from 'react';
-import {
-  SafeAreaView,
-  View,
-  Platform,
-  Button,
-  ScrollView,
-  KeyboardAvoidingView,
-  ActivityIndicator,
-  StyleSheet,
-  Alert,
-} from 'react-native';
+import {SafeAreaView, View, StyleSheet} from 'react-native';
 
 import Input from '../../components/UI/Input';
 import PrimaryButton from '../../components/UI/PrimaryButton';
+import TextLink from '../../components/UI/TextLink';
 
 import Colors from '../../constants/Colors';
 
 const INPUT_UPDATE = 'UPDATE';
 const CLEAR_FORM = 'CLEAR_FORM';
 
-const formReducer = (state, action) => {
-  if (action.type === INPUT_UPDATE) {
-    const updatedValues = {
-      ...state.inputValues,
-      [action.input]: action.value,
-    };
-    const updatedValidities = {
-      ...state.inputValidities,
-      [action.input]: action.isValid,
-    };
-    let updatedFormIsValid = true;
-    for (const key in updatedValidities) {
-      updatedFormIsValid = updatedFormIsValid && updatedValidities[key];
-    }
-    return {
-      formIsValid: updatedFormIsValid,
-      inputValues: updatedValues,
-      inputValidities: updatedValidities,
-    };
-  }
-  if (action.type === CLEAR_FORM) {
-    return {
-      formIsValid: action.formIsValid,
-      inputValues: {...action.inputValues},
-      inputValidities: {...action.inputValidities},
-    };
-  }
-  return state;
-};
+import formReducer from '../../shared/formReducer';
 
 const LoginScreen = props => {
   const [clear, setClear] = useState(false);
@@ -85,6 +48,26 @@ const LoginScreen = props => {
     [formDispatch],
   );
 
+  const clearInpuHandler = useCallback(() => {
+    formDispatch({
+      type: CLEAR_FORM,
+      inputValues: {
+        email: '',
+        password: '',
+      },
+      inputValidities: {
+        email: false,
+        password: false,
+      },
+      formIsValid: false,
+    });
+    setClear(true);
+  }, [formDispatch]);
+
+  const loginHandler = () => {
+    clearInpuHandler();
+  };
+
   return (
     <SafeAreaView style={styles.outterContainer}>
       <View style={styles.mainContainer}>
@@ -111,7 +94,17 @@ const LoginScreen = props => {
           initialValue=""
           clearAfterSubmit={clear}
         />
-        <PrimaryButton>Entrar</PrimaryButton>
+        <PrimaryButton onPress={loginHandler}>Entrar</PrimaryButton>
+        <TextLink
+          onPress={() => navigation.navigate('SignUpScreen')}
+          style={styles.textLink}>
+          Não é um DJ? Cadastre-se!
+        </TextLink>
+        <TextLink
+          onPress={() => navigation.navigate('ForgotPasswordScreen')}
+          style={styles.textLink}>
+          Esqueci minha senha
+        </TextLink>
       </View>
     </SafeAreaView>
   );
