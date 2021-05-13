@@ -13,81 +13,71 @@ export async function loginService(email, password) {
     jwt: '',
     login_user: null,
   };
-  await axios({
-    method: 'POST',
-    url: APIConfig.LOGIN_URL,
-    data: body,
-  })
-    .then(response => {
-      data = response.data;
-    })
-    .catch(error => {
-      console.log(error.response.data.error);
-      Alert.alert('Erro', error.response.data.error);
-      return;
+  try {
+    const response = await axios({
+      method: 'POST',
+      url: APIConfig.LOGIN_URL,
+      data: body,
     });
-  return data;
+    return response.data;
+  } catch (error) {
+    console.log(error.response.data.error);
+    Alert.alert('Erro', error.response.data.error);
+    return undefined;
+  }
 }
 
 export async function signUpService(email) {
   const body = {
     email,
   };
-  var data;
-  await axios({
-    method: 'POST',
-    url: APIConfig.SIGNUP_URL,
-    data: body,
-  })
-    .then(response => {
-      data = response.data;
-    })
-    .catch(error => {
-      console.log(error);
-      Alert.alert('Erro', error.response.data.error);
+  try {
+    const response = await axios({
+      method: 'POST',
+      url: APIConfig.SIGNUP_URL,
+      data: body,
     });
-  return data;
+    return response;
+  } catch (error) {
+    console.log(error);
+    Alert.alert('Erro', error.response.data.error);
+    return undefined;
+  }
 }
 
 export async function forgotPasswordService(email) {
   const body = {
     email,
   };
-  var data;
-  await axios({
-    method: 'POST',
-    url: APIConfig.FORGOT_PASSWORD_URL,
-    data: body,
-  })
-    .then(response => {
-      data = response.data;
-    })
-    .catch(error => {
-      console.log(error);
-      Alert.alert('Erro', error.response.data.error);
+
+  try {
+    const response = await axios({
+      method: 'POST',
+      url: APIConfig.FORGOT_PASSWORD_URL,
+      data: body,
     });
-  return data;
+    return response;
+  } catch (error) {
+    console.log(error);
+    Alert.alert('Erro', error.response.data.error);
+    return undefined;
+  }
 }
 
 export async function registerService(email, password, code) {
   const body = {email, password, code};
-  var data = {
-    jwt: '',
-    register_user: null,
-  };
-  await axios({
-    method: 'POST',
-    url: APIConfig.REGISTER_URL,
-    data: body,
-  })
-    .then(response => {
-      data = response.data;
-    })
-    .catch(error => {
-      console.log(error);
-      Alert.alert('Erro', error.response.data.error);
+  try {
+    const response = await axios({
+      method: 'POST',
+      url: APIConfig.REGISTER_URL,
+      data: body,
     });
-  return data;
+    return response.data;
+  } catch (error) {
+    console.log(error);
+    Alert.alert('Erro', error.response.data.error);
+    return undefined;
+  }
 }
 
 export async function resetPasswordService(email, old_password, new_password) {

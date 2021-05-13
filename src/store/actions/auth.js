@@ -14,18 +14,17 @@ export const login = user => {
   };
 };
 
-export const initSignUp = (email, password) => {
+export const initSignUp = email => {
   return {
     type: actionTypes.INIT_SIGNUP,
     email: email,
-    password: password,
   };
 };
 
-export const signUp = user => {
+export const signUp = email => {
   return {
     type: actionTypes.SIGNUP,
-    user: user,
+    email: email,
   };
 };
 
@@ -84,9 +83,8 @@ export const initForgotPassword = email => {
   };
 };
 
-export const forgotPassword = email => {
+export const forgotPassword = () => {
   return {
     type: actionTypes.FORGOT_PASSWORD,
-    email: email,
   };
 };

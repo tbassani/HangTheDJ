@@ -1,6 +1,9 @@
 import React, {useState, useEffect, useReducer, useCallback} from 'react';
 import {SafeAreaView, View, StyleSheet} from 'react-native';
 
+import {useSelector, useDispatch} from 'react-redux';
+import * as actions from '../../store/actions';
+
 import Input from '../../components/UI/Input';
 import PrimaryButton from '../../components/UI/PrimaryButton';
 import TextLink from '../../components/UI/TextLink';
@@ -15,14 +18,14 @@ const CLEAR_FORM = 'CLEAR_FORM';
 const SignUpScreen = props => {
   const [clear, setClear] = useState(false);
 
+  const dispatch = useDispatch();
+
   const [formState, formDispatch] = useReducer(formReducer, {
     inputValues: {
       email: '',
-      password: '',
     },
     inputValidities: {
       email: false,
-      password: false,
     },
     formIsValid: false,
   });
@@ -37,7 +40,6 @@ const SignUpScreen = props => {
 
   const inputChangeHandler = useCallback(
     (inputId, inputValue, inputValidity) => {
-      setClear(false);
       formDispatch({
         type: INPUT_UPDATE,
         value: inputValue,
@@ -48,8 +50,26 @@ const SignUpScreen = props => {
     [formDispatch],
   );
 
+  const clearInpuHandler = useCallback(() => {
+    formDispatch({
+      type: CLEAR_FORM,
+      inputValues: {
+        email: '',
+      },
+      inputValidities: {
+        email: false,
+      },
+      formIsValid: false,
+    });
+    setClear(true);
+  }, [formDispatch]);
+
   const signUpHandler = () => {
-    navigation.navigate('RegisterScreen');
+    if (formState.inputValues.email && formState.formIsValid) {
+      dispatch(actions.initSignUp(formState.inputValues.email));
+      navigation.navigate('RegisterScreen');
+      clearInpuHandler();
+    }
   };
   return (
     <SafeAreaView style={styles.outterContainer}>
@@ -67,9 +87,7 @@ const SignUpScreen = props => {
           clearAfterSubmit={clear}
         />
         <PrimaryButton onPress={signUpHandler}>Enviar Código</PrimaryButton>
-        <TextLink
-          onPress={() => navigation.navigate('LoginScreen')}
-          style={styles.textLink}>
+        <TextLink onPress={() => navigation.navigate('LoginScreen')}>
           Já possui uma conta?
         </TextLink>
       </View>

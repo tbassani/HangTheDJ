@@ -15,13 +15,13 @@ import {
   removeDataToStorage,
   getdataFromStorage,
 } from '../../services/storage';
+import {Alert} from 'react-native';
 
 export function* initLoginSaga(action) {
   yield put(actions.startAuth());
   const response = yield loginService(action.email, action.password);
-  console.log(response);
   let user;
-  if (response) {
+  if (response.login_user) {
     user = {
       token: response.jwt,
       userId: response.login_user.id,
@@ -38,30 +38,57 @@ export function* initLoginSaga(action) {
 
 export function* initSignUpSaga(action) {
   yield put(actions.startAuth());
-  const response = yield signUpUser(action.email, action.password);
-  let user = {};
+  const response = yield signUpService(action.email);
   if (response) {
-    user = {...response.data};
-  }
-  if (user.email) {
-    const expirationDate = new Date(
-      new Date().getTime() + parseInt(user.expiresIn) * 1000,
+    Alert.alert(
+      'Sign up',
+      'Um código de verificação foi enviado para o seu email.',
     );
-    yield saveDataToStorage(user.localId, user.idToken, expirationDate);
-    yield put(actions.authenticate(user.localId, user.idToken));
+    yield put(actions.signUp(action.email));
   } else {
     yield put(actions.authFail());
   }
 }
 
-export function* initRegisterSaga(action) {}
+export function* initRegisterSaga(action) {
+  yield put(actions.startAuth());
+  const response = yield registerService(
+    action.email,
+    action.password,
+    action.code,
+  );
+  if (response) {
+    Alert.alert('SUCCESS', 'CADASTRADO!');
+    yield put(
+      actions.register({
+        token: response.jwt,
+        email: response.register_user.email,
+        userId: response.register_user.id,
+      }),
+    );
+  } else {
+    yield put(actions.authFail());
+  }
+}
 
 export function* initLogoutSaga(action) {
   yield put(actions.startAuth());
-  yield removeDataToStorage();
+  yield removeDataToStorage('token');
+  yield removeDataToStorage('userId');
+  yield removeDataToStorage('email');
   yield put(actions.logout());
 }
 
-export function* initForgotPasswordSaga(action) {}
+export function* initForgotPasswordSaga(action) {
+  yield put(actions.startAuth());
+  const response = yield forgotPasswordService(action.email);
+  if (response) {
+    yield Alert.alert(
+      'Recuperar Senha',
+      'Uma nova senha foi enviada para o seu email',
+    );
+    yield put(actions.forgotPassword());
+  }
+}
 
 export function* initResetPasswordSaga(action) {}

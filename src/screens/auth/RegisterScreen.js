@@ -1,6 +1,9 @@
 import React, {useState, useEffect, useReducer, useCallback} from 'react';
 import {SafeAreaView, View, Alert, StyleSheet} from 'react-native';
 
+import {useSelector, useDispatch} from 'react-redux';
+import * as actions from '../../store/actions';
+
 import Input from '../../components/UI/Input';
 import PrimaryButton from '../../components/UI/PrimaryButton';
 import TextLink from '../../components/UI/TextLink';
@@ -13,16 +16,20 @@ const CLEAR_FORM = 'CLEAR_FORM';
 import formReducer from '../../shared/formReducer';
 
 const RegisterScreen = props => {
-  const [clear, setClear] = useState(false);
+  const email = useSelector(currState => {
+    return currState.auth.email;
+  });
+
+  const dispatch = useDispatch();
 
   const [formState, formDispatch] = useReducer(formReducer, {
     inputValues: {
-      email: '',
+      code: '',
       password: '',
       confirmPassword: '',
     },
     inputValidities: {
-      email: false,
+      code: false,
       password: false,
       confirmPassword: false,
     },
@@ -39,7 +46,6 @@ const RegisterScreen = props => {
 
   const inputChangeHandler = useCallback(
     (inputId, inputValue, inputValidity) => {
-      setClear(false);
       formDispatch({
         type: INPUT_UPDATE,
         value: inputValue,
@@ -50,31 +56,21 @@ const RegisterScreen = props => {
     [formDispatch],
   );
 
-  const clearInpuHandler = useCallback(() => {
-    formDispatch({
-      type: CLEAR_FORM,
-      inputValues: {
-        email: '',
-        password: '',
-        confirmPassword: '',
-      },
-      inputValidities: {
-        email: false,
-        password: false,
-        confirmPassword: false,
-      },
-      formIsValid: false,
-    });
-    setClear(true);
-  }, [formDispatch]);
-
   const registerHandler = () => {
     const password = formState.inputValues.password;
     const confirmPassword = formState.inputValues.confirmPassword;
     if (password !== confirmPassword) {
       Alert.alert('Erro', 'As senhas não são iguais!');
     } else {
-      clearInpuHandler();
+      if (email) {
+        dispatch(
+          actions.initRegister(
+            formState.inputValues.code,
+            email,
+            formState.inputValues.password,
+          ),
+        );
+      }
     }
   };
 
@@ -90,7 +86,6 @@ const RegisterScreen = props => {
           errorText="Por favor, insira o código."
           onInputChange={inputChangeHandler}
           initialValue=""
-          clearAfterSubmit={clear}
         />
         <Input
           id="password"
@@ -101,7 +96,6 @@ const RegisterScreen = props => {
           errorText="Por favor, insira uma senha válida."
           onInputChange={inputChangeHandler}
           initialValue=""
-          clearAfterSubmit={clear}
         />
         <Input
           id="confirmPassword"
@@ -112,12 +106,9 @@ const RegisterScreen = props => {
           errorText="Por favor, insira uma senha válida."
           onInputChange={inputChangeHandler}
           initialValue=""
-          clearAfterSubmit={clear}
         />
         <PrimaryButton onPress={registerHandler}>Cadastrar</PrimaryButton>
-        <TextLink
-          onPress={() => navigation.navigate('LoginScreen')}
-          style={styles.textLink}>
+        <TextLink onPress={() => navigation.navigate('LoginScreen')}>
           Voltar para Login
         </TextLink>
       </View>

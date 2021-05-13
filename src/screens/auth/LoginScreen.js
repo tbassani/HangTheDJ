@@ -1,13 +1,13 @@
 import React, {useState, useEffect, useReducer, useCallback} from 'react';
 import {SafeAreaView, View, StyleSheet, Alert} from 'react-native';
 
+import {useSelector, useDispatch} from 'react-redux';
+import * as actions from '../../store/actions';
+
 import Input from '../../components/UI/Input';
 import PrimaryButton from '../../components/UI/PrimaryButton';
 import TextLink from '../../components/UI/TextLink';
 import LoadingSpinner from '../../components/UI/LoadingSpinner';
-
-import {useSelector, useDispatch} from 'react-redux';
-import * as actions from '../../store/actions';
 
 import Colors from '../../constants/Colors';
 
@@ -50,7 +50,6 @@ const LoginScreen = props => {
 
   const inputChangeHandler = useCallback(
     (inputId, inputValue, inputValidity) => {
-      console.log(inputId + ': ' + inputValue);
       formDispatch({
         type: INPUT_UPDATE,
         value: inputValue,
@@ -77,7 +76,6 @@ const LoginScreen = props => {
   }, [formDispatch]);
 
   const loginHandler = () => {
-    console.log(formState);
     if (formState.formIsValid) {
       dispatch(
         actions.initLogin(
@@ -107,7 +105,6 @@ const LoginScreen = props => {
           errorText="Por favor, insira uma Email válido."
           onInputChange={inputChangeHandler}
           initialValue=""
-          // clearAfterSubmit={clear}
         />
         <Input
           id="password"
@@ -118,13 +115,14 @@ const LoginScreen = props => {
           errorText="Por favor, insira uma senha válida."
           onInputChange={inputChangeHandler}
           initialValue=""
-          // clearAfterSubmit={clear}
         />
         <PrimaryButton onPress={loginHandler}>Entrar</PrimaryButton>
         <TextLink onPress={() => navigation.navigate('SignUpScreen')}>
           Não é um DJ? Cadastre-se!
         </TextLink>
-        <TextLink>Esqueci minha senha</TextLink>
+        <TextLink onPress={() => navigation.navigate('ForgotPasswordScreen')}>
+          Esqueci minha senha
+        </TextLink>
       </View>
     </SafeAreaView>
   );

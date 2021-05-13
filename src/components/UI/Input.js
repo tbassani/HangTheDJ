@@ -11,7 +11,6 @@ const INPUT_CLEAR = 'INPUT_CLEAR';
 const inputReducer = (state, action) => {
   switch (action.type) {
     case INPUT_CHANGE:
-      console.log('INPUT CHANGE');
       return {
         ...state,
         value: action.value,

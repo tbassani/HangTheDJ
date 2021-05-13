@@ -5,24 +5,24 @@ import Input from '../../components/UI/Input';
 import PrimaryButton from '../../components/UI/PrimaryButton';
 import TextLink from '../../components/UI/TextLink';
 
+import {useSelector, useDispatch} from 'react-redux';
+import * as actions from '../../store/actions';
+
 import formReducer from '../../shared/formReducer';
 
 import Colors from '../../constants/Colors';
 
 const INPUT_UPDATE = 'UPDATE';
-const CLEAR_FORM = 'CLEAR_FORM';
 
 const ForgotPasswordScreen = props => {
-  const [clear, setClear] = useState(false);
+  const dispatch = useDispatch();
 
   const [formState, formDispatch] = useReducer(formReducer, {
     inputValues: {
       email: '',
-      password: '',
     },
     inputValidities: {
       email: false,
-      password: false,
     },
     formIsValid: false,
   });
@@ -37,7 +37,6 @@ const ForgotPasswordScreen = props => {
 
   const inputChangeHandler = useCallback(
     (inputId, inputValue, inputValidity) => {
-      setClear(false);
       formDispatch({
         type: INPUT_UPDATE,
         value: inputValue,
@@ -47,6 +46,14 @@ const ForgotPasswordScreen = props => {
     },
     [formDispatch],
   );
+
+  const forgotPasswordHandler = () => {
+    if (formState.inputValues.email && formState.formIsValid) {
+      dispatch(actions.initForgotPassword(formState.inputValues.email));
+      navigation.navigate('LoginScreen');
+    }
+  };
+
   return (
     <SafeAreaView style={styles.outterContainer}>
       <View style={styles.mainContainer}>
@@ -60,12 +67,11 @@ const ForgotPasswordScreen = props => {
           errorText="Por favor, insira uma Email válido."
           onInputChange={inputChangeHandler}
           initialValue=""
-          clearAfterSubmit={clear}
         />
-        <PrimaryButton>Enviar Email</PrimaryButton>
-        <TextLink
-          onPress={() => navigation.navigate('LoginScreen')}
-          style={styles.textLink}>
+        <PrimaryButton onPress={forgotPasswordHandler}>
+          Enviar Email
+        </PrimaryButton>
+        <TextLink onPress={() => navigation.navigate('LoginScreen')}>
           Voltar
         </TextLink>
       </View>

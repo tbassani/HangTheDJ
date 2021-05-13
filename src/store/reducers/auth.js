@@ -30,10 +30,16 @@ const reducer = (state = initialState, action) => {
     case actionTypes.SIGNUP:
       return {
         ...state,
-        userId: action.user.localId,
-        isLoggedIn: true,
-        token: action.user.token,
-        email: action.user.email,
+        email: action.email,
+        loading: false,
+        error: false,
+      };
+    case actionTypes.REGISTER:
+      return {
+        ...state,
+        email: action.email,
+        token: action.token,
+        userId: action.userId,
         loading: false,
         error: false,
       };
@@ -54,6 +60,16 @@ const reducer = (state = initialState, action) => {
         error: false,
       };
     case actionTypes.LOGOUT:
+      return {
+        ...state,
+        userId: '',
+        isLoggedIn: false,
+        token: '',
+        email: '',
+        loading: false,
+        error: false,
+      };
+    case actionTypes.FORGOT_PASSWORD:
       return {
         ...state,
         userId: '',
