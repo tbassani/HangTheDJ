@@ -40,12 +40,14 @@ const reducer = (state = initialState, action) => {
         email: action.email,
         token: action.token,
         userId: action.userId,
+        isLoggedIn: true,
         loading: false,
         error: false,
       };
     case actionTypes.AUTH_FAIL:
       return {
         ...state,
+        isLoggedIn: false,
         loading: false,
         error: true,
       };
@@ -55,7 +57,7 @@ const reducer = (state = initialState, action) => {
         userId: action.userId,
         isLoggedIn: true,
         token: action.token,
-        email: action.user.email,
+        email: action.email,
         loading: false,
         error: false,
       };

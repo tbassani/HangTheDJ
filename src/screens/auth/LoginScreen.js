@@ -17,14 +17,12 @@ const CLEAR_FORM = 'CLEAR_FORM';
 import formReducer from '../../shared/formReducer';
 
 const LoginScreen = props => {
-  const [clear, setClear] = useState(false);
-
   const loading = useSelector(currState => {
     return currState.auth.loading;
   });
-  const error = useSelector(currState => {
-    return currState.auth.error;
-  });
+  // const error = useSelector(currState => {
+  //   return currState.auth.error;
+  // });
 
   const dispatch = useDispatch();
 
@@ -60,21 +58,6 @@ const LoginScreen = props => {
     [formDispatch],
   );
 
-  const clearInpuHandler = useCallback(() => {
-    formDispatch({
-      type: CLEAR_FORM,
-      inputValues: {
-        email: '',
-        password: '',
-      },
-      inputValidities: {
-        email: false,
-        password: false,
-      },
-      formIsValid: false,
-    });
-  }, [formDispatch]);
-
   const loginHandler = () => {
     if (formState.formIsValid) {
       dispatch(
@@ -83,7 +66,7 @@ const LoginScreen = props => {
           formState.inputValues.password,
         ),
       );
-      //clearInpuHandler();
+      //navigation.navigate('App');
     } else {
       Alert.alert('Erro', 'Por favor, revise seus dados.');
     }

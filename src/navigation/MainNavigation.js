@@ -1,26 +1,31 @@
 import React from 'react';
 import {useSelector, useDispatch} from 'react-redux';
 
-//import {Platform, SafeAreaView, View, Button} from 'react-native';
 import {createStackNavigator} from '@react-navigation/stack';
 import {NavigationContainer} from '@react-navigation/native';
 
 import AuthNavigator from './AuthNavigation';
 import AppNavigator from './AppNavigation';
 
-import LoginScreen from '../screens/auth/LoginScreen';
+import AuthScreen from '../screens/auth/AuthScreen';
 
 const MainNavigator = () => {
+  const isLoggedIn = useSelector(currState => {
+    return currState.auth.isLoggedIn;
+  });
+
   const Stack = createStackNavigator();
 
-  const isLoggedIn = false;
   return (
     <NavigationContainer>
       <Stack.Navigator
         screenOptions={{
           headerShown: false,
+          tabBarLabel: () => {
+            return null;
+          },
         }}>
-        {/* <Stack.Screen name="Start" component={StartScreen} /> */}
+        <Stack.Screen name="AuthScreen" component={AuthScreen} />
         {isLoggedIn ? (
           <Stack.Screen name="App" component={AppNavigator} />
         ) : (

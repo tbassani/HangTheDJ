@@ -57,11 +57,12 @@ export const authFail = () => {
   };
 };
 
-export const authenticate = (userId, token) => {
+export const authenticate = (userId, token, email) => {
   return {
     type: actionTypes.AUTHENTICATE,
     userId: userId,
     token: token,
+    email: email,
   };
 };
 export const initLogout = () => {

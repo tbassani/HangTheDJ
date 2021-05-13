@@ -58,7 +58,6 @@ export function* initRegisterSaga(action) {
     action.code,
   );
   if (response) {
-    Alert.alert('SUCCESS', 'CADASTRADO!');
     yield put(
       actions.register({
         token: response.jwt,
@@ -66,6 +65,9 @@ export function* initRegisterSaga(action) {
         userId: response.register_user.id,
       }),
     );
+    yield saveDataToStorage('token', response.jwt);
+    yield saveDataToStorage('email', response.register_user.email);
+    yield saveDataToStorage('userId', response.register_user.id.toString());
   } else {
     yield put(actions.authFail());
   }
