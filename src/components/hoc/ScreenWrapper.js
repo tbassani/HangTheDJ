@@ -1,8 +1,18 @@
 import React from 'react';
-import {View} from 'react-native';
+import {SafeAreaView, StyleSheet} from 'react-native';
 
 const ScreenWrapper = props => {
-  return <View>{props.children}</View>;
+  return (
+    <SafeAreaView style={styles.wrapperContainer}>
+      {props.children}
+    </SafeAreaView>
+  );
 };
+
+const styles = StyleSheet.create({
+  wrapperContainer: {
+    flex: 1,
+  },
+});
 
 export default ScreenWrapper;

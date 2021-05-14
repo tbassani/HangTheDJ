@@ -3,6 +3,7 @@ import {Alert} from 'react-native';
 import axios from 'axios';
 
 import APIConfig from '../../config/apiconfig';
+import {getdataFromStorage, saveDataToStorage} from '../storage';
 
 export async function loginService(email, password) {
   const body = {
@@ -99,4 +100,64 @@ export async function resetPasswordService(email, old_password, new_password) {
       Alert.alert('Erro', error.response.data.error);
     });
   return data;
+}
+
+export async function getActiveProfile(signOut) {
+  console.log('Get active profile Service');
+  const jwt = await getDataFromStorage('token');
+  var data = {
+    profile: null,
+  };
+  const headers = {
+    Authorization: 'Bearer ' + jwt,
+    contenttype: 'application/json;',
+    datatype: 'json',
+  };
+  try {
+    const response = await axios({
+      headers: headers,
+      method: 'GET',
+      url: APIConfig.ACTIVE_PROFILE_URL,
+    });
+    if (response.data.profile.length > 0) {
+      console.log(response.data.profile[0].service);
+      data.profile = response.data.profile[0].service;
+      return data;
+    }
+  } catch (error) {
+    if (error.response.status === 401) {
+      console.log('JWT Inválido');
+      data = {status: 401};
+      signOut();
+    }
+    return;
+  }
+}
+
+export async function getProfileUrl(signOut) {
+  const jwt = await getDataFromStorage('token');
+  var data = {
+    url: null,
+  };
+  const headers = {
+    Authorization: 'Bearer ' + jwt,
+    contenttype: 'application/json;',
+    datatype: 'json',
+  };
+  try {
+    const response = await axios({
+      headers: headers,
+      method: 'GET',
+      url: APIConfig.GET_PROFILE_URL,
+    });
+    data.url = response.data;
+    return data;
+  } catch (error) {
+    if (error.response.status === 401) {
+      console.log('JWT Inválido');
+      data = {status: 401};
+      signOut();
+    }
+    return;
+  }
 }

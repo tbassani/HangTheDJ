@@ -23,3 +23,14 @@ export const RESET_PASSWORD = 'RESET_PASSWORD';
 
 export const START_AUTH = 'START_AUTH';
 export const AUTH_FAIL = 'AUTH_FAIL';
+
+//HDJ
+export const INIT_ADD_TO_GROUP = 'INIT_ADD_TO_GROUP';
+export const START_ADD_TO_GROUP = 'START_ADD_TO_GROUP';
+export const ADD_TO_GROUP = 'ADD_TO_GROUP';
+export const ADD_TO_GROUP_FAIL = 'ADD_TO_GROUP_FAIL';
+
+export const INIT_GET_MIXES = 'INIT_GET_MIXES';
+export const START_GET_MIXES = 'START_GET_MIXES';
+export const GET_MIXES = 'GET_MIXES';
+export const GET_MIXES_FAIL = 'GET_MIXES_FAIL';

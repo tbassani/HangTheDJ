@@ -7,20 +7,30 @@ import {createStackNavigator} from '@react-navigation/stack';
 
 import UserMixesScreen from '../screens/mix/UserMixesScreen';
 import CreateMixScreen from '../screens/mix/CreateMixScreen';
+import ProfileScreen from '../screens/user/ProfileScreen';
 
 import Colors from '../constants/Colors';
 import Sizes from '../constants/Sizes';
 
-function AppNavigator() {
-  const Tab = createBottomTabNavigator();
-  const Stack = createStackNavigator();
+const Tab = createBottomTabNavigator();
+const Stack = createStackNavigator();
 
-  const PlayerNavigator = () => {
-    <Stack.Navigator>
-      <Stack.Screen name="UserProductsScreen" component={UserProductsScreen} />
-    </Stack.Navigator>;
-  };
+const MixNavigatior = () => {
+  return (
+    <Stack.Navigator
+      screenOptions={{
+        headerStyle: {
+          backgroundColor: Platform.OS == 'android' ? Colors.primary : '',
+        },
+        headerTintColor: Platform.OS == 'android' ? 'white' : Colors.primary,
+        headerLeft: null,
+      }}>
+      <Stack.Screen name="UserMixesScreen" component={UserMixesScreen} />
+    </Stack.Navigator>
+  );
+};
 
+const AppNavigator = () => {
   return (
     <Tab.Navigator
       tabBarOptions={{
@@ -36,21 +46,31 @@ function AppNavigator() {
           ),
           tabBarLabel: 'Tocar',
         }}
-        name="UserMixesScreen"
-        component={UserMixesScreen}
+        name="MixNavigatior"
+        component={MixNavigatior}
       />
       <Tab.Screen
         options={{
           tabBarIcon: ({color, size}) => (
             <Icon name="record-player" color={color} size={Sizes.max} />
           ),
-          tabBarLabel: 'Mix',
+          tabBarLabel: 'Mixar',
         }}
         name="CreateMixScreen"
         component={CreateMixScreen}
       />
+      <Tab.Screen
+        options={{
+          tabBarIcon: ({color, size}) => (
+            <Icon name="account" color={color} size={Sizes.max} />
+          ),
+          tabBarLabel: 'Mixar',
+        }}
+        name="ProfileScreen"
+        component={ProfileScreen}
+      />
     </Tab.Navigator>
   );
-}
+};
 
 export default AppNavigator;

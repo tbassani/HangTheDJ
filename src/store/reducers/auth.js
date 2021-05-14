@@ -4,6 +4,8 @@ const initialState = {
   userId: '',
   token: '',
   email: '',
+  profile: '',
+  profileURL: '',
   isLoggedIn: false,
   loading: false,
   error: null,

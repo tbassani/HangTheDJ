@@ -13,7 +13,7 @@ import {
 import {
   saveDataToStorage,
   removeDataToStorage,
-  getdataFromStorage,
+  getDataFromStorage,
 } from '../../services/storage';
 import {Alert} from 'react-native';
 
@@ -21,7 +21,7 @@ export function* initLoginSaga(action) {
   yield put(actions.startAuth());
   const response = yield loginService(action.email, action.password);
   let user;
-  if (response.login_user) {
+  if (response) {
     user = {
       token: response.jwt,
       userId: response.login_user.id,

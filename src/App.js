@@ -5,20 +5,22 @@
  * @format
  * @flow strict-local
  */
-
+import 'react-native-gesture-handler';
 import React from 'react';
 import {Provider} from 'react-redux';
 import {createStore, applyMiddleware, combineReducers} from 'redux';
 import createSagaMiddleware from 'redux-saga';
 
 import authReducer from './store/reducers/auth';
+import appReducer from './store/reducers/app';
 
-import {watchAuth} from './store/sagas';
+import {watchAuth, watchApp} from './store/sagas';
 
 import MainNavigator from './navigation/MainNavigation';
 
 const rootReducer = combineReducers({
   auth: authReducer,
+  app: appReducer,
 });
 
 const sagaMiddleware = createSagaMiddleware();
@@ -26,6 +28,7 @@ const sagaMiddleware = createSagaMiddleware();
 const store = createStore(rootReducer, applyMiddleware(sagaMiddleware));
 
 sagaMiddleware.run(watchAuth);
+sagaMiddleware.run(watchApp);
 
 const App = () => {
   return (

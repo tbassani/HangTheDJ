@@ -10,6 +10,8 @@ import {
   initResetPasswordSaga,
 } from './authSaga';
 
+import {initGetMixesSaga} from './appSaga';
+
 export function* watchAuth() {
   yield all([takeEvery(actionTypes.INIT_LOGIN, initLoginSaga)]);
   yield all([takeEvery(actionTypes.INIT_SIGNUP, initSignUpSaga)]);
@@ -21,4 +23,8 @@ export function* watchAuth() {
   yield all([
     takeEvery(actionTypes.INIT_RESET_PASSWORD, initResetPasswordSaga),
   ]);
+}
+
+export function* watchApp() {
+  yield all([takeEvery(actionTypes.INIT_GET_MIXES, initGetMixesSaga)]);
 }

@@ -6,7 +6,7 @@ import {useDispatch, useSelector} from 'react-redux';
 import Colors from '../../constants/Colors';
 import * as actions from '../../store/actions';
 
-import {getdataFromStorage} from '../../services/storage';
+import {getDataFromStorage} from '../../services/storage';
 
 const AuthScreen = props => {
   const dispach = useDispatch();
@@ -26,9 +26,9 @@ const AuthScreen = props => {
   useEffect(() => {
     const tryLogin = async () => {
       try {
-        const userId = await getdataFromStorage('userId');
-        const email = await getdataFromStorage('email');
-        const token = await getdataFromStorage('token');
+        const userId = await getDataFromStorage('userId');
+        const email = await getDataFromStorage('email');
+        const token = await getDataFromStorage('token');
         if (!userId || !email || !token) {
           navigation.navigate('Auth');
           return;
