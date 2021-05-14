@@ -4,6 +4,7 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {createStackNavigator} from '@react-navigation/stack';
+import {createDrawerNavigator} from '@react-navigation/drawer';
 
 import UserMixesScreen from '../screens/mix/UserMixesScreen';
 import CreateMixScreen from '../screens/mix/CreateMixScreen';
@@ -14,6 +15,29 @@ import Sizes from '../constants/Sizes';
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
+const Drawer = createDrawerNavigator();
+
+const ProfileNavigatior = () => {
+  return (
+    <Stack.Navigator
+      screenOptions={{
+        headerStyle: {
+          backgroundColor: Platform.OS == 'android' ? Colors.primary : '',
+        },
+        headerTintColor: Platform.OS == 'android' ? 'white' : Colors.primary,
+        headerLeft: null,
+      }}>
+      <Stack.Screen
+        options={{
+          headerTitle: 'Minha conta',
+          headerTitleStyle: {alignSelf: 'center'},
+        }}
+        name="ProfileScreen"
+        component={ProfileScreen}
+      />
+    </Stack.Navigator>
+  );
+};
 
 const MixNavigatior = () => {
   return (
@@ -25,7 +49,36 @@ const MixNavigatior = () => {
         headerTintColor: Platform.OS == 'android' ? 'white' : Colors.primary,
         headerLeft: null,
       }}>
-      <Stack.Screen name="UserMixesScreen" component={UserMixesScreen} />
+      <Stack.Screen
+        options={{
+          headerTitle: 'Criar Mix',
+          headerTitleStyle: {alignSelf: 'center'},
+        }}
+        name="CreateMixScreen"
+        component={CreateMixScreen}
+      />
+    </Stack.Navigator>
+  );
+};
+
+const UserMixesNavigatior = () => {
+  return (
+    <Stack.Navigator
+      screenOptions={{
+        headerStyle: {
+          backgroundColor: Platform.OS == 'android' ? Colors.primary : '',
+        },
+        headerTintColor: Platform.OS == 'android' ? 'white' : Colors.primary,
+        headerLeft: null,
+      }}>
+      <Stack.Screen
+        options={{
+          headerTitle: 'Meus Mixes',
+          headerTitleStyle: {alignSelf: 'center'},
+        }}
+        name="UserMixesScreen"
+        component={UserMixesScreen}
+      />
     </Stack.Navigator>
   );
 };
@@ -46,8 +99,8 @@ const AppNavigator = () => {
           ),
           tabBarLabel: 'Tocar',
         }}
-        name="MixNavigatior"
-        component={MixNavigatior}
+        name="UserMixesNavigatior"
+        component={UserMixesNavigatior}
       />
       <Tab.Screen
         options={{
@@ -56,18 +109,18 @@ const AppNavigator = () => {
           ),
           tabBarLabel: 'Mixar',
         }}
-        name="CreateMixScreen"
-        component={CreateMixScreen}
+        name="MixNavigatior"
+        component={MixNavigatior}
       />
       <Tab.Screen
         options={{
           tabBarIcon: ({color, size}) => (
             <Icon name="account" color={color} size={Sizes.max} />
           ),
-          tabBarLabel: 'Mixar',
+          tabBarLabel: 'Conta',
         }}
-        name="ProfileScreen"
-        component={ProfileScreen}
+        name="ProfileNavigatior"
+        component={ProfileNavigatior}
       />
     </Tab.Navigator>
   );

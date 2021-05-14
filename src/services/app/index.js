@@ -5,7 +5,7 @@ import axios from 'axios';
 import APIConfig from '../../config/apiconfig';
 import {getDataFromStorage, saveDataToStorage} from '../storage';
 
-export async function createMixPlaylist(selected, name, signOut) {
+export async function createMixPlaylistService(selected, name, signOut) {
   console.log('Create Mix Playlist Service');
   const jwt = await getDataFromStorage('token');
   let items = [];
@@ -48,7 +48,7 @@ export async function createMixPlaylist(selected, name, signOut) {
   return aux;
 }
 
-export async function mixPlaylist(
+export async function mixPlaylistService(
   selectedPlaylists,
   selectedTracks,
   name,
@@ -105,7 +105,7 @@ export async function mixPlaylist(
   return aux;
 }
 
-export async function deleteMix(mix_id, signOut) {
+export async function deleteMixService(mix_id, signOut) {
   const jwt = await getDataFromStorage('token');
 
   var aux = [];
@@ -139,10 +139,10 @@ export async function deleteMix(mix_id, signOut) {
   return aux;
 }
 
-export async function getMixPlaylists(signOut) {
+export async function getMixPlaylistsService(signOut) {
   const jwt = await getDataFromStorage('token');
 
-  var aux = [];
+  var aux = undefined;
   const headers = {
     Authorization: 'Bearer ' + jwt,
     contenttype: 'application/json;',
@@ -154,7 +154,7 @@ export async function getMixPlaylists(signOut) {
     url: APIConfig.GET_HDJPLAYLISTS_URL,
   })
     .then(response => {
-      console.log('RESPONSE');
+      aux = [];
       response.data.forEach(element => {
         aux.push({
           id: element.id,
@@ -172,11 +172,10 @@ export async function getMixPlaylists(signOut) {
       }
       console.log(error);
     });
-  console.log(aux);
   return aux;
 }
 
-export async function getMixTracks(mix_id, signOut, interval) {
+export async function getMixTracksService(mix_id, signOut, interval) {
   const jwt = await getDataFromStorage('token');
   const body = {
     playlist_id: mix_id,
@@ -210,7 +209,7 @@ export async function getMixTracks(mix_id, signOut, interval) {
   return aux;
 }
 
-export async function getVotingTrack(mix_id, signOut) {
+export async function getVotingTrackService(mix_id, signOut) {
   console.log('Get Voting Track from service for HDJ Playlist: ' + mix_id);
   const jwt = await getDataFromStorage('token');
   var aux = [];
@@ -240,7 +239,7 @@ export async function getVotingTrack(mix_id, signOut) {
   return aux;
 }
 
-export async function upVote(mix_id, track_id, signOut) {
+export async function upVoteService(mix_id, track_id, signOut) {
   console.log('Get Voting Track from service for HDJ Playlist: ' + mix_id);
   const jwt = await getDataFromStorage('token');
   var aux = [];
@@ -276,7 +275,7 @@ export async function upVote(mix_id, track_id, signOut) {
   return aux;
 }
 
-export async function downVote(mix_id, track_id, signOut) {
+export async function downVoteService(mix_id, track_id, signOut) {
   console.log('Get Voting Track from service for HDJ Playlist: ' + playlist_id);
   const jwt = await getDataFromStorage('token');
   var aux = [];
@@ -312,7 +311,7 @@ export async function downVote(mix_id, track_id, signOut) {
   return aux;
 }
 
-export async function addTracks(
+export async function addTracksService(
   selectedPlaylists,
   selectedTracks,
   mix_id,
@@ -369,7 +368,7 @@ export async function addTracks(
   return aux;
 }
 
-export async function getNextTrack(mix_id, signOut) {
+export async function getNextTrackService(mix_id, signOut) {
   const jwt = await getDataFromStorage('token');
 
   var aux = {};
@@ -399,7 +398,7 @@ export async function getNextTrack(mix_id, signOut) {
   return aux;
 }
 
-export async function resetPlaylist(mix_id, signOut) {
+export async function resetPlaylistService(mix_id, signOut) {
   const jwt = await getDataFromStorage('token');
   const headers = {
     Authorization: 'Bearer ' + jwt,
@@ -432,7 +431,7 @@ export async function resetPlaylist(mix_id, signOut) {
   return aux;
 }
 
-export async function addToGroup(mix_id, signOut) {
+export async function addToGroupService(mix_id, signOut) {
   const jwt = await getDataFromStorage('token');
   const headers = {
     Authorization: 'Bearer ' + jwt,
@@ -442,7 +441,7 @@ export async function addToGroup(mix_id, signOut) {
   const body = {
     playlist_id: mix_id,
   };
-  var aux = {};
+  var aux = undefined;
   await axios({
     headers: headers,
     method: 'POST',
@@ -450,7 +449,7 @@ export async function addToGroup(mix_id, signOut) {
     data: body,
   })
     .then(response => {
-      //console.log(response.data);
+      console.log(response.data);
       aux = response.data;
     })
     .catch(error => {
@@ -533,7 +532,7 @@ export async function searchVotingTracks(query, mix_id, cancelToken, signOut) {
   return aux;
 }
 
-export async function premiumClick(signOut) {
+export async function premiumClickService(signOut) {
   const jwt = await getDataFromStorage('token');
   console.log('CALLIN PREMIMUM');
   var aux = [];

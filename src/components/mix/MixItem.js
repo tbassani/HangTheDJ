@@ -12,10 +12,12 @@ const MixItem = props => {
         <View style={styles.infoContainer}>
           <Icon
             name="music-box-multiple"
-            size={Sizes.medium}
+            size={Sizes.max * 2}
             color={Colors.light}
           />
-          <Text style={styles.title}>{props.title}</Text>
+          <View style={styles.titleContainer}>
+            <Text style={styles.title}>{props.title}</Text>
+          </View>
         </View>
       </TouchableOpacity>
       {props.isOwner ? (
@@ -30,14 +32,22 @@ const MixItem = props => {
 const styles = StyleSheet.create({
   mainContainer: {
     flex: 1,
-    flexDirection: 'row',
     width: '100%',
   },
   infoContainer: {
-    flex: 0.8,
+    width: '100%',
+    flexDirection: 'row',
+    flex: 1,
+  },
+  titleContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'flex-start',
+    marginLeft: Sizes.tiny,
   },
   title: {
-    flex: 0.2,
+    fontSize: Sizes.large,
+    color: '#FFF',
   },
 });
 

@@ -5,11 +5,9 @@ import ScreenWrapper from '../../components/hoc/ScreenWrapper';
 
 const CreateMixScreen = props => {
   return (
-    <View>
-      <ScreenWrapper>
-        <Text>CREATE MIX</Text>
-      </ScreenWrapper>
-    </View>
+    <ScreenWrapper>
+      <Text>CREATE MIX</Text>
+    </ScreenWrapper>
   );
 };
 

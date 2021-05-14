@@ -18,9 +18,9 @@ const reducer = (state = initialState, action) => {
       };
 
     case actionTypes.GET_MIXES:
-      console.lof('ACTION GET MIXES');
       return {
         ...state,
+        mixes: action.mixes,
         loading: false,
         error: false,
       };
@@ -41,7 +41,8 @@ const reducer = (state = initialState, action) => {
     case actionTypes.ADD_TO_GROUP:
       return {
         ...state,
-        loading: true,
+        mixes: state.mixes.concat(action.mix),
+        loading: false,
         error: false,
       };
     case actionTypes.ADD_TO_GROUP_FAIL:

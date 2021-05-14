@@ -1,5 +1,5 @@
 import React, {useEffect, useState, useCallback, useReducer} from 'react';
-import {View, FlatList, Text, StyleSheet} from 'react-native';
+import {View, FlatList, Text, StyleSheet, Alert} from 'react-native';
 
 import {useSelector, useDispatch} from 'react-redux';
 import * as actions from '../../store/actions';
@@ -8,6 +8,7 @@ import Input from '../../components/UI/Input';
 import PrimaryButton from '../../components/UI/PrimaryButton';
 import TextLink from '../../components/UI/TextLink';
 import LoadingSpinner from '../../components/UI/LoadingSpinner';
+import MixItem from '../../components/mix/MixItem';
 
 import Colors from '../../constants/Colors';
 
@@ -31,6 +32,10 @@ const UserMixesScreen = props => {
   const loading = useSelector(currState => {
     return currState.app.loading;
   });
+
+  useEffect(() => {
+    dispatch(actions.initGetMixes());
+  }, []);
 
   const [formState, formDispatch] = useReducer(formReducer, {
     inputValues: {
@@ -69,16 +74,46 @@ const UserMixesScreen = props => {
 
   const addToGroupHandler = () => {
     if (formState.inputValues.code && formState.formIsValid) {
-      dispatch(actions.initSignUp(formState.inputValues.email));
+      dispatch(actions.initAddToGroup(formState.inputValues.code));
       clearInpuHandler();
+    } else {
+      Alert.alert('Erro', 'Código de Mix incorreto!');
     }
   };
 
   if (loading) {
-    return <LoadingSpinner size="large" />;
+    return (
+      <ScreenWrapper>
+        <View style={styles.mainContainer}>
+          <View style={styles.top}>
+            <Text style={styles.text}>
+              Selecione um Mix ou insira o código de convidado para participar!
+            </Text>
+          </View>
+          <LoadingSpinner size="large" />
+          <View style={styles.bottomContainer}>
+            <View style={styles.formContainer}>
+              <Input
+                id="code"
+                placeholder="Código de convidado"
+                required
+                errorText="Por favor, insira um Código válido."
+                onInputChange={inputChangeHandler}
+                initialValue=""
+                clearAfterSubmit={clear}
+                keyboardType="numeric"
+              />
+              <PrimaryButton onPress={() => addToGroupHandler()}>
+                Participar!
+              </PrimaryButton>
+            </View>
+          </View>
+        </View>
+      </ScreenWrapper>
+    );
   }
 
-  if (mixes.length <= 0) {
+  if (!loading && mixes.length <= 0) {
     return (
       <ScreenWrapper>
         <View style={styles.mainContainer}>
@@ -87,7 +122,10 @@ const UserMixesScreen = props => {
             <Text style={styles.text}>
               Insiria um código de convidado para participar!
             </Text>
-            <TextLink>Ou crie seu próprio Mix!</TextLink>
+            <TextLink
+              onPress={() => props.navigation.navigate('MixNavigatior')}>
+              Ou crie seu próprio Mix!
+            </TextLink>
           </View>
         </View>
         <View style={styles.bottomContainer}>
@@ -100,8 +138,9 @@ const UserMixesScreen = props => {
               onInputChange={inputChangeHandler}
               initialValue=""
               clearAfterSubmit={clear}
+              keyboardType="numeric"
             />
-            <PrimaryButton onPress={addToGroupHandler}>
+            <PrimaryButton onPress={() => addToGroupHandler()}>
               Participar!
             </PrimaryButton>
           </View>
@@ -110,17 +149,22 @@ const UserMixesScreen = props => {
     );
   }
 
+  const renderMixItem = itemData => {
+    return <MixItem title={itemData.item.title} />;
+  };
+
   return (
     <ScreenWrapper>
-      <View style={styles.listContainer}>
-        <Text style={styles.description}>
-          Selecione uma Playlist HDJ ou insira o código de convidado para
-          participar de uma nova!
-        </Text>
-        <View style={styles.middleContainer}>
+      <View style={styles.mainContainer}>
+        <View style={styles.top}>
+          <Text style={styles.text}>
+            Selecione um Mix ou insira o código de convidado para participar!
+          </Text>
+        </View>
+        <View style={styles.listContainer}>
           <FlatList
-            data={listData}
-            renderItem={renderItem}
+            data={mixes}
+            renderItem={renderMixItem}
             keyExtractor={item => item.id.toString()}
           />
         </View>
@@ -134,7 +178,11 @@ const UserMixesScreen = props => {
               onInputChange={inputChangeHandler}
               initialValue=""
               clearAfterSubmit={clear}
+              keyboardType="numeric"
             />
+            <PrimaryButton onPress={() => addToGroupHandler()}>
+              Participar!
+            </PrimaryButton>
           </View>
         </View>
       </View>
@@ -152,19 +200,28 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
+  listContainer: {
+    flex: 0.8,
+  },
   formContainer: {
-    width: '50%',
+    width: '65%',
     alignItems: 'center',
     justifyContent: 'center',
+    marginVertical: Sizes.small,
   },
   centered: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
   },
+  top: {
+    flex: 0.2,
+    margin: Sizes.tiny,
+  },
   text: {
     color: Colors.light,
     fontSize: Sizes.medium,
+    textAlign: 'center',
   },
 });
 

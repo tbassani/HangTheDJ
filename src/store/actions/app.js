@@ -12,9 +12,10 @@ export const startGetMixes = () => {
   };
 };
 
-export const getMixes = () => {
+export const getMixes = mixes => {
   return {
     type: actionTypes.GET_MIXES,
+    mixes: mixes,
   };
 };
 
@@ -24,9 +25,10 @@ export const getMixesFail = () => {
   };
 };
 
-export const initAddToGroup = () => {
+export const initAddToGroup = mixId => {
   return {
     type: actionTypes.INIT_ADD_TO_GROUP,
+    mixId: mixId,
   };
 };
 
@@ -36,9 +38,10 @@ export const startAddToGroup = () => {
   };
 };
 
-export const addToGroup = () => {
+export const addToGroup = mix => {
   return {
     type: actionTypes.ADD_TO_GROUP,
+    mix: mix,
   };
 };
 
