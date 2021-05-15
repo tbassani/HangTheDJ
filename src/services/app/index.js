@@ -562,3 +562,63 @@ export async function premiumClickService(signOut) {
     });
   return aux;
 }
+
+export async function getActiveProfileService(signOut) {
+  console.log('Get active profile Service');
+  const jwt = await getDataFromStorage('token');
+  var data = {
+    profile: null,
+  };
+  const headers = {
+    Authorization: 'Bearer ' + jwt,
+    contenttype: 'application/json;',
+    datatype: 'json',
+  };
+  try {
+    const response = await axios({
+      headers: headers,
+      method: 'GET',
+      url: APIConfig.ACTIVE_PROFILE_URL,
+    });
+    if (response.data.profile.length > 0) {
+      console.log(response.data.profile[0].service);
+      data.profile = response.data.profile[0].service;
+      return data;
+    }
+  } catch (error) {
+    if (error.response.status === 401) {
+      console.log('JWT Inválido');
+      data = {status: 401};
+      signOut();
+    }
+    return;
+  }
+}
+
+export async function getProfileURLService(signOut) {
+  const jwt = await getDataFromStorage('token');
+  var data = {
+    url: null,
+  };
+  const headers = {
+    Authorization: 'Bearer ' + jwt,
+    contenttype: 'application/json;',
+    datatype: 'json',
+  };
+  try {
+    const response = await axios({
+      headers: headers,
+      method: 'GET',
+      url: APIConfig.GET_PROFILE_URL,
+    });
+    data.url = response.data;
+    return data;
+  } catch (error) {
+    if (error.response.status === 401) {
+      console.log('JWT Inválido');
+      data = {status: 401};
+      signOut();
+    }
+    return;
+  }
+}

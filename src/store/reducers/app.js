@@ -4,6 +4,9 @@ const initialState = {
   mixes: [],
   playlists: [],
   tracks: [],
+  refresh: false,
+  profile: '',
+  profileURL: '',
   loading: false,
   error: null,
 };
@@ -16,7 +19,6 @@ const reducer = (state = initialState, action) => {
         loading: true,
         error: false,
       };
-
     case actionTypes.GET_MIXES:
       return {
         ...state,
@@ -30,14 +32,12 @@ const reducer = (state = initialState, action) => {
         loading: false,
         error: true,
       };
-
     case actionTypes.START_ADD_TO_GROUP:
       return {
         ...state,
         loading: true,
         error: false,
       };
-
     case actionTypes.ADD_TO_GROUP:
       return {
         ...state,
@@ -46,6 +46,46 @@ const reducer = (state = initialState, action) => {
         error: false,
       };
     case actionTypes.ADD_TO_GROUP_FAIL:
+      return {
+        ...state,
+        loading: false,
+        error: true,
+      };
+    case actionTypes.START_GET_PROFILE_URL:
+      return {
+        ...state,
+        loading: true,
+        error: false,
+      };
+    case actionTypes.GET_PROFILE_URL:
+      return {
+        ...state,
+        profileURL: action.url,
+        loading: false,
+        error: false,
+      };
+    case actionTypes.GET_PROFILE_URL_FAIL:
+      return {
+        ...state,
+        loading: false,
+        error: true,
+      };
+    case actionTypes.START_GET_PROFILE:
+      console.log('Start');
+      return {
+        ...state,
+        loading: true,
+        error: false,
+      };
+    case actionTypes.GET_PROFILE:
+      return {
+        ...state,
+        refresh: true,
+        profile: action.profile,
+        loading: false,
+        error: false,
+      };
+    case actionTypes.GET_PROFILE_FAIL:
       return {
         ...state,
         loading: false,

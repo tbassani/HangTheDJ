@@ -1,21 +1,23 @@
 import React from 'react';
 
+import {useSelector} from 'react-redux';
+
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {createStackNavigator} from '@react-navigation/stack';
-import {createDrawerNavigator} from '@react-navigation/drawer';
 
 import UserMixesScreen from '../screens/mix/UserMixesScreen';
 import CreateMixScreen from '../screens/mix/CreateMixScreen';
 import ProfileScreen from '../screens/user/ProfileScreen';
+import StreamingProfileScreen from '../screens/mix/StreamingProfileScreen';
+import LoadingScreen from '../screens/LoadingScreen';
 
 import Colors from '../constants/Colors';
 import Sizes from '../constants/Sizes';
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
-const Drawer = createDrawerNavigator();
 
 const ProfileNavigatior = () => {
   return (
@@ -35,11 +37,20 @@ const ProfileNavigatior = () => {
         name="ProfileScreen"
         component={ProfileScreen}
       />
+      <Stack.Screen
+        options={{
+          headerTitle: 'Atualizando',
+          headerTitleStyle: {alignSelf: 'center'},
+        }}
+        name="LoadingScreen"
+        component={LoadingScreen}
+      />
     </Stack.Navigator>
   );
 };
 
-const MixNavigatior = () => {
+const CreateMixNavigatior = () => {
+  const profile = useSelector(currState => currState.app.profile);
   return (
     <Stack.Navigator
       screenOptions={{
@@ -49,13 +60,32 @@ const MixNavigatior = () => {
         headerTintColor: Platform.OS == 'android' ? 'white' : Colors.primary,
         headerLeft: null,
       }}>
+      {profile && profile.length > 0 ? (
+        <Stack.Screen
+          options={{
+            headerTitle: 'Criar Mix',
+            headerTitleStyle: {alignSelf: 'center'},
+          }}
+          name="CreateMixScreen"
+          component={CreateMixScreen}
+        />
+      ) : (
+        <Stack.Screen
+          options={{
+            headerTitle: 'Serviço de Streaming',
+            headerTitleStyle: {alignSelf: 'center'},
+          }}
+          name="StreamingProfileScreen"
+          component={StreamingProfileScreen}
+        />
+      )}
       <Stack.Screen
         options={{
-          headerTitle: 'Criar Mix',
+          headerTitle: 'Atualizando',
           headerTitleStyle: {alignSelf: 'center'},
         }}
-        name="CreateMixScreen"
-        component={CreateMixScreen}
+        name="LoadingScreen"
+        component={LoadingScreen}
       />
     </Stack.Navigator>
   );
@@ -109,8 +139,8 @@ const AppNavigator = () => {
           ),
           tabBarLabel: 'Mixar',
         }}
-        name="MixNavigatior"
-        component={MixNavigatior}
+        name="CreateMixNavigatior"
+        component={CreateMixNavigatior}
       />
       <Tab.Screen
         options={{

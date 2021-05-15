@@ -1,11 +1,11 @@
-import React, {useEffect, useState, useRef} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   View,
-  AppState,
   Linking,
+  Alert,
+  AppState,
   DevSettings,
   StyleSheet,
-  Alert,
 } from 'react-native';
 
 import {useSelector, useDispatch} from 'react-redux';
@@ -16,12 +16,9 @@ import LoadingSpinner from '../../components/UI/LoadingSpinner';
 
 import Colors from '../../constants/Colors';
 
-const ProfileScreen = props => {
-  const profile = useSelector(currState => currState.app.profile);
+const StreamingProfileScreen = props => {
   const profileURL = useSelector(currState => currState.app.profileURL);
   const loading = useSelector(currState => currState.app.loading);
-
-  const appState = useRef(AppState.currentState);
 
   const dispatch = useDispatch();
 
@@ -78,18 +75,9 @@ const ProfileScreen = props => {
   return (
     <View style={styles.mainContainer}>
       <View style={styles.buttonContainer}>
-        <PrimaryButton onPress={() => dispatch(actions.initLogout())}>
-          Logout
+        <PrimaryButton onPress={() => handleNewProfile()}>
+          Adicionar Serviço de Streaming
         </PrimaryButton>
-        <PrimaryButton onPress={() => {}}>Alterar senha</PrimaryButton>
-        {profile.length <= 0 ? (
-          <PrimaryButton
-            onPress={() => {
-              handleNewProfile();
-            }}>
-            Adicionar Serviço de Streaming
-          </PrimaryButton>
-        ) : null}
       </View>
     </View>
   );
@@ -110,4 +98,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default ProfileScreen;
+export default StreamingProfileScreen;

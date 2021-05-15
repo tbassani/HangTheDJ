@@ -23,4 +23,13 @@ export {
   startAddToGroup,
   addToGroup,
   addToGroupFail,
+  initGetProfileURL,
+  startGetProfileURL,
+  getProfileURL,
+  getProfileURLFail,
+  initGetProfile,
+  startGetProfile,
+  getProfile,
+  getProfileFail,
+  refresh,
 } from './app';

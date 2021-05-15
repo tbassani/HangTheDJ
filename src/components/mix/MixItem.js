@@ -10,11 +10,7 @@ const MixItem = props => {
     <View style={styles.mainContainer}>
       <TouchableOpacity onPress={props.selectMix}>
         <View style={styles.infoContainer}>
-          <Icon
-            name="music-box-multiple"
-            size={Sizes.max * 2}
-            color={Colors.light}
-          />
+          <Icon name="music-box-multiple" size={Sizes.max * 2} color={'#FFF'} />
           <View style={styles.titleContainer}>
             <Text style={styles.title}>{props.title}</Text>
           </View>

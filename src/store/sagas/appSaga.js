@@ -9,6 +9,8 @@ import {
   addToGroupService,
   createMixPlaylistService,
   deleteMixService,
+  getActiveProfileService,
+  getProfileURLService,
 } from '../../services/app';
 
 export function* initGetMixesSaga(action) {
@@ -34,5 +36,27 @@ export function* initAddToGroupSaga(action) {
     yield put(actions.addToGroup(mix));
   } else {
     yield put(actions.addToGroupFail());
+  }
+}
+
+export function* initGetProfileURLSaga(action) {
+  yield put(actions.startGetProfileURL());
+  const response = yield getProfileURLService(actions.logout);
+  if (response && response.url) {
+    yield put(actions.getProfileURL(response.url));
+  } else {
+    yield put(actions.getProfileURLFail());
+  }
+}
+
+export function* initGetActiveProfileSaga(action) {
+  console.log('GET PROFILE SAGA');
+  yield put(actions.startGetProfile());
+  const response = yield getActiveProfileService(actions.logout);
+  console.log(response);
+  if (response && response.profile) {
+    yield put(actions.getProfile(response.profile));
+  } else {
+    yield put(actions.getProfileFail());
   }
 }

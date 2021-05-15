@@ -1,5 +1,5 @@
 import React, {useEffect, useState, useCallback, useReducer} from 'react';
-import {View, FlatList, Text, StyleSheet, Alert} from 'react-native';
+import {View, FlatList, Text, StyleSheet, AppState, Alert} from 'react-native';
 
 import {useSelector, useDispatch} from 'react-redux';
 import * as actions from '../../store/actions';
@@ -34,7 +34,10 @@ const UserMixesScreen = props => {
   });
 
   useEffect(() => {
+    console.log('SCREEN');
     dispatch(actions.initGetMixes());
+    dispatch(actions.initGetProfileURL());
+    dispatch(actions.initGetProfile());
   }, []);
 
   const [formState, formDispatch] = useReducer(formReducer, {
@@ -81,6 +84,42 @@ const UserMixesScreen = props => {
     }
   };
 
+  if (!loading && mixes.length <= 0) {
+    return (
+      <ScreenWrapper>
+        <View style={styles.mainContainer}>
+          <View style={styles.centered}>
+            <Text style={styles.text}>Você não possui nenhum Mix.</Text>
+            <Text style={styles.text}>
+              Insiria um código de convidado para participar!
+            </Text>
+            <TextLink
+              onPress={() => props.navigation.navigate('CreateMixNavigatior')}>
+              Ou crie seu próprio Mix!
+            </TextLink>
+          </View>
+        </View>
+        <View style={styles.bottomContainer}>
+          <View style={styles.formContainer}>
+            <Input
+              id="code"
+              placeholder="Código de convidado"
+              required
+              errorText="Por favor, insira um Código válido."
+              onInputChange={inputChangeHandler}
+              initialValue=""
+              clearAfterSubmit={clear}
+              keyboardType="numeric"
+            />
+            <PrimaryButton onPress={() => addToGroupHandler()}>
+              Participar!
+            </PrimaryButton>
+          </View>
+        </View>
+      </ScreenWrapper>
+    );
+  }
+
   if (loading) {
     return (
       <ScreenWrapper>
@@ -107,42 +146,6 @@ const UserMixesScreen = props => {
                 Participar!
               </PrimaryButton>
             </View>
-          </View>
-        </View>
-      </ScreenWrapper>
-    );
-  }
-
-  if (!loading && mixes.length <= 0) {
-    return (
-      <ScreenWrapper>
-        <View style={styles.mainContainer}>
-          <View style={styles.centered}>
-            <Text style={styles.text}>Você não possui nenhum Mix.</Text>
-            <Text style={styles.text}>
-              Insiria um código de convidado para participar!
-            </Text>
-            <TextLink
-              onPress={() => props.navigation.navigate('MixNavigatior')}>
-              Ou crie seu próprio Mix!
-            </TextLink>
-          </View>
-        </View>
-        <View style={styles.bottomContainer}>
-          <View style={styles.formContainer}>
-            <Input
-              id="code"
-              placeholder="Código de convidado"
-              required
-              errorText="Por favor, insira um Código válido."
-              onInputChange={inputChangeHandler}
-              initialValue=""
-              clearAfterSubmit={clear}
-              keyboardType="numeric"
-            />
-            <PrimaryButton onPress={() => addToGroupHandler()}>
-              Participar!
-            </PrimaryButton>
           </View>
         </View>
       </ScreenWrapper>
@@ -202,6 +205,7 @@ const styles = StyleSheet.create({
   },
   listContainer: {
     flex: 0.8,
+    backgroundColor: Colors.light,
   },
   formContainer: {
     width: '65%',
@@ -220,7 +224,7 @@ const styles = StyleSheet.create({
   },
   text: {
     color: Colors.light,
-    fontSize: Sizes.medium,
+    fontSize: Sizes.medium * 1.2,
     textAlign: 'center',
   },
 });

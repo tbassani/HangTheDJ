@@ -50,3 +50,53 @@ export const addToGroupFail = () => {
     type: actionTypes.ADD_TO_GROUP_FAIL,
   };
 };
+
+export const initGetProfileURL = () => {
+  return {
+    type: actionTypes.INIT_GET_PROFILE_URL,
+  };
+};
+
+export const startGetProfileURL = () => {
+  return {
+    type: actionTypes.START_GET_PROFILE_URL,
+  };
+};
+
+export const getProfileURL = url => {
+  return {
+    type: actionTypes.GET_PROFILE_URL,
+    url: url,
+  };
+};
+
+export const getProfileURLFail = () => {
+  return {
+    type: actionTypes.GET_PROFILE_URL_FAIL,
+  };
+};
+
+export const initGetProfile = () => {
+  return {
+    type: actionTypes.INIT_GET_PROFILE,
+  };
+};
+
+export const startGetProfile = () => {
+  return {
+    type: actionTypes.START_GET_PROFILE,
+  };
+};
+
+export const getProfile = profile => {
+  return {
+    type: actionTypes.GET_PROFILE,
+    profile: profile,
+  };
+};
+
+export const getProfileFail = () => {
+  return {
+    type: actionTypes.GET_PROFILE_FAIL,
+  };
+};
