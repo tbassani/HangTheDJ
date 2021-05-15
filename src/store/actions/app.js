@@ -100,3 +100,30 @@ export const getProfileFail = () => {
     type: actionTypes.GET_PROFILE_FAIL,
   };
 };
+
+export const initResetPassword = (email, currPassword, newPassword) => {
+  return {
+    type: actionTypes.INIT_RESET_PASSWORD,
+    email: email,
+    currPassword: currPassword,
+    newPassword: newPassword,
+  };
+};
+
+export const startResetPassword = () => {
+  return {
+    type: actionTypes.START_RESET_PASSWORD,
+  };
+};
+
+export const resetPassword = () => {
+  return {
+    type: actionTypes.RESET_PASSWORD,
+  };
+};
+
+export const resetPasswordFail = () => {
+  return {
+    type: actionTypes.RESET_PASSWORD_FAIL,
+  };
+};

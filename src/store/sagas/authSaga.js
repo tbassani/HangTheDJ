@@ -92,5 +92,3 @@ export function* initForgotPasswordSaga(action) {
     yield put(actions.forgotPassword());
   }
 }
-
-export function* initResetPasswordSaga(action) {}

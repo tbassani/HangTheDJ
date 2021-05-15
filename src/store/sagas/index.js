@@ -7,7 +7,6 @@ import {
   initLogoutSaga,
   initRegisterSaga,
   initForgotPasswordSaga,
-  initResetPasswordSaga,
 } from './authSaga';
 
 import {
@@ -15,6 +14,7 @@ import {
   initAddToGroupSaga,
   initGetProfileURLSaga,
   initGetActiveProfileSaga,
+  initResetPasswordSaga,
 } from './appSaga';
 
 export function* watchAuth() {
@@ -37,4 +37,7 @@ export function* watchApp() {
     takeEvery(actionTypes.INIT_GET_PROFILE_URL, initGetActiveProfileSaga),
   ]);
   yield all([takeEvery(actionTypes.INIT_GET_PROFILE, initGetProfileURLSaga)]);
+  yield all([
+    takeEvery(actionTypes.INIT_RESET_PASSWORD, initResetPasswordSaga),
+  ]);
 }

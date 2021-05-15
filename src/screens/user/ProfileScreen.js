@@ -41,6 +41,8 @@ const ProfileScreen = props => {
         nextAppState === 'active') ||
       !nextAppState
     ) {
+      AppState.removeEventListener('change', _handleAppStateChange);
+      AppState.removeEventListener('focus', _handleAppStateChange);
       dispatch(actions.initGetProfile());
       props.navigation.navigate('LoadingScreen');
       DevSettings.reload();
@@ -81,7 +83,14 @@ const ProfileScreen = props => {
         <PrimaryButton onPress={() => dispatch(actions.initLogout())}>
           Logout
         </PrimaryButton>
-        <PrimaryButton onPress={() => {}}>Alterar senha</PrimaryButton>
+        <PrimaryButton
+          onPress={() => {
+            AppState.removeEventListener('change', _handleAppStateChange);
+            AppState.removeEventListener('focus', _handleAppStateChange);
+            props.navigation.navigate('ResetPasswordScreen');
+          }}>
+          Alterar senha
+        </PrimaryButton>
         {profile.length <= 0 ? (
           <PrimaryButton
             onPress={() => {

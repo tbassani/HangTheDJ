@@ -11,6 +11,7 @@ import UserMixesScreen from '../screens/mix/UserMixesScreen';
 import CreateMixScreen from '../screens/mix/CreateMixScreen';
 import ProfileScreen from '../screens/user/ProfileScreen';
 import StreamingProfileScreen from '../screens/mix/StreamingProfileScreen';
+import ResetPasswordScreen from '../screens/auth/ResetPasswordScreen';
 import LoadingScreen from '../screens/LoadingScreen';
 
 import Colors from '../constants/Colors';
@@ -44,6 +45,14 @@ const ProfileNavigatior = () => {
         }}
         name="LoadingScreen"
         component={LoadingScreen}
+      />
+      <Stack.Screen
+        options={{
+          headerTitle: 'Atualizar senha',
+          headerTitleStyle: {alignSelf: 'center'},
+        }}
+        name="ResetPasswordScreen"
+        component={ResetPasswordScreen}
       />
     </Stack.Navigator>
   );

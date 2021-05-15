@@ -81,12 +81,18 @@ export async function registerService(email, password, code) {
   }
 }
 
-export async function resetPasswordService(email, old_password, new_password) {
+export async function resetPasswordService(
+  email,
+  old_password,
+  new_password,
+  signOut,
+) {
   const body = {email, old_password, new_password};
   var data = {
     jwt: '',
     register_user: null,
   };
+
   await axios({
     method: 'POST',
     url: APIConfig.RESET_PASSWORD_URL,
@@ -94,8 +100,15 @@ export async function resetPasswordService(email, old_password, new_password) {
   })
     .then(response => {
       data = response.data;
+      console.log(data);
     })
     .catch(error => {
+      if (error.response) {
+        if (error.response.status === 401) {
+          console.log('JWT Inválido');
+          signOut();
+        }
+      }
       console.log(error);
       Alert.alert('Erro', error.response.data.error);
     });

@@ -13,6 +13,9 @@ import {
   getProfileURLService,
 } from '../../services/app';
 
+import {resetPasswordService} from '../../services/auth';
+import {Alert} from 'react-native';
+
 export function* initGetMixesSaga(action) {
   yield put(actions.startGetMixes());
   const response = yield getMixPlaylistsService(actions.initLogout);
@@ -56,5 +59,20 @@ export function* initGetActiveProfileSaga(action) {
     yield put(actions.getProfile(response.profile));
   } else {
     yield put(actions.getProfileFail());
+  }
+}
+
+export function* initResetPasswordSaga(action) {
+  yield put(actions.startResetPassword());
+  const response = yield resetPasswordService(
+    action.email,
+    action.currPassword,
+    action.newPassword,
+    actions.logout,
+  );
+  if (response && response.success) {
+    Alert.alert('Senha alterada!');
+  } else {
+    yield put(actions.resetPasswordFail());
   }
 }

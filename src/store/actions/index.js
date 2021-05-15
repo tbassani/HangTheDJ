@@ -31,5 +31,8 @@ export {
   startGetProfile,
   getProfile,
   getProfileFail,
-  refresh,
+  initResetPassword,
+  startResetPassword,
+  resetPassword,
+  resetPasswordFail,
 } from './app';
