@@ -564,7 +564,6 @@ export async function premiumClickService(signOut) {
 }
 
 export async function getActiveProfileService(signOut) {
-  console.log('Get active profile Service');
   const jwt = await getDataFromStorage('token');
   var data = {
     profile: null,
@@ -581,7 +580,6 @@ export async function getActiveProfileService(signOut) {
       url: APIConfig.ACTIVE_PROFILE_URL,
     });
     if (response.data.profile.length > 0) {
-      console.log(response.data.profile[0].service);
       data.profile = response.data.profile[0].service;
       return data;
     }

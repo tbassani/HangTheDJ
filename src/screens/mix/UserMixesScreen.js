@@ -34,7 +34,6 @@ const UserMixesScreen = props => {
   });
 
   useEffect(() => {
-    console.log('SCREEN');
     dispatch(actions.initGetMixes());
     dispatch(actions.initGetProfileURL());
     dispatch(actions.initGetProfile());

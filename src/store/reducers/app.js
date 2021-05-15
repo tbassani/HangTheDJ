@@ -71,7 +71,6 @@ const reducer = (state = initialState, action) => {
         error: true,
       };
     case actionTypes.START_GET_PROFILE:
-      console.log('Start');
       return {
         ...state,
         loading: true,

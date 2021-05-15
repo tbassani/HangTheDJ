@@ -50,10 +50,8 @@ export function* initGetProfileURLSaga(action) {
 }
 
 export function* initGetActiveProfileSaga(action) {
-  console.log('GET PROFILE SAGA');
   yield put(actions.startGetProfile());
   const response = yield getActiveProfileService(actions.logout);
-  console.log(response);
   if (response && response.profile) {
     yield put(actions.getProfile(response.profile));
   } else {
