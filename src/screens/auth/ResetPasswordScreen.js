@@ -77,9 +77,6 @@ const ResetPasswordScreen = props => {
     const oldPassword = formState.inputValues.oldPassword;
     const password = formState.inputValues.password;
     const confirmPassword = formState.inputValues.confirmPassword;
-    console.log(oldPassword);
-    console.log(password);
-    console.log(confirmPassword);
     if (password !== confirmPassword) {
       Alert.alert('Erro', 'As senhas não são iguais!');
     } else {

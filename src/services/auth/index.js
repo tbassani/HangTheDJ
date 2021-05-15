@@ -100,7 +100,6 @@ export async function resetPasswordService(
   })
     .then(response => {
       data = response.data;
-      console.log(data);
     })
     .catch(error => {
       if (error.response) {
