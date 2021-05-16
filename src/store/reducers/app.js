@@ -4,6 +4,10 @@ const initialState = {
   mixes: [],
   playlists: [],
   tracks: [],
+  newMix: {
+    tracks: [],
+    playlists: [],
+  },
   refresh: false,
   profile: '',
   profileURL: '',
@@ -109,6 +113,62 @@ const reducer = (state = initialState, action) => {
         ...state,
         loading: false,
         error: true,
+      };
+    case actionTypes.ADD_TRACK_TO_MIX:
+      const newTracks = [...state.newMix.tracks];
+      let trackExists = [];
+      trackExists = newTracks.filter(track => track.id === action.track.id);
+      if (trackExists.length <= 0) {
+        newTracks.push(action.track);
+      }
+
+      return {
+        ...state,
+        newMix: {
+          ...state.newMix,
+          tracks: newTracks,
+        },
+      };
+    case actionTypes.ADD_PLAYLIST_TO_MIX:
+      const newPlaylists = [...state.newMix.playlists];
+      let playlistExists = [];
+      playlistExists = newPlaylists.filter(
+        playlist => playlist.id === action.playlist.id,
+      );
+      if (playlistExists.length <= 0) {
+        newPlaylists.push(action.playlist);
+      }
+
+      return {
+        ...state,
+        newMix: {
+          ...state.newMix,
+          playlists: newPlaylists,
+        },
+      };
+    case actionTypes.REMOVE_TRACK_FROM_MIX:
+      const updatedTracks = [...state.newMix.tracks].filter(
+        track => track.id !== action.track.id,
+      );
+
+      return {
+        ...state,
+        newMix: {
+          ...state.newMix,
+          tracks: updatedTracks,
+        },
+      };
+    case actionTypes.REMOVE_PLAYLIST_FROM_MIX:
+      const updatedPlaylists = [...state.newMix.playlists].filter(
+        playlist => playlist.id === action.playlist.id,
+      );
+
+      return {
+        ...state,
+        newMix: {
+          ...state.newMix,
+          playlists: updatedPlaylists,
+        },
       };
     default:
       return state;

@@ -1,5 +1,7 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {View, Text, TouchableOpacity, StyleSheet} from 'react-native';
+
+import {useSelector} from 'react-redux';
 
 import MixPicker from '../../views/MixPicker';
 import YourMix from '../../views/YourMix';
@@ -9,6 +11,16 @@ import Sizes from '../../constants/Sizes';
 
 const MixMaker = props => {
   const [selected, setSelected] = useState('first');
+  const [totalMix, setTotalMix] = useState(0);
+
+  const newMix = useSelector(currState => currState.app.newMix);
+
+  useEffect(() => {
+    if (newMix) {
+      setTotalMix(newMix.tracks.length + newMix.playlists.length);
+    }
+  }, [newMix]);
+
   const selectFirst = () => {
     setSelected('first');
   };
@@ -39,6 +51,9 @@ const MixMaker = props => {
               styles.tab,
               selected === 'second' ? styles.selectedTab : null,
             ]}>
+            <View style={styles.mixCounterContainer}>
+              <Text style={styles.mixCounter}>{totalMix}</Text>
+            </View>
             <Text style={styles.tabTitle}>{props.secondTabTitle}</Text>
           </View>
         </TouchableOpacity>
@@ -61,10 +76,26 @@ const styles = StyleSheet.create({
     marginTop: Sizes.small,
   },
   tab: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    alignItems: 'center',
     borderTopRightRadius: Sizes.medium,
     borderTopLeftRadius: Sizes.medium,
     backgroundColor: Colors.dark,
     padding: Sizes.small,
+  },
+  mixCounterContainer: {
+    marginHorizontal: Sizes.small,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: Colors.alternative,
+    borderRadius: Sizes.max,
+    height: Sizes.large,
+    width: Sizes.large,
+  },
+  mixCounter: {
+    color: '#FFF',
+    fontSize: Sizes.tiny,
   },
   tabTitle: {
     color: Colors.textDefault,

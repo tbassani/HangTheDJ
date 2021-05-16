@@ -88,21 +88,34 @@ const MakeMix = props => {
     }
   };
 
+  const selectTrackHandler = track => {
+    dispatch(actions.addTrackToMix(track));
+  };
+
+  const selectPlaylistHandler = playlist => {
+    dispatch(actions.addPlaylistToMix(playlist));
+  };
+
   const renderTrackItem = itemData => {
     return (
       <TrackItem
         imgSource={itemData.item.artURL}
         title={itemData.item.title}
         artists={itemData.item.artists}
+        onSelectTrack={() => {
+          selectTrackHandler(itemData.item);
+        }}
       />
     );
   };
   const renderPlaylistItem = itemData => {
-    console.log(itemData.item);
     return (
       <PlaylistItem
         title={itemData.item.title}
         imgSource={itemData.item.artURL}
+        onSelectPlaylist={() => {
+          selectPlaylistHandler(itemData.item);
+        }}
       />
     );
   };
@@ -118,7 +131,6 @@ const MakeMix = props => {
   );
 
   if (selectedType && selectedType.key === 'playlist') {
-    console.log('SÃO PLAYLISTS');
     pickList = (
       <View style={styles.listContainer}>
         <FlatList

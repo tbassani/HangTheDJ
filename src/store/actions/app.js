@@ -155,3 +155,31 @@ export const getTracksAndPlaylistsFail = () => {
     type: actionTypes.GET_TRACKS_AND_PLAYLISTS_FAIL,
   };
 };
+
+export const addTrackToMix = track => {
+  return {
+    type: actionTypes.ADD_TRACK_TO_MIX,
+    track: track,
+  };
+};
+
+export const addPlaylistToMix = playlist => {
+  return {
+    type: actionTypes.ADD_PLAYLIST_TO_MIX,
+    playlist: playlist,
+  };
+};
+
+export const removeTrackFromMix = track => {
+  return {
+    type: actionTypes.REMOVE_TRACK_FROM_MIX,
+    track: track,
+  };
+};
+
+export const removePlaylistFromMix = playlist => {
+  return {
+    type: actionTypes.REMOVE_PLAYLIST_FROM_MIX,
+    playlist: playlist,
+  };
+};

@@ -39,4 +39,8 @@ export {
   startGetTracksAndPlaylists,
   getTracksAndPlaylists,
   getTracksAndPlaylistsFail,
+  addTrackToMix,
+  addPlaylistToMix,
+  removePlaylistFromMix,
+  removeTrackFromMix,
 } from './app';

@@ -1,14 +1,16 @@
 import React from 'react';
 import {TouchableOpacity, View, Text, Image, StyleSheet} from 'react-native';
 
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+
 import Sizes from '../../constants/Sizes';
 
 const TrackItem = props => {
   return (
-    <TouchableOpacity
-      style={styles.mainContainer}
-      onPress={props.selectPlaylist}>
-      <View style={styles.trackContainer}>
+    <View style={styles.mainContainer}>
+      <TouchableOpacity
+        style={styles.trackContainer}
+        onPress={props.onSelectTrack}>
         <View style={styles.imageContainer}>
           <Image style={styles.image} source={{uri: props.imgSource}} />
         </View>
@@ -20,13 +22,21 @@ const TrackItem = props => {
             <Text style={styles.artists}>{props.artists}</Text>
           </View>
         </View>
-      </View>
-    </TouchableOpacity>
+      </TouchableOpacity>
+      {props.onRemoveTrack ? (
+        <TouchableOpacity
+          style={styles.removeContainer}
+          onPress={props.onRemoveTrack}>
+          <Icon name="delete-circle" color="red" size={Sizes.huge} />
+        </TouchableOpacity>
+      ) : null}
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
   mainContainer: {
+    flexDirection: 'row',
     flex: 1,
     margin: Sizes.min,
   },
@@ -57,6 +67,11 @@ const styles = StyleSheet.create({
   image: {
     width: Sizes.max * 2,
     height: Sizes.max * 2,
+  },
+  removeContainer: {
+    flex: 0.15,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
 });
 
