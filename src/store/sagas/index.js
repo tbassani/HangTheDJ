@@ -16,6 +16,7 @@ import {
   initGetActiveProfileSaga,
   initResetPasswordSaga,
   initGetTracksAndPlaylistsSaga,
+  initCreateMixSaga,
 } from './appSaga';
 
 export function* watchAuth() {
@@ -47,4 +48,5 @@ export function* watchApp() {
       initGetTracksAndPlaylistsSaga,
     ),
   ]);
+  yield all([takeEvery(actionTypes.INIT_CREATE_MIX, initCreateMixSaga)]);
 }

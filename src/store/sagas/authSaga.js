@@ -10,11 +10,7 @@ import {
   forgotPasswordService,
 } from '../../services/auth';
 
-import {
-  saveDataToStorage,
-  removeDataToStorage,
-  getDataFromStorage,
-} from '../../services/storage';
+import {saveDataToStorage, removeDataToStorage} from '../../services/storage';
 import {Alert} from 'react-native';
 
 export function* initLoginSaga(action) {

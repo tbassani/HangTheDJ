@@ -183,3 +183,29 @@ export const removePlaylistFromMix = playlist => {
     playlist: playlist,
   };
 };
+
+export const initCreateMix = title => {
+  return {
+    type: actionTypes.INIT_CREATE_MIX,
+    title: title,
+  };
+};
+
+export const startCreateMix = () => {
+  return {
+    type: actionTypes.START_CREATE_MIX,
+  };
+};
+
+export const createMix = mix => {
+  return {
+    type: actionTypes.CREATE_MIX,
+    mix: mix,
+  };
+};
+
+export const createMixFail = () => {
+  return {
+    type: actionTypes.CREATE_MIX_FAIL,
+  };
+};

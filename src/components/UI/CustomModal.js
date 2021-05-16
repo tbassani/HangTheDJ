@@ -1,17 +1,20 @@
 import React from 'react';
 import {
   Modal,
+  KeyboardAvoidingView,
   View,
   Text,
-  Button,
   TouchableWithoutFeedback,
   StyleSheet,
   Dimensions,
 } from 'react-native';
 
+import Colors from '../../constants/Colors';
+import Sizes from '../../constants/Sizes';
+
 const CustomModal = props => {
   return (
-    <View>
+    <KeyboardAvoidingView>
       <Modal
         visible={props.show}
         transparent={true}
@@ -27,16 +30,17 @@ const CustomModal = props => {
           {props.children}
         </View>
       </Modal>
-    </View>
+    </KeyboardAvoidingView>
   );
 };
 
 const styles = StyleSheet.create({
   modalContent: {
-    flex: 0.4,
+    flex: 0.65,
     justifyContent: 'center',
     margin: '5%',
-    backgroundColor: 'white',
+    backgroundColor: Colors.shadow,
+    borderRadius: Sizes.huge,
   },
   modalOverlay: {
     position: 'absolute',

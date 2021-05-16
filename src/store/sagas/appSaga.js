@@ -9,7 +9,7 @@ import Playlist from '../../models/Playlist';
 import {
   getMixPlaylistsService,
   addToGroupService,
-  createMixPlaylistService,
+  mixPlaylistService,
   deleteMixService,
   getActiveProfileService,
   getProfileURLService,
@@ -112,6 +112,7 @@ export function* initGetTracksAndPlaylistsSaga(action) {
               playlist.playlist_name,
               playlist.playlist_art,
               playlist.tracks,
+              playlist.duration,
             ),
           );
         });
@@ -120,5 +121,31 @@ export function* initGetTracksAndPlaylistsSaga(action) {
     yield put(actions.getTracksAndPlaylists(tracks, playlists));
   } else {
     yield put(actions.getTracksAndPlaylistsFail());
+  }
+}
+
+export function* initCreateMixSaga(action) {
+  yield put(actions.startCreateMix());
+  const newMix = state => state.app.newMix;
+  const mix = yield select(newMix);
+  const selectedTracks = [];
+  const selectedPlaylists = [];
+
+  mix.tracks.forEach(track => {
+    selectedTracks.push(track.id);
+  });
+  mix.playlists.forEach(playlist => {
+    selectedPlaylists.push(playlist.id);
+  });
+  const response = yield mixPlaylistService(
+    selectedPlaylists,
+    selectedTracks,
+    action.title,
+    actions.logout,
+  );
+  if (response) {
+    console.log(response);
+  } else {
+    yield put(actions.resetPasswordFail());
   }
 }

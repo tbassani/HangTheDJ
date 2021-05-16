@@ -5,6 +5,7 @@ const initialState = {
   playlists: [],
   tracks: [],
   newMix: {
+    title: '',
     tracks: [],
     playlists: [],
   },
@@ -160,7 +161,7 @@ const reducer = (state = initialState, action) => {
       };
     case actionTypes.REMOVE_PLAYLIST_FROM_MIX:
       const updatedPlaylists = [...state.newMix.playlists].filter(
-        playlist => playlist.id === action.playlist.id,
+        playlist => playlist.id !== action.playlist.id,
       );
 
       return {
@@ -169,6 +170,21 @@ const reducer = (state = initialState, action) => {
           ...state.newMix,
           playlists: updatedPlaylists,
         },
+      };
+    case actionTypes.CREATE_MIX:
+      return {
+        ...state,
+        newMix: {
+          title: '',
+          tracks: [],
+          playlists: [],
+        },
+      };
+    case actionTypes.CREATE_MIX_FAIL:
+      return {
+        ...state,
+        loading: false,
+        error: true,
       };
     default:
       return state;

@@ -43,4 +43,8 @@ export {
   addPlaylistToMix,
   removePlaylistFromMix,
   removeTrackFromMix,
+  initCreateMix,
+  startCreateMix,
+  createMix,
+  createMixFail,
 } from './app';
