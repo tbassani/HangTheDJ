@@ -3,6 +3,8 @@ import {put, select} from 'redux-saga/effects';
 import * as actions from '../actions';
 
 import Mix from '../../models/Mix';
+import Track from '../../models/Track';
+import Playlist from '../../models/Playlist';
 
 import {
   getMixPlaylistsService,
@@ -11,6 +13,7 @@ import {
   deleteMixService,
   getActiveProfileService,
   getProfileURLService,
+  getTracksAndPlaylistsService,
 } from '../../services/app';
 
 import {resetPasswordService} from '../../services/auth';
@@ -74,5 +77,48 @@ export function* initResetPasswordSaga(action) {
     Alert.alert('Senha alterada!');
   } else {
     yield put(actions.resetPasswordFail());
+  }
+}
+
+export function* initGetTracksAndPlaylistsSaga(action) {
+  yield put(actions.startGetTracksAndPlaylists());
+  const response = yield getTracksAndPlaylistsService(
+    action.query,
+    action.cancelToken,
+    actions.logout,
+  );
+  if (response) {
+    const tracks = [];
+    const playlists = [];
+    yield response.forEach(section => {
+      if (section && section.data && section.title === 'Músicas') {
+        section.data.forEach(track => {
+          tracks.push(
+            new Track(
+              track.external_track_id,
+              track.track_name,
+              track.artists,
+              track.album_art,
+              track.duration,
+            ),
+          );
+        });
+      }
+      if (section && section.data && section.title === 'Playlists') {
+        section.data.forEach(playlist => {
+          playlists.push(
+            new Playlist(
+              playlist.external_playlist_id,
+              playlist.playlist_name,
+              playlist.playlist_art,
+              playlist.tracks,
+            ),
+          );
+        });
+      }
+    });
+    yield put(actions.getTracksAndPlaylists(tracks, playlists));
+  } else {
+    yield put(actions.getTracksAndPlaylistsFail());
   }
 }

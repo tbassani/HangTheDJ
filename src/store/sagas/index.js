@@ -15,6 +15,7 @@ import {
   initGetProfileURLSaga,
   initGetActiveProfileSaga,
   initResetPasswordSaga,
+  initGetTracksAndPlaylistsSaga,
 } from './appSaga';
 
 export function* watchAuth() {
@@ -39,5 +40,11 @@ export function* watchApp() {
   yield all([takeEvery(actionTypes.INIT_GET_PROFILE, initGetProfileURLSaga)]);
   yield all([
     takeEvery(actionTypes.INIT_RESET_PASSWORD, initResetPasswordSaga),
+  ]);
+  yield all([
+    takeEvery(
+      actionTypes.INIT_GET_TRACKS_AND_PLAYLISTS,
+      initGetTracksAndPlaylistsSaga,
+    ),
   ]);
 }

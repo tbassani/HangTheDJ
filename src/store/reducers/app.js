@@ -90,7 +90,26 @@ const reducer = (state = initialState, action) => {
         loading: false,
         error: true,
       };
-
+    case actionTypes.START_GET_TRACKS_AND_PLAYLISTS:
+      return {
+        ...state,
+        loading: true,
+        error: false,
+      };
+    case actionTypes.GET_TRACKS_AND_PLAYLISTS:
+      return {
+        ...state,
+        tracks: action.tracks,
+        playlists: action.playlists,
+        loading: false,
+        error: false,
+      };
+    case actionTypes.GET_TRACKS_AND_PLAYLISTS_FAIL:
+      return {
+        ...state,
+        loading: false,
+        error: true,
+      };
     default:
       return state;
   }

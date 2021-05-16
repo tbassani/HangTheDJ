@@ -1,53 +1,56 @@
 import React from 'react';
 import {TouchableOpacity, View, Text, Image, StyleSheet} from 'react-native';
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
-import Colors from '../../constants/Colors';
 import Sizes from '../../constants/Sizes';
 
 const PlaylistItem = props => {
   return (
-    <View style={styles.mainContainer}>
-      <TouchableOpacity onPress={props.selectPlaylist}>
+    <TouchableOpacity
+      style={styles.mainContainer}
+      onPress={props.selectPlaylist}>
+      <View style={styles.playlistContainer}>
+        <View style={styles.imageContainer}>
+          <Image style={styles.image} source={{uri: props.imgSource}} />
+        </View>
         <View style={styles.infoContainer}>
-          <View style={styles.imageContainer}>
-            <Image source={{uri: props.imgSource}} />
-          </View>
           <View style={styles.titleContainer}>
             <Text style={styles.title}>{props.title}</Text>
           </View>
         </View>
-      </TouchableOpacity>
-      {props.isOwner ? (
-        <TouchableOpacity onPress={props.deleteMix}>
-          <Icon name="delete" size={Sizes.small} color={Colors.primary} />
-        </TouchableOpacity>
-      ) : null}
-    </View>
+      </View>
+    </TouchableOpacity>
   );
 };
 
 const styles = StyleSheet.create({
   mainContainer: {
     flex: 1,
-    width: '100%',
+    margin: Sizes.min,
+  },
+  playlistContainer: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
   },
   infoContainer: {
-    width: '100%',
-    flexDirection: 'row',
     flex: 1,
   },
   titleContainer: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'flex-start',
-    marginLeft: Sizes.tiny,
+    flexDirection: 'row',
+    flexWrap: 'wrap',
   },
   title: {
+    flex: 1,
     fontSize: Sizes.large,
     color: '#FFF',
   },
-  imageContainer: {},
+  imageContainer: {
+    margin: Sizes.tiny,
+  },
+  image: {
+    width: Sizes.max * 2,
+    height: Sizes.max * 2,
+  },
 });
 
 export default PlaylistItem;

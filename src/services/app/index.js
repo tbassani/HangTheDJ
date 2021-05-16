@@ -620,3 +620,39 @@ export async function getProfileURLService(signOut) {
     return;
   }
 }
+
+export async function getTracksAndPlaylistsService(
+  query,
+  cancelToken,
+  signOut,
+) {
+  const jwt = await getDataFromStorage('token');
+  var aux = [];
+  const headers = {
+    Authorization: 'Bearer ' + jwt,
+    contenttype: 'application/json;',
+    datatype: 'json',
+  };
+  await axios({
+    headers: headers,
+    method: 'GET',
+    url: APIConfig.GET_PLAYLISTS_AND_TRACKS_URL,
+    cancelToken: cancelToken ? cancelToken.token : null,
+    params: {
+      query,
+    },
+  })
+    .then(response => {
+      aux = response.data;
+    })
+    .catch(error => {
+      if (error.response) {
+        if (error.response.status === 401) {
+          console.log('JWT Inválido');
+          signOut();
+        }
+      }
+      console.log(error);
+    });
+  return aux;
+}

@@ -7,5 +7,6 @@ export default {
   textAlt: '#CCC',
   textPlaceholder: '#333',
   dark: '#222',
+  shadow: '#333',
   light: '#555',
 };

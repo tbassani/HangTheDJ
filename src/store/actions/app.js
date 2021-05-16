@@ -127,3 +127,31 @@ export const resetPasswordFail = () => {
     type: actionTypes.RESET_PASSWORD_FAIL,
   };
 };
+
+export const initGetTracksAndPlaylists = (query, cancelToken) => {
+  return {
+    type: actionTypes.INIT_GET_TRACKS_AND_PLAYLISTS,
+    query: query,
+    cancelToken: cancelToken,
+  };
+};
+
+export const startGetTracksAndPlaylists = () => {
+  return {
+    type: actionTypes.START_GET_TRACKS_AND_PLAYLISTS,
+  };
+};
+
+export const getTracksAndPlaylists = (tracks, playlists) => {
+  return {
+    type: actionTypes.GET_TRACKS_AND_PLAYLISTS,
+    tracks: tracks,
+    playlists: playlists,
+  };
+};
+
+export const getTracksAndPlaylistsFail = () => {
+  return {
+    type: actionTypes.GET_TRACKS_AND_PLAYLISTS_FAIL,
+  };
+};

@@ -35,4 +35,8 @@ export {
   startResetPassword,
   resetPassword,
   resetPasswordFail,
+  initGetTracksAndPlaylists,
+  startGetTracksAndPlaylists,
+  getTracksAndPlaylists,
+  getTracksAndPlaylistsFail,
 } from './app';
