@@ -112,7 +112,6 @@ export function* initGetTracksAndPlaylistsSaga(action) {
               playlist.playlist_name,
               playlist.playlist_art,
               playlist.tracks,
-              playlist.duration,
             ),
           );
         });
