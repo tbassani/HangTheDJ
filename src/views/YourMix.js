@@ -76,6 +76,7 @@ const YourMix = props => {
 
   const createMix = () => {
     dispatch(actions.initCreateMix(formState.inputValues.mixTitle));
+    clearInpuHandler();
     setShowModal(false);
   };
 
@@ -138,7 +139,7 @@ const YourMix = props => {
                 imgSource={item.artURL}
                 title={item.title}
                 onSelectPlaylist={() => {}}
-                onRemovePLaylist={() => removePlaylistHandler(item)}
+                onRemovePlaylist={() => removePlaylistHandler(item)}
               />
             );
           })}

@@ -13,6 +13,7 @@ import ProfileScreen from '../screens/user/ProfileScreen';
 import StreamingProfileScreen from '../screens/mix/StreamingProfileScreen';
 import ResetPasswordScreen from '../screens/auth/ResetPasswordScreen';
 import LoadingScreen from '../screens/LoadingScreen';
+import RankingScreen from '../screens/ranking/RankingScreen';
 
 import Colors from '../constants/Colors';
 import Sizes from '../constants/Sizes';
@@ -122,6 +123,28 @@ const UserMixesNavigatior = () => {
   );
 };
 
+const RankingNavigatior = () => {
+  return (
+    <Stack.Navigator
+      screenOptions={{
+        headerStyle: {
+          backgroundColor: Platform.OS == 'android' ? Colors.primary : '',
+        },
+        headerTintColor: Platform.OS == 'android' ? 'white' : Colors.primary,
+        headerLeft: null,
+      }}>
+      <Stack.Screen
+        options={{
+          headerTitle: 'Tocando',
+          headerTitleStyle: {alignSelf: 'center'},
+        }}
+        name="RankingScreen"
+        component={RankingScreen}
+      />
+    </Stack.Navigator>
+  );
+};
+
 const AppNavigator = () => {
   return (
     <Tab.Navigator
@@ -134,9 +157,9 @@ const AppNavigator = () => {
       <Tab.Screen
         options={{
           tabBarIcon: ({color, size}) => (
-            <Icon name="speaker" color={color} size={Sizes.huge} />
+            <Icon name="album" color={color} size={Sizes.huge} />
           ),
-          tabBarLabel: 'Tocar',
+          tabBarLabel: 'Meus Mixes',
         }}
         name="UserMixesNavigatior"
         component={UserMixesNavigatior}
@@ -150,6 +173,16 @@ const AppNavigator = () => {
         }}
         name="CreateMixNavigatior"
         component={CreateMixNavigatior}
+      />
+      <Tab.Screen
+        options={{
+          tabBarIcon: ({color, size}) => (
+            <Icon name="speaker" color={color} size={Sizes.huge} />
+          ),
+          tabBarLabel: 'Tocando',
+        }}
+        name="RankingNavigatior"
+        component={RankingNavigatior}
       />
       <Tab.Screen
         options={{

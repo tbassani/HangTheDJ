@@ -29,6 +29,10 @@ const UserMixesScreen = props => {
     return currState.app.mixes;
   });
 
+  const userId = useSelector(currState => {
+    return currState.auth.userId;
+  });
+
   const loading = useSelector(currState => {
     return currState.app.loading;
   });
@@ -152,7 +156,12 @@ const UserMixesScreen = props => {
   }
 
   const renderMixItem = itemData => {
-    return <MixItem title={itemData.item.title} />;
+    return (
+      <MixItem
+        title={itemData.item.title}
+        isOwner={itemData.item.ownerId === userId}
+      />
+    );
   };
 
   return (

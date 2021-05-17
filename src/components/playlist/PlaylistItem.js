@@ -20,10 +20,10 @@ const PlaylistItem = props => {
           </View>
         </View>
       </TouchableOpacity>
-      {props.onRemovePLaylist ? (
+      {props.onRemovePlaylist ? (
         <TouchableOpacity
           style={styles.removeContainer}
-          onPress={props.onRemovePLaylist}>
+          onPress={props.onRemovePlaylist}>
           <Icon name="delete-circle" color="red" size={Sizes.huge} />
         </TouchableOpacity>
       ) : null}

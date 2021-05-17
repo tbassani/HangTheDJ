@@ -1,24 +1,26 @@
 import React from 'react';
-import {TouchableOpacity, View, Text, StyleSheet} from 'react-native';
+import {TouchableOpacity, View, Text, Image, StyleSheet} from 'react-native';
+
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
-import Colors from '../../constants/Colors';
 import Sizes from '../../constants/Sizes';
 
-const MixItem = props => {
+const PlaylistItem = props => {
   return (
     <View style={styles.mainContainer}>
-      <TouchableOpacity onPress={props.selectMix}>
+      <TouchableOpacity style={styles.mixContainer} onPress={props.onSelectMix}>
+        <Icon name="music-box-multiple" size={Sizes.max * 2} color={'#FFF'} />
         <View style={styles.infoContainer}>
-          <Icon name="music-box-multiple" size={Sizes.max * 2} color={'#FFF'} />
           <View style={styles.titleContainer}>
             <Text style={styles.title}>{props.title}</Text>
           </View>
         </View>
       </TouchableOpacity>
       {props.isOwner ? (
-        <TouchableOpacity onPress={props.deleteMix}>
-          <Icon name="delete" size={Sizes.small} color={Colors.primary} />
+        <TouchableOpacity
+          style={styles.removeContainer}
+          onPress={props.onRemoveMix}>
+          <Icon name="delete-circle" color="red" size={Sizes.huge} />
         </TouchableOpacity>
       ) : null}
     </View>
@@ -27,24 +29,39 @@ const MixItem = props => {
 
 const styles = StyleSheet.create({
   mainContainer: {
+    flexDirection: 'row',
     flex: 1,
-    width: '100%',
+    margin: Sizes.min,
+  },
+  mixContainer: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
   },
   infoContainer: {
-    width: '100%',
-    flexDirection: 'row',
     flex: 1,
   },
   titleContainer: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'flex-start',
-    marginLeft: Sizes.tiny,
+    flexDirection: 'row',
+    flexWrap: 'wrap',
   },
   title: {
+    flex: 1,
     fontSize: Sizes.large,
     color: '#FFF',
   },
+  imageContainer: {
+    margin: Sizes.tiny,
+  },
+  image: {
+    width: Sizes.max * 2,
+    height: Sizes.max * 2,
+  },
+  removeContainer: {
+    flex: 0.15,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
 });
 
-export default MixItem;
+export default PlaylistItem;
