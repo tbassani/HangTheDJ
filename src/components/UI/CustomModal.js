@@ -6,6 +6,7 @@ import {
   Text,
   TouchableWithoutFeedback,
   StyleSheet,
+  Platform,
   Dimensions,
 } from 'react-native';
 
@@ -14,7 +15,7 @@ import Sizes from '../../constants/Sizes';
 
 const CustomModal = props => {
   return (
-    <KeyboardAvoidingView>
+    <View>
       <Modal
         visible={props.show}
         transparent={true}
@@ -23,20 +24,22 @@ const CustomModal = props => {
           <View style={styles.modalOverlay} />
         </TouchableWithoutFeedback>
 
-        <View style={styles.modalContent}>
+        <KeyboardAvoidingView
+          style={styles.modalContent}
+          behavior={Platform.OS === 'android' ? undefined : 'position'}>
           <View style={styles.modalTextContainer}>
             <Text style={styles.modalTitle}>{props.title}</Text>
           </View>
           {props.children}
-        </View>
+        </KeyboardAvoidingView>
       </Modal>
-    </KeyboardAvoidingView>
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
   modalContent: {
-    flex: 0.65,
+    flex: 0.5,
     justifyContent: 'center',
     margin: '5%',
     backgroundColor: Colors.shadow,
