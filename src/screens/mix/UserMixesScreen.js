@@ -102,6 +102,11 @@ const UserMixesScreen = props => {
     ]);
   };
 
+  const selectMixHandler = (mixId, mixTitle, ownerId) => {
+    dispatch(actions.initGetRanking(mixId, mixTitle, ownerId));
+    props.navigation.navigate('RankingNavigatior');
+  };
+
   if (!loading && mixes.length <= 0) {
     return (
       <ScreenWrapper>
@@ -177,6 +182,13 @@ const UserMixesScreen = props => {
         isOwner={itemData.item.ownerId === userId}
         onRemoveMix={() =>
           removeMixHandler(itemData.item.id, itemData.item.title)
+        }
+        onSelectMix={() =>
+          selectMixHandler(
+            itemData.item.id,
+            itemData.item.title,
+            itemData.item.ownerId,
+          )
         }
       />
     );

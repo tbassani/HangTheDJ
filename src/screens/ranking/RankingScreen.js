@@ -7,6 +7,7 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 import CustomModal from '../../components/UI/CustomModal';
 import PrimaryButton from '../../components/UI/PrimaryButton';
+import SecondaryButton from '../../components/UI/SecondaryButton';
 import CurrentTrack from '../../components/ranking/CurrentTrack';
 import TrackRanking from '../../components/ranking/TrackRanking';
 //import Player from '../../components/player/Player';
@@ -22,6 +23,7 @@ const RankingScreen = props => {
   const ownerId = useSelector(currState => currState.ranking.ownerId);
   const mixTitle = useSelector(currState => currState.ranking.mixTitle);
   const tracks = useSelector(currState => currState.ranking.tracks);
+  const topTracks = useSelector(currState => currState.ranking.topTracks);
   const loading = useSelector(currState => currState.ranking.loading);
 
   const userId = useSelector(currState => currState.auth.userId);
@@ -46,7 +48,7 @@ const RankingScreen = props => {
         return <View style={styles.shareButtonContainer}></View>;
       },
     });
-  }, [navigation]);
+  }, [navigation, mixTitle]);
 
   const shareMixHandler = () => {
     setShareModal(true);
@@ -56,14 +58,50 @@ const RankingScreen = props => {
     Alert.alert('Código copiado!');
   };
 
-  let rankingContent = <Text>Escolha ou crie um Mix!</Text>;
-  if (mixId && mixId.length > 0) {
-    rankingContent = <TrackRanking />;
-  }
   let playerContent = null;
   if (ownerId === userId) {
     //playerContent = <Player />;
   }
+
+  let rankingContent = (
+    <View style={styles.mainContainer}>
+      <Text>Escolha ou crie um Mix!</Text>
+    </View>
+  );
+
+  if (mixId && mixId > 0) {
+    rankingContent = (
+      <View style={styles.rankingContainer}>
+        <TrackRanking />
+      </View>
+    );
+  }
+
+  let buttonsContent = (
+    <View style={styles.buttonsContainer}>
+      <View style={styles.buttonContainer}>
+        <SecondaryButton>
+          <Icon name="lightbulb-on" color="#FFF" size={Sizes.huge} />
+        </SecondaryButton>
+      </View>
+      <View style={styles.buttonContainer}>
+        <PrimaryButton>
+          <Icon name="vote" color="#FFF" size={Sizes.huge} />
+        </PrimaryButton>
+      </View>
+      <View style={styles.buttonContainer}>
+        <SecondaryButton>
+          <Icon name="music-note-plus" color="#FFF" size={Sizes.huge} />
+        </SecondaryButton>
+      </View>
+    </View>
+  );
+
+  let topContent = (
+    <View style={styles.topContainer}>
+      <Text>TOP</Text>
+    </View>
+  );
 
   if (loading) {
     return (
@@ -92,7 +130,10 @@ const RankingScreen = props => {
           </View>
         </View>
       </CustomModal>
-      <Text>RANKING</Text>
+      {topContent}
+      {rankingContent}
+      <View style={styles.bottomContainer}>{buttonsContent}</View>
+
       {/* 
 
         //If there is no Mix, direct the user to se main screen
@@ -111,6 +152,24 @@ const styles = StyleSheet.create({
   mainContainer: {
     flex: 1,
     backgroundColor: Colors.dark,
+  },
+  topContainer: {
+    flex: 0.25,
+  },
+  rankingContainer: {
+    flex: 0.6,
+  },
+  bottomContainer: {
+    flex: 0.15,
+    width: '100%',
+  },
+  buttonsContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    flex: 1,
+  },
+  buttonContainer: {
+    flex: 0.3,
   },
   shareButtonContainer: {
     margin: Sizes.tiny,
