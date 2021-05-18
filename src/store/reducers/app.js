@@ -184,6 +184,8 @@ const reducer = (state = initialState, action) => {
           tracks: [],
           playlists: [],
         },
+        tracks: [],
+        playlists: [],
         loading: false,
       };
     case actionTypes.CREATE_MIX_FAIL:
