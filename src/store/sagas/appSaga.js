@@ -10,10 +10,10 @@ import {
   getMixPlaylistsService,
   addToGroupService,
   mixPlaylistService,
-  deleteMixService,
   getActiveProfileService,
   getProfileURLService,
   getTracksAndPlaylistsService,
+  deleteMixService,
 } from '../../services/app';
 
 import {resetPasswordService} from '../../services/auth';
@@ -143,8 +143,21 @@ export function* initCreateMixSaga(action) {
     actions.logout,
   );
   if (response) {
-    console.log(response);
+    yield put(actions.createMix());
+    yield put(actions.initGetMixes());
   } else {
     yield put(actions.resetPasswordFail());
+  }
+}
+
+export function* initRemoveMixSaga(action) {
+  yield put(actions.startRemoveMix());
+
+  const response = yield deleteMixService(action.mixId, actions.logout);
+  if (response) {
+    console.log(response);
+    yield put(actions.removeMix(action.mixId));
+  } else {
+    yield put(actions.removeMixFail());
   }
 }

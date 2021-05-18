@@ -87,6 +87,21 @@ const UserMixesScreen = props => {
     }
   };
 
+  const removeMixHandler = (mixId, mixTitle) => {
+    Alert.alert('Remover Mix', `Deseja mesmo remove o mix '${mixTitle}'?`, [
+      {text: 'Cancelar', style: 'cancel', onPress: () => {}},
+      {
+        text: 'Remover',
+        style: 'destructive',
+        // If the user confirmed, then we dispatch the action we blocked earlier
+        // This will continue the action that had triggered the removal of the screen
+        onPress: () => {
+          dispatch(actions.initRemoveMix(mixId));
+        },
+      },
+    ]);
+  };
+
   if (!loading && mixes.length <= 0) {
     return (
       <ScreenWrapper>
@@ -160,6 +175,9 @@ const UserMixesScreen = props => {
       <MixItem
         title={itemData.item.title}
         isOwner={itemData.item.ownerId === userId}
+        onRemoveMix={() =>
+          removeMixHandler(itemData.item.id, itemData.item.title)
+        }
       />
     );
   };

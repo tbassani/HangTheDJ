@@ -13,13 +13,25 @@ const initialState = {
 
 const reducer = (state = initialState, action) => {
   switch (action.type) {
-    case actionTypes.START_AUTH:
+    case actionTypes.START_GET_RANKING_TRACKS:
       return {
         ...state,
         loading: true,
         error: false,
       };
-
+    case actionTypes.GET_RANKING_TRACKS:
+      return {
+        ...state,
+        tracks: action.tracks,
+        loading: false,
+        error: false,
+      };
+    case actionTypes.GET_RANKING_TRACKS_FAIL:
+      return {
+        ...state,
+        loading: false,
+        error: true,
+      };
     default:
       return state;
   }

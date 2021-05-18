@@ -13,14 +13,16 @@ import createSagaMiddleware from 'redux-saga';
 
 import authReducer from './store/reducers/auth';
 import appReducer from './store/reducers/app';
+import rankingReducer from './store/reducers/ranking';
 
-import {watchAuth, watchApp} from './store/sagas';
+import {watchAuth, watchApp, watchRanking} from './store/sagas';
 
 import MainNavigator from './navigation/MainNavigation';
 
 const rootReducer = combineReducers({
   auth: authReducer,
   app: appReducer,
+  ranking: rankingReducer,
 });
 
 const sagaMiddleware = createSagaMiddleware();
@@ -29,6 +31,7 @@ const store = createStore(rootReducer, applyMiddleware(sagaMiddleware));
 
 sagaMiddleware.run(watchAuth);
 sagaMiddleware.run(watchApp);
+sagaMiddleware.run(watchRanking);
 
 const App = () => {
   return (

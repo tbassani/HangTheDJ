@@ -115,7 +115,7 @@ export async function deleteMixService(mix_id, signOut) {
     datatype: 'json',
   };
   const body = {
-    mix_id,
+    playlist_id: mix_id,
   };
   await axios({
     headers: headers,

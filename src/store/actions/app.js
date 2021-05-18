@@ -209,3 +209,29 @@ export const createMixFail = () => {
     type: actionTypes.CREATE_MIX_FAIL,
   };
 };
+
+export const initRemoveMix = mixId => {
+  return {
+    type: actionTypes.INIT_REMOVE_MIX,
+    mixId: mixId,
+  };
+};
+
+export const startRemoveMix = () => {
+  return {
+    type: actionTypes.START_REMOVE_MIX,
+  };
+};
+
+export const removeMix = mixId => {
+  return {
+    type: actionTypes.REMOVE_MIX,
+    mixId: mixId,
+  };
+};
+
+export const removeMixFail = () => {
+  return {
+    type: actionTypes.REMOVE_MIX_FAIL,
+  };
+};

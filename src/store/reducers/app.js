@@ -171,6 +171,11 @@ const reducer = (state = initialState, action) => {
           playlists: updatedPlaylists,
         },
       };
+    case actionTypes.START_CREATE_MIX:
+      return {
+        ...state,
+        loading: true,
+      };
     case actionTypes.CREATE_MIX:
       return {
         ...state,
@@ -179,8 +184,29 @@ const reducer = (state = initialState, action) => {
           tracks: [],
           playlists: [],
         },
+        loading: false,
       };
     case actionTypes.CREATE_MIX_FAIL:
+      return {
+        ...state,
+        loading: false,
+        error: true,
+      };
+    case actionTypes.START_REMOVE_MIX:
+      return {
+        ...state,
+        loading: true,
+      };
+    case actionTypes.REMOVE_MIX:
+      const updatedMixes = [...state.mixes].filter(
+        mix => mix.id !== action.mixId,
+      );
+      return {
+        ...state,
+        mixes: updatedMixes,
+        loading: false,
+      };
+    case actionTypes.REMOVE_MIX_FAIL:
       return {
         ...state,
         loading: false,
