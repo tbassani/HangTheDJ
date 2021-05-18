@@ -127,6 +127,8 @@ export function* initCreateMixSaga(action) {
   yield put(actions.startCreateMix());
   const newMix = state => state.app.newMix;
   const mix = yield select(newMix);
+  const user = state => state.auth.userId;
+  const userId = yield select(user);
   const selectedTracks = [];
   const selectedPlaylists = [];
 
@@ -145,6 +147,7 @@ export function* initCreateMixSaga(action) {
   if (response) {
     yield put(actions.createMix());
     yield put(actions.initGetMixes());
+    yield put(actions.initGetRanking(response, action.title, userId));
   } else {
     yield put(actions.resetPasswordFail());
   }

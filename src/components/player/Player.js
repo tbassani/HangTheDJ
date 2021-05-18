@@ -11,11 +11,15 @@ const Player = props => {
     <View style={styles.mainContainer}>
       <View style={styles.buttonsContainer}>
         {!props.isPLaying ? (
-          <TouchableOpacity style={styles.buttonContainer}>
+          <TouchableOpacity
+            style={styles.buttonContainer}
+            onPress={props.onPressPlay}>
             <Icon name="play" color="#FFF" size={Sizes.max * 1.2} />
           </TouchableOpacity>
         ) : (
-          <TouchableOpacity style={styles.buttonContainer}>
+          <TouchableOpacity
+            style={styles.buttonContainer}
+            onPress={props.onPressPause}>
             <Icon name="pause" color="#FFF" size={Sizes.max * 1.2} />
           </TouchableOpacity>
         )}

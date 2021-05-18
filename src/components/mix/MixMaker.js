@@ -31,7 +31,9 @@ const MixMaker = props => {
   let content = <MixPicker />;
 
   if (selected === 'second') {
-    content = <YourMix />;
+    content = (
+      <YourMix addTracks={props.addTracks} onCreateMix={props.onCreateMix} />
+    );
   }
   return (
     <View style={styles.mainContainer}>

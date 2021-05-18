@@ -78,10 +78,14 @@ const YourMix = props => {
     dispatch(actions.initCreateMix(formState.inputValues.mixTitle));
     clearInpuHandler();
     setShowModal(false);
+    props.onCreateMix();
   };
 
-  return (
-    <View style={styles.mainContainer}>
+  const addTracksToMixHandler = () => {};
+
+  let modal = null;
+  if (!props.addTracks) {
+    modal = (
       <CustomModal show={showModal} close={() => setShowModal(false)}>
         <View style={styles.modalContent}>
           <View style={styles.formContainer}>
@@ -107,6 +111,12 @@ const YourMix = props => {
           </View>
         </View>
       </CustomModal>
+    );
+  }
+
+  return (
+    <View style={styles.mainContainer}>
+      {modal}
       <View style={styles.listContainer}>
         <ScrollView>
           {newMix.tracks.length > 0 ? (
@@ -144,7 +154,13 @@ const YourMix = props => {
             );
           })}
         </ScrollView>
-        <PrimaryButton onPress={createMixHandler}>Criar!</PrimaryButton>
+        {props.addTracks ? (
+          <PrimaryButton onPress={addTracksToMixHandler}>
+            Adicionar!
+          </PrimaryButton>
+        ) : (
+          <PrimaryButton onPress={createMixHandler}>Criar!</PrimaryButton>
+        )}
       </View>
     </View>
   );

@@ -12,6 +12,7 @@ import CurrentTrack from '../../components/ranking/CurrentTrack';
 import TrackRanking from '../../components/ranking/TrackRanking';
 import Player from '../../components/player/Player';
 import LoadingSpinner from '../../components/UI/LoadingSpinner';
+import TextLink from '../../components/UI/TextLink';
 
 import Colors from '../../constants/Colors';
 import Sizes from '../../constants/Sizes';
@@ -24,29 +25,36 @@ const RankingScreen = props => {
   const mixTitle = useSelector(currState => currState.ranking.mixTitle);
   const tracks = useSelector(currState => currState.ranking.tracks);
   const topTracks = useSelector(currState => currState.ranking.topTracks);
+  const currTrack = useSelector(currState => currState.ranking.currTrack);
   const loading = useSelector(currState => currState.ranking.loading);
 
   const userId = useSelector(currState => currState.auth.userId);
 
-  //Show Mix Title on screen header
-  //Add dhare button to top right corner
   const navigation = props.navigation;
   useEffect(() => {
     navigation.setOptions({
       headerTitle: mixTitle.length > 0 ? mixTitle : 'Tocando',
       headerTitleStyle: {alignSelf: 'center'},
-      headerRight: () => {
-        return (
-          <TouchableOpacity
-            style={styles.shareButtonContainer}
-            onPress={shareMixHandler}>
-            <Icon name="share-variant" color={Colors.light} size={Sizes.huge} />
-          </TouchableOpacity>
-        );
-      },
-      headerLeft: () => {
-        return <View style={styles.shareButtonContainer}></View>;
-      },
+      headerRight: mixTitle
+        ? () => {
+            return (
+              <TouchableOpacity
+                style={styles.shareButtonContainer}
+                onPress={shareMixHandler}>
+                <Icon
+                  name="share-variant"
+                  color={Colors.light}
+                  size={Sizes.huge}
+                />
+              </TouchableOpacity>
+            );
+          }
+        : () => {},
+      headerLeft: mixTitle
+        ? () => {
+            return <View style={styles.shareButtonContainer}></View>;
+          }
+        : () => {},
     });
   }, [navigation, mixTitle]);
 
@@ -58,16 +66,20 @@ const RankingScreen = props => {
     Alert.alert('Código copiado!');
   };
 
-  let playerContent = null;
-  if (ownerId === userId) {
-    //playerContent = <Player />;
-  }
+  const onPressPlayHandler = () => {};
+
+  const onPressPauseHandler = () => {};
 
   let rankingContent = (
     <View style={styles.mainContainer}>
-      <Text>Escolha ou crie um Mix!</Text>
+      <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+        <Text style={styles.message}>Escolha ou crie um Mix!</Text>
+      </View>
     </View>
   );
+
+  let topContent = null;
+  let buttonsContent = null;
 
   if (mixId && mixId > 0) {
     rankingContent = (
@@ -75,38 +87,50 @@ const RankingScreen = props => {
         <TrackRanking />
       </View>
     );
+    topContent = (
+      <View style={styles.topContainer}>
+        <View style={styles.currTrackContainer}>
+          {currTrack ? (
+            <CurrentTrack
+              title={currTrack.title}
+              artists={currTrack.artists}
+              artURL={currTrack.artURL}
+            />
+          ) : (
+            <View style={styles.currTrackContainer}>
+              <Text style={styles.message}>Aperte Play!</Text>
+            </View>
+          )}
+        </View>
+        <View style={styles.playerContainer}>
+          <Player
+            onPressPlay={onPressPlayHandler}
+            onPressPause={onPressPauseHandler}
+          />
+        </View>
+      </View>
+    );
+    buttonsContent = (
+      <View style={styles.buttonsContainer}>
+        <View style={styles.buttonContainer}>
+          <SecondaryButton>
+            <Icon name="lightbulb-on" color="#FFF" size={Sizes.huge} />
+          </SecondaryButton>
+        </View>
+        <View style={styles.buttonContainer}>
+          <PrimaryButton>
+            <Icon name="vote" color="#FFF" size={Sizes.huge} />
+          </PrimaryButton>
+        </View>
+        <View style={styles.buttonContainer}>
+          <SecondaryButton
+            onPress={() => navigation.navigate('AddTracksToMixScreen')}>
+            <Icon name="music-note-plus" color="#FFF" size={Sizes.huge} />
+          </SecondaryButton>
+        </View>
+      </View>
+    );
   }
-
-  let buttonsContent = (
-    <View style={styles.buttonsContainer}>
-      <View style={styles.buttonContainer}>
-        <SecondaryButton>
-          <Icon name="lightbulb-on" color="#FFF" size={Sizes.huge} />
-        </SecondaryButton>
-      </View>
-      <View style={styles.buttonContainer}>
-        <PrimaryButton>
-          <Icon name="vote" color="#FFF" size={Sizes.huge} />
-        </PrimaryButton>
-      </View>
-      <View style={styles.buttonContainer}>
-        <SecondaryButton>
-          <Icon name="music-note-plus" color="#FFF" size={Sizes.huge} />
-        </SecondaryButton>
-      </View>
-    </View>
-  );
-
-  let topContent = (
-    <View style={styles.topContainer}>
-      <View style={styles.currTrackContainer}>
-        <CurrentTrack />
-      </View>
-      <View style={styles.playerContainer}>
-        <Player />
-      </View>
-    </View>
-  );
 
   if (loading) {
     return (
@@ -174,7 +198,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   buttonContainer: {
-    flex: 0.3,
+    flex: 0.5,
   },
   shareButtonContainer: {
     margin: Sizes.tiny,
@@ -208,6 +232,12 @@ const styles = StyleSheet.create({
   },
   currTrackContainer: {
     flex: 0.75,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  message: {
+    color: Colors.textDefault,
+    fontSize: Sizes.huge,
   },
   playerContainer: {
     flex: 0.25,

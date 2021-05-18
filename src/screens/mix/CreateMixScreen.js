@@ -8,7 +8,11 @@ const CreateMixScreen = props => {
   return (
     <ScreenWrapper>
       <View style={styles.mainContainer}>
-        <MixMaker firstTabTitle="Escolha" secondTabTitle="Seu Mix" />
+        <MixMaker
+          firstTabTitle="Escolha"
+          secondTabTitle="Seu Mix"
+          onCreateMix={() => props.navigation.navigate('RankingNavigator')}
+        />
       </View>
     </ScreenWrapper>
   );

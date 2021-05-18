@@ -14,6 +14,7 @@ import StreamingProfileScreen from '../screens/mix/StreamingProfileScreen';
 import ResetPasswordScreen from '../screens/auth/ResetPasswordScreen';
 import LoadingScreen from '../screens/LoadingScreen';
 import RankingScreen from '../screens/ranking/RankingScreen';
+import AddTracksToMixScreen from '../screens/ranking/AddTracksToMixScreen';
 
 import Colors from '../constants/Colors';
 import Sizes from '../constants/Sizes';
@@ -21,7 +22,7 @@ import Sizes from '../constants/Sizes';
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
 
-const ProfileNavigatior = () => {
+const ProfileNavigator = () => {
   return (
     <Stack.Navigator
       screenOptions={{
@@ -59,7 +60,59 @@ const ProfileNavigatior = () => {
   );
 };
 
-const CreateMixNavigatior = () => {
+const UserMixesNavigator = () => {
+  return (
+    <Stack.Navigator
+      screenOptions={{
+        headerStyle: {
+          backgroundColor: Platform.OS == 'android' ? Colors.primary : '',
+        },
+        headerTintColor: Platform.OS == 'android' ? 'white' : Colors.primary,
+        headerLeft: null,
+      }}>
+      <Stack.Screen
+        options={{
+          headerTitle: 'Meus Mixes',
+          headerTitleStyle: {alignSelf: 'center'},
+        }}
+        name="UserMixesScreen"
+        component={UserMixesScreen}
+      />
+    </Stack.Navigator>
+  );
+};
+
+const RankingNavigator = () => {
+  return (
+    <Stack.Navigator
+      screenOptions={{
+        headerStyle: {
+          backgroundColor: Platform.OS == 'android' ? Colors.primary : '',
+        },
+        headerTintColor: Platform.OS == 'android' ? 'white' : Colors.primary,
+        headerLeft: null,
+      }}>
+      <Stack.Screen
+        options={{
+          headerTitle: 'Tocando',
+          headerTitleStyle: {alignSelf: 'center'},
+        }}
+        name="RankingScreen"
+        component={RankingScreen}
+      />
+      <Stack.Screen
+        options={{
+          headerTitle: 'Adicionar ao Mix',
+          headerTitleStyle: {alignSelf: 'center'},
+        }}
+        name="AddTracksToMixScreen"
+        component={AddTracksToMixScreen}
+      />
+    </Stack.Navigator>
+  );
+};
+
+const CreateMixNavigator = () => {
   const profile = useSelector(currState => currState.app.profile);
   return (
     <Stack.Navigator
@@ -101,50 +154,6 @@ const CreateMixNavigatior = () => {
   );
 };
 
-const UserMixesNavigatior = () => {
-  return (
-    <Stack.Navigator
-      screenOptions={{
-        headerStyle: {
-          backgroundColor: Platform.OS == 'android' ? Colors.primary : '',
-        },
-        headerTintColor: Platform.OS == 'android' ? 'white' : Colors.primary,
-        headerLeft: null,
-      }}>
-      <Stack.Screen
-        options={{
-          headerTitle: 'Meus Mixes',
-          headerTitleStyle: {alignSelf: 'center'},
-        }}
-        name="UserMixesScreen"
-        component={UserMixesScreen}
-      />
-    </Stack.Navigator>
-  );
-};
-
-const RankingNavigatior = () => {
-  return (
-    <Stack.Navigator
-      screenOptions={{
-        headerStyle: {
-          backgroundColor: Platform.OS == 'android' ? Colors.primary : '',
-        },
-        headerTintColor: Platform.OS == 'android' ? 'white' : Colors.primary,
-        headerLeft: null,
-      }}>
-      <Stack.Screen
-        options={{
-          headerTitle: 'Tocando',
-          headerTitleStyle: {alignSelf: 'center'},
-        }}
-        name="RankingScreen"
-        component={RankingScreen}
-      />
-    </Stack.Navigator>
-  );
-};
-
 const AppNavigator = () => {
   return (
     <Tab.Navigator
@@ -161,8 +170,8 @@ const AppNavigator = () => {
           ),
           tabBarLabel: 'Meus Mixes',
         }}
-        name="UserMixesNavigatior"
-        component={UserMixesNavigatior}
+        name="UserMixesNavigator"
+        component={UserMixesNavigator}
       />
       <Tab.Screen
         options={{
@@ -171,8 +180,8 @@ const AppNavigator = () => {
           ),
           tabBarLabel: 'Mixar',
         }}
-        name="CreateMixNavigatior"
-        component={CreateMixNavigatior}
+        name="CreateMixNavigator"
+        component={CreateMixNavigator}
       />
       <Tab.Screen
         options={{
@@ -181,8 +190,8 @@ const AppNavigator = () => {
           ),
           tabBarLabel: 'Tocando',
         }}
-        name="RankingNavigatior"
-        component={RankingNavigatior}
+        name="RankingNavigator"
+        component={RankingNavigator}
       />
       <Tab.Screen
         options={{
@@ -191,8 +200,8 @@ const AppNavigator = () => {
           ),
           tabBarLabel: 'Conta',
         }}
-        name="ProfileNavigatior"
-        component={ProfileNavigatior}
+        name="ProfileNavigator"
+        component={ProfileNavigator}
       />
     </Tab.Navigator>
   );

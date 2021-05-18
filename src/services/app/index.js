@@ -90,7 +90,6 @@ export async function mixPlaylistService(
     data: body,
   })
     .then(response => {
-      console.log('RESPONSE');
       aux = response.data.id;
     })
     .catch(error => {
