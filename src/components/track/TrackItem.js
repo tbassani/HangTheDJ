@@ -11,15 +11,25 @@ const TrackItem = props => {
       <TouchableOpacity
         style={styles.trackContainer}
         onPress={props.onSelectTrack}>
-        <View style={styles.imageContainer}>
-          <Image style={styles.image} source={{uri: props.imgSource}} />
+        <View
+          style={
+            !props.small ? styles.imageContainer : styles.imageContainerSmall
+          }>
+          <Image
+            style={!props.small ? styles.image : styles.imageSmall}
+            source={{uri: props.imgSource}}
+          />
         </View>
         <View style={styles.infoContainer}>
           <View style={styles.titleContainer}>
-            <Text style={styles.title}>{props.title}</Text>
+            <Text style={!props.small ? styles.title : styles.titleSmall}>
+              {props.title}
+            </Text>
           </View>
           <View style={styles.artistsContainer}>
-            <Text style={styles.artists}>{props.artists}</Text>
+            <Text style={!props.small ? styles.artists : styles.artistsSmall}>
+              {props.artists}
+            </Text>
           </View>
         </View>
       </TouchableOpacity>
@@ -67,6 +77,22 @@ const styles = StyleSheet.create({
   image: {
     width: Sizes.max * 2,
     height: Sizes.max * 2,
+  },
+  titleSmall: {
+    flex: 1,
+    fontSize: Sizes.medium,
+    color: '#FFF',
+  },
+  artistsSmall: {
+    fontSize: Sizes.small,
+    color: '#FFF',
+  },
+  imageContainerSmall: {
+    margin: Sizes.min,
+  },
+  imageSmall: {
+    width: Sizes.max * 1.5,
+    height: Sizes.max * 1.5,
   },
   removeContainer: {
     flex: 0.15,

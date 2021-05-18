@@ -72,6 +72,7 @@ const TrackRanking = props => {
         onSelectTrack={() => {
           selectTrackHandler(itemData.item);
         }}
+        small
       />
     );
   };
@@ -117,6 +118,7 @@ const styles = StyleSheet.create({
     marginVertical: Sizes.tiny,
   },
   queryContainer: {
+    flex: 1,
     width: '70%',
   },
 });

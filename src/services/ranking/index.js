@@ -26,8 +26,6 @@ export async function searchRankingTracksService(
     },
   })
     .then(response => {
-      console.log('RESPONSE FROM SEARCH VOTING TRACKS');
-      console.log(response.data);
       aux = response.data;
     })
     .catch(error => {

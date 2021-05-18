@@ -10,7 +10,7 @@ import PrimaryButton from '../../components/UI/PrimaryButton';
 import SecondaryButton from '../../components/UI/SecondaryButton';
 import CurrentTrack from '../../components/ranking/CurrentTrack';
 import TrackRanking from '../../components/ranking/TrackRanking';
-//import Player from '../../components/player/Player';
+import Player from '../../components/player/Player';
 import LoadingSpinner from '../../components/UI/LoadingSpinner';
 
 import Colors from '../../constants/Colors';
@@ -99,7 +99,12 @@ const RankingScreen = props => {
 
   let topContent = (
     <View style={styles.topContainer}>
-      <Text>TOP</Text>
+      <View style={styles.currTrackContainer}>
+        <CurrentTrack />
+      </View>
+      <View style={styles.playerContainer}>
+        <Player />
+      </View>
     </View>
   );
 
@@ -154,10 +159,10 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.dark,
   },
   topContainer: {
-    flex: 0.25,
+    flex: 0.3,
   },
   rankingContainer: {
-    flex: 0.6,
+    flex: 0.55,
   },
   bottomContainer: {
     flex: 0.15,
@@ -200,6 +205,14 @@ const styles = StyleSheet.create({
   mixCode: {
     fontSize: Sizes.max,
     color: Colors.textDefault,
+  },
+  currTrackContainer: {
+    flex: 0.75,
+  },
+  playerContainer: {
+    flex: 0.25,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 });
 export default RankingScreen;
