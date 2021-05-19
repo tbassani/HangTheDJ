@@ -1,10 +1,19 @@
-import React, {useState, useEffect, useReducer, useCallback} from 'react';
+import React, {
+  useState,
+  useEffect,
+  useReducer,
+  useCallback,
+  useRef,
+} from 'react';
 import {View, FlatList, StyleSheet} from 'react-native';
+
+import LoadingSpinner from '../../components/UI/LoadingSpinner';
+
+import axios from 'axios';
 
 import {useSelector, useDispatch} from 'react-redux';
 import * as actions from '../../store/actions';
 
-import Colors from '../../constants/Colors';
 import Sizes from '../../constants/Sizes';
 
 import RankingTrackItem from '../ranking/RankingTrackItem';
@@ -19,9 +28,15 @@ const Ranking = props => {
   const tracks = useSelector(currState => {
     return currState.mix.tracks;
   });
+  const mixId = useSelector(currState => {
+    return currState.mix.mixId;
+  });
+
+  const loading = useSelector(currState => currState.mix.loading);
 
   const [clear, setClear] = useState(false);
-  const [listData, setListData] = useState(tracks);
+
+  const cancelToken = useRef();
 
   const dispatch = useDispatch();
 
@@ -36,33 +51,17 @@ const Ranking = props => {
   });
 
   useEffect(() => {
-    if (formState.inputValues.query && formState.inputValues.query.length > 0) {
-      filterList();
-    } else {
-      setListData(tracks);
-    }
-  }, [formState.inputValues, tracks, filterList]);
-
-  const filterList = () => {
-    const allTracks = tracks;
-    const updatedTracks = [];
-
-    for (const key in allTracks) {
-      const track = allTracks[key];
-      if (
-        track.title
-          .toUpperCase()
-          .includes(formState.inputValues.query.toUpperCase()) ||
-        track.artists
-          .toUpperCase()
-          .includes(formState.inputValues.query.toUpperCase())
-      ) {
-        updatedTracks.push(track);
-      }
-    }
-
-    setListData(updatedTracks);
-  };
+    cancelToken.current = axios.CancelToken.source();
+    setTimeout(() => {
+      dispatch(
+        actions.initGetRankingTracks(
+          mixId,
+          formState.inputValues.query,
+          cancelToken,
+        ),
+      );
+    }, 500);
+  }, [formState.inputValues.query]);
 
   const inputChangeHandler = useCallback(
     (inputId, inputValue, inputValidity) => {
@@ -108,6 +107,22 @@ const Ranking = props => {
     );
   };
 
+  let listContent = (
+    <FlatList
+      data={tracks}
+      renderItem={renderTrackItem}
+      keyExtractor={item => item.id.toString()}
+    />
+  );
+
+  if (loading) {
+    listContent = (
+      <View style={styles.mainContainer}>
+        <LoadingSpinner size="large" />
+      </View>
+    );
+  }
+
   return (
     <View style={styles.mainContainer}>
       <View style={styles.topContainer}>
@@ -124,13 +139,7 @@ const Ranking = props => {
           />
         </View>
       </View>
-      <View style={styles.listContainer}>
-        <FlatList
-          data={listData}
-          renderItem={renderTrackItem}
-          keyExtractor={item => item.id.toString()}
-        />
-      </View>
+      <View style={styles.listContainer}>{listContent}</View>
     </View>
   );
 };

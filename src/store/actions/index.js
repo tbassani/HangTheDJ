@@ -62,4 +62,8 @@ export {
   startGetRanking,
   getRanking,
   getRankingFail,
+  initAddTracksToMix,
+  startAddTracksToMix,
+  addTracksToMix,
+  addTracksToMixFail,
 } from './mix';

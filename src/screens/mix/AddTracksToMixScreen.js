@@ -26,17 +26,19 @@ const AddTracksToMixScreen = props => {
         return <View style={styles.backButtonContainer}></View>;
       },
     });
-    const unsubscribe = navigation.addListener('blur', () => {
-      navigation.replace('MixScreen');
-    });
-
-    return unsubscribe;
   }, [navigation]);
 
   return (
     <ScreenWrapper>
       <View style={styles.mainContainer}>
-        <MixMaker firstTabTitle="Escolha" secondTabTitle="Seu Mix" addTracks />
+        <MixMaker
+          firstTabTitle="Escolha"
+          secondTabTitle="Seu Mix"
+          addTracks
+          onAddTracksToMix={() => {
+            props.navigation.goBack();
+          }}
+        />
       </View>
     </ScreenWrapper>
   );

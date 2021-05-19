@@ -20,7 +20,11 @@ import {
   initRemoveMixSaga,
 } from './appSaga';
 
-import {initGetRankingTracksSaga, initGetRankingSaga} from './mixSaga';
+import {
+  initGetRankingTracksSaga,
+  initGetRankingSaga,
+  initAddTracksToMixSaga,
+} from './mixSaga';
 
 export function* watchAuth() {
   yield all([takeEvery(actionTypes.INIT_LOGIN, initLoginSaga)]);
@@ -60,4 +64,7 @@ export function* watchMix() {
     takeEvery(actionTypes.INIT_GET_RANKING_TRACKS, initGetRankingTracksSaga),
   ]);
   yield all([takeEvery(actionTypes.INIT_GET_RANKING, initGetRankingSaga)]);
+  yield all([
+    takeEvery(actionTypes.INIT_ADD_TRACKS_TO_MIX, initAddTracksToMixSaga),
+  ]);
 }

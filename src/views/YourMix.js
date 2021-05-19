@@ -1,5 +1,5 @@
 import React, {useState, useReducer, useCallback} from 'react';
-import {View, Text, ScrollView, StyleSheet} from 'react-native';
+import {View, Text, ScrollView, StyleSheet, Alert} from 'react-native';
 
 import {useSelector, useDispatch} from 'react-redux';
 import * as actions from '../store/actions';
@@ -23,6 +23,7 @@ const YourMix = props => {
   const [clear, setClear] = useState(false);
 
   const newMix = useSelector(currState => currState.app.newMix);
+  const mixId = useSelector(currState => currState.mix.mixId);
 
   const [formState, formDispatch] = useReducer(formReducer, {
     inputValues: {
@@ -81,7 +82,15 @@ const YourMix = props => {
     props.onCreateMix();
   };
 
-  const addTracksToMixHandler = () => {};
+  const addTracksToMixHandler = () => {
+    if (mixId) {
+      dispatch(actions.initAddTracksToMix(mixId));
+      clearInpuHandler();
+      props.onAddTracksToMix();
+    } else {
+      Alert.alert('Selecione um Mix!');
+    }
+  };
 
   let modal = null;
   if (!props.addTracks) {

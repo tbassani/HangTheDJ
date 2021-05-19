@@ -37,11 +37,6 @@ const VotingScreen = props => {
         );
       },
     });
-    const unsubscribe = navigation.addListener('blur', () => {
-      navigation.replace('MixScreen');
-    });
-
-    return unsubscribe;
   });
 
   return (

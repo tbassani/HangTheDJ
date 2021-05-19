@@ -55,3 +55,31 @@ export const getRankingFail = () => {
     type: actionTypes.GET_RANKING_FAIL,
   };
 };
+
+export const initAddTracksToMix = mixId => {
+  return {
+    type: actionTypes.INIT_ADD_TRACKS_TO_MIX,
+    mixId: mixId,
+  };
+};
+
+export const startAddTracksToMix = () => {
+  return {
+    type: actionTypes.START_ADD_TRACKS_TO_MIX,
+  };
+};
+
+export const addTracksToMix = (mixId, tracks, playlists) => {
+  return {
+    type: actionTypes.ADD_TRACKS_TO_MIX,
+    mixId: mixId,
+    tracks: tracks,
+    playlists: playlists,
+  };
+};
+
+export const addTracksToMixFail = () => {
+  return {
+    type: actionTypes.ADD_TRACKS_TO_MIX_FAIL,
+  };
+};

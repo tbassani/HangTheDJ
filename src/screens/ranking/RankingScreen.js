@@ -1,31 +1,18 @@
-import React, {useEffect, useState} from 'react';
-import {View, Text, TouchableOpacity, StyleSheet, Alert} from 'react-native';
+import React, {useEffect} from 'react';
+import {View, TouchableOpacity, StyleSheet} from 'react-native';
 
-import {useSelector, useDispatch} from 'react-redux';
+import {useSelector} from 'react-redux';
 
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
-import PrimaryButton from '../../components/UI/PrimaryButton';
-import SecondaryButton from '../../components/UI/SecondaryButton';
-import CurrentTrack from '../../components/ranking/CurrentTrack';
 import Ranking from '../../components/ranking/Ranking';
-import Player from '../../components/player/Player';
-import LoadingSpinner from '../../components/UI/LoadingSpinner';
 
 import Colors from '../../constants/Colors';
 import Sizes from '../../constants/Sizes';
 
 const MixScreen = props => {
-  const [shareModal, setShareModal] = useState(false);
-
   const mixId = useSelector(currState => currState.mix.mixId);
-  const ownerId = useSelector(currState => currState.mix.ownerId);
   const mixTitle = useSelector(currState => currState.mix.mixTitle);
-  const tracks = useSelector(currState => currState.mix.tracks);
-  const topTracks = useSelector(currState => currState.mix.topTracks);
-  const loading = useSelector(currState => currState.mix.loading);
-
-  const userId = useSelector(currState => currState.auth.userId);
 
   const navigation = props.navigation;
   useEffect(() => {
@@ -53,11 +40,6 @@ const MixScreen = props => {
           }
         : () => {},
     });
-    const unsubscribe = navigation.addListener('blur', () => {
-      navigation.replace('MixScreen');
-    });
-
-    return unsubscribe;
   }, [navigation, mixTitle]);
 
   let rankingContent = null;
@@ -66,14 +48,6 @@ const MixScreen = props => {
     rankingContent = (
       <View style={styles.rankingContainer}>
         <Ranking />
-      </View>
-    );
-  }
-
-  if (loading) {
-    return (
-      <View style={styles.mainContainer}>
-        <LoadingSpinner size="large" />
       </View>
     );
   }

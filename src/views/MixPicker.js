@@ -58,15 +58,15 @@ const MakeMix = props => {
   });
 
   useEffect(() => {
-    cancelToken.current = axios.CancelToken.source();
-    if (!formState.inputValues.query.length <= 0) {
+    setTimeout(() => {
+      cancelToken.current = axios.CancelToken.source();
       dispatch(
         actions.initGetTracksAndPlaylists(
           formState.inputValues.query,
           cancelToken.current,
         ),
       );
-    }
+    }, 500);
   }, [formState.inputValues.query]);
 
   const inputChangeHandler = useCallback(

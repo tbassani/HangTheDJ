@@ -214,6 +214,18 @@ const reducer = (state = initialState, action) => {
         loading: false,
         error: true,
       };
+    case actionTypes.ADD_TRACKS_TO_MIX:
+      return {
+        ...state,
+        newMix: {
+          title: '',
+          tracks: [],
+          playlists: [],
+        },
+        tracks: [],
+        playlists: [],
+        loading: false,
+      };
     default:
       return state;
   }
