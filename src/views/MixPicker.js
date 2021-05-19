@@ -59,13 +59,14 @@ const MakeMix = props => {
 
   useEffect(() => {
     cancelToken.current = axios.CancelToken.source();
-    if (!formState.inputValues.query.length <= 0)
+    if (!formState.inputValues.query.length <= 0) {
       dispatch(
         actions.initGetTracksAndPlaylists(
           formState.inputValues.query,
           cancelToken.current,
         ),
       );
+    }
   }, [formState.inputValues.query]);
 
   const inputChangeHandler = useCallback(
@@ -189,7 +190,7 @@ const styles = StyleSheet.create({
   queryContainer: {
     width: '70%',
     alignItems: 'center',
-    marginVertical: Sizes.tiny,
+    marginVertical: Sizes.small,
   },
 });
 

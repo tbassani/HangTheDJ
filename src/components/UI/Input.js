@@ -48,7 +48,11 @@ const Input = props => {
   }, [onInputChange, clearAfterSubmit]);
 
   useEffect(() => {
-    if (inputState.touched || inputState.value) {
+    if (
+      inputState.touched ||
+      inputState.value ||
+      inputState.value.length === 0
+    ) {
       onInputChange(id, inputState.value, inputState.isValid);
     }
   }, [inputState, onInputChange, id]);

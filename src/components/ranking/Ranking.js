@@ -1,4 +1,4 @@
-import React, {useState, useReducer, useCallback} from 'react';
+import React, {useState, useEffect, useReducer, useCallback} from 'react';
 import {View, FlatList, StyleSheet} from 'react-native';
 
 import {useSelector, useDispatch} from 'react-redux';
@@ -16,11 +16,12 @@ const INPUT_UPDATE = 'UPDATE';
 const CLEAR_FORM = 'CLEAR_FORM';
 
 const Ranking = props => {
-  const [clear, setClear] = useState(false);
-
   const tracks = useSelector(currState => {
     return currState.ranking.tracks;
   });
+
+  const [clear, setClear] = useState(false);
+  const [listData, setListData] = useState(tracks);
 
   const dispatch = useDispatch();
 
@@ -33,6 +34,35 @@ const Ranking = props => {
     },
     isValid: false,
   });
+
+  useEffect(() => {
+    if (formState.inputValues.query && formState.inputValues.query.length > 0) {
+      filterList();
+    } else {
+      setListData(tracks);
+    }
+  }, [formState.inputValues, tracks, filterList]);
+
+  const filterList = () => {
+    const allTracks = tracks;
+    const updatedTracks = [];
+
+    for (const key in allTracks) {
+      const track = allTracks[key];
+      if (
+        track.title
+          .toUpperCase()
+          .includes(formState.inputValues.query.toUpperCase()) ||
+        track.artists
+          .toUpperCase()
+          .includes(formState.inputValues.query.toUpperCase())
+      ) {
+        updatedTracks.push(track);
+      }
+    }
+
+    setListData(updatedTracks);
+  };
 
   const inputChangeHandler = useCallback(
     (inputId, inputValue, inputValidity) => {
@@ -90,12 +120,13 @@ const Ranking = props => {
             errorText="Busque por algo."
             onInputChange={inputChangeHandler}
             initialValue=""
+            clearAfterSubmit={clear}
           />
         </View>
       </View>
       <View style={styles.listContainer}>
         <FlatList
-          data={tracks}
+          data={listData}
           renderItem={renderTrackItem}
           keyExtractor={item => item.id.toString()}
         />
@@ -109,10 +140,10 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   listContainer: {
-    flex: 0.9,
+    flex: 0.85,
   },
   topContainer: {
-    flex: 0.1,
+    flex: 0.15,
     width: '100%',
     alignItems: 'center',
     justifyContent: 'center',

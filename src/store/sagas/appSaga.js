@@ -22,7 +22,6 @@ import {Alert} from 'react-native';
 export function* initGetMixesSaga(action) {
   yield put(actions.startGetMixes());
   const response = yield getMixPlaylistsService();
-  console.log(response);
   if (response && response !== 401) {
     const mixes = [];
     response.forEach(element => {
@@ -71,7 +70,7 @@ export function* initGetProfileURLSaga(action) {
 export function* initGetActiveProfileSaga(action) {
   yield put(actions.startGetProfile());
   const response = yield getActiveProfileService();
-  if (response && response.profile & (response !== 401)) {
+  if (response && response.profile && response !== 401) {
     yield put(actions.getProfile(response.profile));
   } else {
     if (response === 401) {

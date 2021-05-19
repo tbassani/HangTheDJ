@@ -14,13 +14,13 @@ const Player = props => {
           <TouchableOpacity
             style={styles.buttonContainer}
             onPress={props.onPressPlay}>
-            <Icon name="play" color="#FFF" size={Sizes.max * 1.2} />
+            <Icon name="play" color="#FFF" size={Sizes.max * 1.5} />
           </TouchableOpacity>
         ) : (
           <TouchableOpacity
             style={styles.buttonContainer}
             onPress={props.onPressPause}>
-            <Icon name="pause" color="#FFF" size={Sizes.max * 1.2} />
+            <Icon name="pause" color="#FFF" size={Sizes.max * 1.5} />
           </TouchableOpacity>
         )}
       </View>
