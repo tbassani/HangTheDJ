@@ -7,7 +7,7 @@ import * as actions from '../../store/actions';
 import Colors from '../../constants/Colors';
 import Sizes from '../../constants/Sizes';
 
-import TrackItem from '../track/TrackItem';
+import RankingTrackItem from '../ranking/RankingTrackItem';
 import Input from '../UI/Input';
 
 import formReducer from '../../shared/formReducer';
@@ -15,7 +15,7 @@ import formReducer from '../../shared/formReducer';
 const INPUT_UPDATE = 'UPDATE';
 const CLEAR_FORM = 'CLEAR_FORM';
 
-const TrackRanking = props => {
+const Ranking = props => {
   const [clear, setClear] = useState(false);
 
   const tracks = useSelector(currState => {
@@ -60,19 +60,20 @@ const TrackRanking = props => {
   }, [formDispatch]);
 
   const selectTrackHandler = track => {
+    //TO-DO: Send user to voting screen for this track
     clearInpuHandler();
   };
 
   const renderTrackItem = itemData => {
     return (
-      <TrackItem
+      <RankingTrackItem
         imgSource={itemData.item.artURL}
         title={itemData.item.title}
         artists={itemData.item.artists}
         onSelectTrack={() => {
           selectTrackHandler(itemData.item);
         }}
-        small
+        score={itemData.item.score}
       />
     );
   };
@@ -123,4 +124,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default TrackRanking;
+export default Ranking;

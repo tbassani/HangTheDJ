@@ -30,10 +30,7 @@ export async function searchRankingTracksService(
     })
     .catch(error => {
       if (error.response) {
-        if (error.response.status === 401) {
-          console.log('JWT Inválido');
-          signOut();
-        }
+        aux = error.response.status;
       }
       console.log(error);
     });

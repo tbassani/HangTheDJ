@@ -13,8 +13,10 @@ import ProfileScreen from '../screens/user/ProfileScreen';
 import StreamingProfileScreen from '../screens/mix/StreamingProfileScreen';
 import ResetPasswordScreen from '../screens/auth/ResetPasswordScreen';
 import LoadingScreen from '../screens/LoadingScreen';
+import MixScreen from '../screens/mix/MixScreen';
 import RankingScreen from '../screens/ranking/RankingScreen';
-import AddTracksToMixScreen from '../screens/ranking/AddTracksToMixScreen';
+import AddTracksToMixScreen from '../screens/mix/AddTracksToMixScreen';
+import VotingScreen from '../screens/voting/VotingScreen';
 
 import Colors from '../constants/Colors';
 import Sizes from '../constants/Sizes';
@@ -97,8 +99,8 @@ const RankingNavigator = () => {
           headerTitle: 'Tocando',
           headerTitleStyle: {alignSelf: 'center'},
         }}
-        name="RankingScreen"
-        component={RankingScreen}
+        name="MixScreen"
+        component={MixScreen}
       />
       <Stack.Screen
         options={{
@@ -107,6 +109,22 @@ const RankingNavigator = () => {
         }}
         name="AddTracksToMixScreen"
         component={AddTracksToMixScreen}
+      />
+      <Stack.Screen
+        options={{
+          headerTitle: 'Ranking',
+          headerTitleStyle: {alignSelf: 'center'},
+        }}
+        name="RankingScreen"
+        component={RankingScreen}
+      />
+      <Stack.Screen
+        options={{
+          headerTitle: 'Votar',
+          headerTitleStyle: {alignSelf: 'center'},
+        }}
+        name="VotingScreen"
+        component={VotingScreen}
       />
     </Stack.Navigator>
   );

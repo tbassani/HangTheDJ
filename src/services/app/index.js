@@ -1,11 +1,9 @@
-import {Alert} from 'react-native';
-
 import axios from 'axios';
 
 import APIConfig from '../../config/apiconfig';
 import {getDataFromStorage, saveDataToStorage} from '../storage';
 
-export async function createMixPlaylistService(selected, name, signOut) {
+export async function createMixPlaylistService(selected, name) {
   console.log('Create Mix Playlist Service');
   const jwt = await getDataFromStorage('token');
   let items = [];
@@ -38,10 +36,7 @@ export async function createMixPlaylistService(selected, name, signOut) {
     })
     .catch(error => {
       if (error.response) {
-        if (error.response.status === 401) {
-          console.log('JWT Inválido');
-          signOut();
-        }
+        aux = error.response.status;
       }
       console.log(error);
     });
@@ -52,7 +47,6 @@ export async function mixPlaylistService(
   selectedPlaylists,
   selectedTracks,
   name,
-  signOut,
 ) {
   console.log('Create HDJ Playlist Service');
   const jwt = await getDataFromStorage('token');
@@ -94,17 +88,14 @@ export async function mixPlaylistService(
     })
     .catch(error => {
       if (error.response) {
-        if (error.response.status === 401) {
-          console.log('JWT Inválido');
-          signOut();
-        }
+        aux = error.response.status;
       }
       console.log(error);
     });
   return aux;
 }
 
-export async function deleteMixService(mix_id, signOut) {
+export async function deleteMixService(mix_id) {
   const jwt = await getDataFromStorage('token');
 
   var aux = [];
@@ -127,10 +118,7 @@ export async function deleteMixService(mix_id, signOut) {
     })
     .catch(error => {
       if (error.response) {
-        if (error.response.status === 401) {
-          console.log('JWT Inválido');
-          signOut();
-        }
+        aux = error.response.status;
       }
       console.log(error);
     });
@@ -138,7 +126,7 @@ export async function deleteMixService(mix_id, signOut) {
   return aux;
 }
 
-export async function getMixPlaylistsService(signOut) {
+export async function getMixPlaylistsService() {
   const jwt = await getDataFromStorage('token');
 
   var aux = undefined;
@@ -164,17 +152,13 @@ export async function getMixPlaylistsService(signOut) {
     })
     .catch(error => {
       if (error.response) {
-        if (error.response.status === 401) {
-          console.log('JWT Inválido');
-          signOut();
-        }
+        aux = error.response.status;
       }
-      console.log(error);
     });
   return aux;
 }
 
-export async function getMixTracksService(mix_id, signOut, interval) {
+export async function getMixTracksService(mix_id, interval) {
   const jwt = await getDataFromStorage('token');
   const body = {
     playlist_id: mix_id,
@@ -195,12 +179,9 @@ export async function getMixTracksService(mix_id, signOut, interval) {
     })
     .catch(error => {
       if (error.response) {
-        if (error.response.status === 401) {
-          console.log('JWT Inválido');
-          signOut();
-          if (interval) {
-            clearInterval(interval);
-          }
+        aux = error.response.status;
+        if (interval) {
+          clearInterval(interval);
         }
       }
       console.log(error);
@@ -208,7 +189,7 @@ export async function getMixTracksService(mix_id, signOut, interval) {
   return aux;
 }
 
-export async function getVotingTrackService(mix_id, signOut) {
+export async function getVotingTrackService(mix_id) {
   console.log('Get Voting Track from service for HDJ Playlist: ' + mix_id);
   const jwt = await getDataFromStorage('token');
   var aux = [];
@@ -227,10 +208,7 @@ export async function getVotingTrackService(mix_id, signOut) {
     })
     .catch(error => {
       if (error.response) {
-        if (error.response.status === 401) {
-          console.log('JWT Inválido');
-          signOut();
-        }
+        aux = error.response.status;
       }
       console.log(error);
     });
@@ -238,7 +216,7 @@ export async function getVotingTrackService(mix_id, signOut) {
   return aux;
 }
 
-export async function upVoteService(mix_id, track_id, signOut) {
+export async function upVoteService(mix_id, track_id) {
   console.log('Get Voting Track from service for HDJ Playlist: ' + mix_id);
   const jwt = await getDataFromStorage('token');
   var aux = [];
@@ -263,10 +241,7 @@ export async function upVoteService(mix_id, track_id, signOut) {
     })
     .catch(error => {
       if (error.response) {
-        if (error.response.status === 401) {
-          console.log('JWT Inválido');
-          signOut();
-        }
+        aux = error.response.status;
       }
       console.log(error);
     });
@@ -274,7 +249,7 @@ export async function upVoteService(mix_id, track_id, signOut) {
   return aux;
 }
 
-export async function downVoteService(mix_id, track_id, signOut) {
+export async function downVoteService(mix_id, track_id) {
   console.log('Get Voting Track from service for HDJ Playlist: ' + playlist_id);
   const jwt = await getDataFromStorage('token');
   var aux = [];
@@ -299,10 +274,7 @@ export async function downVoteService(mix_id, track_id, signOut) {
     })
     .catch(error => {
       if (error.response) {
-        if (error.response.status === 401) {
-          console.log('JWT Inválido');
-          signOut();
-        }
+        aux = error.response.status;
       }
       console.log(error);
     });
@@ -314,7 +286,6 @@ export async function addTracksService(
   selectedPlaylists,
   selectedTracks,
   mix_id,
-  signOut,
 ) {
   console.log('Add trakcs to HDJ Playlist from Service');
   const jwt = await getDataFromStorage('token');
@@ -357,17 +328,14 @@ export async function addTracksService(
     })
     .catch(error => {
       if (error.response) {
-        if (error.response.status === 401) {
-          console.log('JWT Inválido');
-          signOut();
-        }
+        aux = error.response.status;
       }
       console.log(error);
     });
   return aux;
 }
 
-export async function getNextTrackService(mix_id, signOut) {
+export async function getNextTrackService(mix_id) {
   const jwt = await getDataFromStorage('token');
 
   var aux = {};
@@ -387,17 +355,14 @@ export async function getNextTrackService(mix_id, signOut) {
     })
     .catch(error => {
       if (error.response) {
-        if (error.response.status === 401) {
-          console.log('JWT Inválido');
-          signOut();
-        }
+        aux = error.response.status;
       }
       console.log(error);
     });
   return aux;
 }
 
-export async function resetPlaylistService(mix_id, signOut) {
+export async function resetPlaylistService(mix_id) {
   const jwt = await getDataFromStorage('token');
   const headers = {
     Authorization: 'Bearer ' + jwt,
@@ -420,17 +385,14 @@ export async function resetPlaylistService(mix_id, signOut) {
     })
     .catch(error => {
       if (error.response) {
-        if (error.response.status === 401) {
-          console.log('JWT Inválido');
-          signOut();
-        }
+        aux = error.response.status;
       }
       console.log(error);
     });
   return aux;
 }
 
-export async function addToGroupService(mix_id, signOut) {
+export async function addToGroupService(mix_id) {
   const jwt = await getDataFromStorage('token');
   const headers = {
     Authorization: 'Bearer ' + jwt,
@@ -453,17 +415,14 @@ export async function addToGroupService(mix_id, signOut) {
     })
     .catch(error => {
       if (error.response) {
-        if (error.response.status === 401) {
-          console.log('JWT Inválido');
-          signOut();
-        }
+        aux = error.response.status;
       }
       console.log(error);
     });
   return aux;
 }
 
-export async function getTrackToVote(track_id, mix_id, signOut) {
+export async function getTrackToVote(track_id, mix_id) {
   const jwt = await getDataFromStorage('token');
   var aux;
   const headers = {
@@ -487,17 +446,14 @@ export async function getTrackToVote(track_id, mix_id, signOut) {
     })
     .catch(error => {
       if (error.response) {
-        if (error.response.status === 401) {
-          console.log('JWT Inválido');
-          signOut();
-        }
+        aux = error.response.status;
       }
       console.log(error);
     });
   return aux;
 }
 
-export async function searchVotingTracks(query, mix_id, cancelToken, signOut) {
+export async function searchVotingTracks(query, mix_id, cancelToken) {
   const jwt = await getDataFromStorage('token');
   var aux = [];
   const headers = {
@@ -521,10 +477,7 @@ export async function searchVotingTracks(query, mix_id, cancelToken, signOut) {
     })
     .catch(error => {
       if (error.response) {
-        if (error.response.status === 401) {
-          console.log('JWT Inválido');
-          signOut();
-        }
+        aux = error.response.status;
       }
       console.log(error);
     });
@@ -552,17 +505,14 @@ export async function premiumClickService(signOut) {
     })
     .catch(error => {
       if (error.response) {
-        if (error.response.status === 401) {
-          console.log('JWT Inválido');
-          signOut();
-        }
+        aux = error.response.status;
       }
       console.log(error);
     });
   return aux;
 }
 
-export async function getActiveProfileService(signOut) {
+export async function getActiveProfileService() {
   const jwt = await getDataFromStorage('token');
   var data = {
     profile: null,
@@ -584,9 +534,7 @@ export async function getActiveProfileService(signOut) {
     }
   } catch (error) {
     if (error.response.status === 401) {
-      console.log('JWT Inválido');
-      data = {status: 401};
-      signOut();
+      return 401;
     }
     return;
   }
@@ -612,9 +560,7 @@ export async function getProfileURLService(signOut) {
     return data;
   } catch (error) {
     if (error.response.status === 401) {
-      console.log('JWT Inválido');
-      data = {status: 401};
-      signOut();
+      return 401;
     }
     return;
   }
@@ -646,10 +592,7 @@ export async function getTracksAndPlaylistsService(
     })
     .catch(error => {
       if (error.response) {
-        if (error.response.status === 401) {
-          console.log('JWT Inválido');
-          signOut();
-        }
+        aux = error.response.status;
       }
       console.log(error);
     });

@@ -13,13 +13,16 @@ export function* initGetRankingTracksSaga(action) {
     action.mixId,
     action.query,
     action.cancelToken,
-    actions.logout,
   );
-  if (response) {
+  if (response && response !== 401) {
     console.log(response);
     //yield put(actions.getRankingTracks());
   } else {
-    yield put(actions.getRankingTracksFail());
+    if (response === 401) {
+      yield put(actions.initLogout());
+    } else {
+      yield put(actions.getRankingTracksFail());
+    }
   }
 }
 
@@ -30,11 +33,10 @@ export function* initGetRankingSaga(action) {
     action.mixId,
     '',
     undefined,
-    actions.logout,
   );
   const rankingTracks = [];
 
-  if (response) {
+  if (response && response !== 401) {
     response.forEach(track => {
       rankingTracks.push(
         new RankingTrack(
@@ -68,6 +70,10 @@ export function* initGetRankingSaga(action) {
       ),
     );
   } else {
-    yield put(actions.getRankingTracksFail());
+    if (response === 401) {
+      yield put(actions.initLogout());
+    } else {
+      yield put(actions.getRankingTracksFail());
+    }
   }
 }

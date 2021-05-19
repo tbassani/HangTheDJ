@@ -21,47 +21,64 @@ import {Alert} from 'react-native';
 
 export function* initGetMixesSaga(action) {
   yield put(actions.startGetMixes());
-  const response = yield getMixPlaylistsService(actions.initLogout);
-  if (response) {
+  const response = yield getMixPlaylistsService();
+  console.log(response);
+  if (response && response !== 401) {
     const mixes = [];
     response.forEach(element => {
       mixes.push(new Mix(element.id, element.owner_user_id, element.name));
     });
     yield put(actions.getMixes(mixes));
   } else {
-    yield put(actions.getMixesFail());
+    if (response === 401) {
+      yield put(actions.initLogout());
+    } else {
+      yield put(actions.getMixesFail());
+    }
   }
 }
 
 export function* initAddToGroupSaga(action) {
   yield put(actions.startAddToGroup());
-  const response = yield addToGroupService(action.mixId, actions.initLogout);
-  if (response) {
+  const response = yield addToGroupService(action.mixId);
+  if (response && response !== 401) {
     const mix = new Mix(response.id, response.user_id, response.playlist_name);
 
     yield put(actions.addToGroup(mix));
   } else {
-    yield put(actions.addToGroupFail());
+    if (response === 401) {
+      yield put(actions.initLogout());
+    } else {
+      yield put(actions.addToGroupFail());
+    }
   }
 }
 
 export function* initGetProfileURLSaga(action) {
   yield put(actions.startGetProfileURL());
-  const response = yield getProfileURLService(actions.logout);
-  if (response && response.url) {
+  const response = yield getProfileURLService();
+  if (response && response.url && response !== 401) {
     yield put(actions.getProfileURL(response.url));
   } else {
-    yield put(actions.getProfileURLFail());
+    if (response === 401) {
+      yield put(actions.initLogout());
+    } else {
+      yield put(actions.getProfileURLFail());
+    }
   }
 }
 
 export function* initGetActiveProfileSaga(action) {
   yield put(actions.startGetProfile());
-  const response = yield getActiveProfileService(actions.logout);
-  if (response && response.profile) {
+  const response = yield getActiveProfileService();
+  if (response && response.profile & (response !== 401)) {
     yield put(actions.getProfile(response.profile));
   } else {
-    yield put(actions.getProfileFail());
+    if (response === 401) {
+      yield put(actions.initLogout());
+    } else {
+      yield put(actions.getProfileFail());
+    }
   }
 }
 
@@ -71,12 +88,15 @@ export function* initResetPasswordSaga(action) {
     action.email,
     action.currPassword,
     action.newPassword,
-    actions.logout,
   );
-  if (response && response.success) {
+  if (response && response.success && response !== 401) {
     Alert.alert('Senha alterada!');
   } else {
-    yield put(actions.resetPasswordFail());
+    if (response === 401) {
+      yield put(actions.initLogout());
+    } else {
+      yield put(actions.resetPasswordFail());
+    }
   }
 }
 
@@ -85,9 +105,8 @@ export function* initGetTracksAndPlaylistsSaga(action) {
   const response = yield getTracksAndPlaylistsService(
     action.query,
     action.cancelToken,
-    actions.logout,
   );
-  if (response) {
+  if (response && response !== 401) {
     const tracks = [];
     const playlists = [];
     yield response.forEach(section => {
@@ -119,7 +138,11 @@ export function* initGetTracksAndPlaylistsSaga(action) {
     });
     yield put(actions.getTracksAndPlaylists(tracks, playlists));
   } else {
-    yield put(actions.getTracksAndPlaylistsFail());
+    if (response === 401) {
+      yield put(actions.initLogout());
+    } else {
+      yield put(actions.getTracksAndPlaylistsFail());
+    }
   }
 }
 
@@ -142,14 +165,17 @@ export function* initCreateMixSaga(action) {
     selectedPlaylists,
     selectedTracks,
     action.title,
-    actions.logout,
   );
-  if (response) {
+  if (response && response !== 401) {
     yield put(actions.createMix());
     yield put(actions.initGetMixes());
     yield put(actions.initGetRanking(response, action.title, userId));
   } else {
-    yield put(actions.resetPasswordFail());
+    if (response === 401) {
+      yield put(actions.initLogout());
+    } else {
+      yield put(actions.resetPasswordFail());
+    }
   }
 }
 
@@ -157,10 +183,13 @@ export function* initRemoveMixSaga(action) {
   yield put(actions.startRemoveMix());
 
   const response = yield deleteMixService(action.mixId, actions.logout);
-  if (response) {
-    console.log(response);
+  if (response && response !== 401) {
     yield put(actions.removeMix(action.mixId));
   } else {
-    yield put(actions.removeMixFail());
+    if (response === 401) {
+      yield put(actions.initLogout());
+    } else {
+      yield put(actions.removeMixFail());
+    }
   }
 }

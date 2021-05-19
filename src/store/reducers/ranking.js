@@ -7,6 +7,7 @@ const initialState = {
   tracks: [],
   topTracks: [],
   currTrack: null,
+  votingTrack: null,
   timeInterval: null,
   loading: false,
   error: null,

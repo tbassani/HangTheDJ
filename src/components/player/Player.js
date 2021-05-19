@@ -10,7 +10,7 @@ const Player = props => {
   return (
     <View style={styles.mainContainer}>
       <View style={styles.buttonsContainer}>
-        {!props.isPLaying ? (
+        {!props.isPlaying ? (
           <TouchableOpacity
             style={styles.buttonContainer}
             onPress={props.onPressPlay}>

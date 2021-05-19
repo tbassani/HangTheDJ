@@ -104,7 +104,7 @@ const UserMixesScreen = props => {
 
   const selectMixHandler = (mixId, mixTitle, ownerId) => {
     dispatch(actions.initGetRanking(mixId, mixTitle, ownerId));
-    props.navigation.navigate('RankingNavigatior');
+    props.navigation.navigate('RankingNavigator');
   };
 
   if (!loading && mixes.length <= 0) {
@@ -117,7 +117,7 @@ const UserMixesScreen = props => {
               Insiria um código de convidado para participar!
             </Text>
             <TextLink
-              onPress={() => props.navigation.navigate('CreateMixNavigatior')}>
+              onPress={() => props.navigation.navigate('CreateMixNavigator')}>
               Ou crie seu próprio Mix!
             </TextLink>
           </View>

@@ -6,41 +6,27 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import Sizes from '../../constants/Sizes';
 import Colors from '../../constants/Colors';
 
-const TrackItem = props => {
+const RankingTrackItem = props => {
   return (
     <View style={styles.mainContainer}>
       <TouchableOpacity
         style={styles.trackContainer}
         onPress={props.onSelectTrack}>
-        <View
-          style={
-            !props.small ? styles.imageContainer : styles.imageContainerSmall
-          }>
-          <Image
-            style={!props.small ? styles.image : styles.imageSmall}
-            source={{uri: props.imgSource}}
-          />
+        <View style={styles.imageContainer}>
+          <Image style={styles.image} source={{uri: props.imgSource}} />
         </View>
         <View style={styles.infoContainer}>
           <View style={styles.titleContainer}>
-            <Text style={!props.small ? styles.title : styles.titleSmall}>
-              {props.title}
-            </Text>
+            <Text style={styles.title}>{props.title}</Text>
           </View>
           <View style={styles.artistsContainer}>
-            <Text style={!props.small ? styles.artists : styles.artistsSmall}>
-              {props.artists}
-            </Text>
+            <Text style={styles.artists}>{props.artists}</Text>
           </View>
         </View>
       </TouchableOpacity>
-      {props.onRemoveTrack ? (
-        <TouchableOpacity
-          style={styles.removeContainer}
-          onPress={props.onRemoveTrack}>
-          <Icon name="delete-circle" color="red" size={Sizes.huge} />
-        </TouchableOpacity>
-      ) : null}
+      <View style={styles.scoreContainer}>
+        <Text style={styles.score}>{props.score}</Text>
+      </View>
     </View>
   );
 };
@@ -65,41 +51,28 @@ const styles = StyleSheet.create({
   },
   title: {
     flex: 1,
-    fontSize: Sizes.large,
+    fontSize: Sizes.medium,
     color: Colors.textDefault,
   },
   artists: {
-    fontSize: Sizes.medium,
-    color: Colors.textDefault,
-  },
-  imageContainer: {
-    margin: Sizes.tiny,
-  },
-  image: {
-    width: Sizes.max * 2,
-    height: Sizes.max * 2,
-  },
-  titleSmall: {
-    flex: 1,
-    fontSize: Sizes.medium,
-    color: Colors.textDefault,
-  },
-  artistsSmall: {
     fontSize: Sizes.small,
     color: Colors.textDefault,
   },
-  imageContainerSmall: {
+  imageContainer: {
     margin: Sizes.min,
   },
-  imageSmall: {
+  image: {
     width: Sizes.max * 1.5,
     height: Sizes.max * 1.5,
   },
-  removeContainer: {
+  scoreContainer: {
     flex: 0.15,
     alignItems: 'center',
     justifyContent: 'center',
   },
+  score: {
+    color: Colors.textDefault,
+  },
 });
 
-export default TrackItem;
+export default RankingTrackItem;
