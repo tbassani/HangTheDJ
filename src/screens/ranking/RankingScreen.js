@@ -42,7 +42,7 @@ const MixScreen = props => {
             return (
               <TouchableOpacity
                 style={styles.backButtonContainer}
-                onPress={() => navigation.goBack()}>
+                onPress={() => navigation.replace('MixScreen')}>
                 <Icon
                   name="arrow-left"
                   color={Colors.light}

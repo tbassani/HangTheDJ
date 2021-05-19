@@ -26,18 +26,18 @@ const VotingScreen = props => {
         return (
           <TouchableOpacity
             style={styles.backButtonContainer}
-            onPress={() => navigation.goBack()}>
+            onPress={() => navigation.replace('MixScreen')}>
             <Icon name="arrow-left" color={Colors.light} size={Sizes.huge} />
           </TouchableOpacity>
         );
       },
     });
     const unsubscribe = navigation.addListener('blur', () => {
-      navigation.replace('RankingScreen');
+      navigation.replace('MixScreen');
     });
 
     return unsubscribe;
-  }, [navigation, mixTitle]);
+  });
 
   return (
     <View style={styles.mainContainer}>

@@ -17,7 +17,7 @@ const AddTracksToMixScreen = props => {
         return (
           <TouchableOpacity
             style={styles.backButtonContainer}
-            onPress={() => navigation.goBack()}>
+            onPress={() => navigation.replace('MixScreen')}>
             <Icon name="arrow-left" color={Colors.light} size={Sizes.huge} />
           </TouchableOpacity>
         );
@@ -27,7 +27,7 @@ const AddTracksToMixScreen = props => {
       },
     });
     const unsubscribe = navigation.addListener('blur', () => {
-      navigation.replace('RankingScreen');
+      nnavigation.replace('MixScreen');
     });
 
     return unsubscribe;
