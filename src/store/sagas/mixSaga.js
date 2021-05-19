@@ -2,8 +2,8 @@ import {put} from 'redux-saga/effects';
 
 import * as actions from '../actions';
 
-import RankingTrack from '../../models/RankingTrack';
-import Ranking from '../../models/Ranking';
+import MixTrack from '../../models/MixTrack';
+import Mix from '../../models/Mix';
 
 import {searchRankingTracksService} from '../../services/ranking';
 
@@ -39,7 +39,7 @@ export function* initGetRankingSaga(action) {
   if (response && response !== 401) {
     response.forEach(track => {
       rankingTracks.push(
-        new RankingTrack(
+        new MixTrack(
           track.id,
           track.external_track_id,
           track.playlist_id,
@@ -58,7 +58,7 @@ export function* initGetRankingSaga(action) {
 
     yield put(
       actions.getRanking(
-        new Ranking(
+        new Mix(
           action.mixId,
           action.mixTitle,
           action.ownerId,

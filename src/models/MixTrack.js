@@ -1,4 +1,4 @@
-class Track {
+class MixTrack {
   constructor(
     id,
     externalId,
@@ -28,4 +28,4 @@ class Track {
   }
 }
 
-export default Track;
+export default MixTrack;

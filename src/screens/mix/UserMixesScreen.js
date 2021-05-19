@@ -176,6 +176,7 @@ const UserMixesScreen = props => {
   }
 
   const renderMixItem = itemData => {
+    console.log(itemData.item);
     return (
       <MixItem
         title={itemData.item.title}
@@ -206,7 +207,7 @@ const UserMixesScreen = props => {
           <FlatList
             data={mixes}
             renderItem={renderMixItem}
-            keyExtractor={item => item.id.toString()}
+            keyExtractor={item => item.id}
           />
         </View>
         <View style={styles.bottomContainer}>

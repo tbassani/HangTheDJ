@@ -9,8 +9,8 @@ import Colors from '../../constants/Colors';
 import Sizes from '../../constants/Sizes';
 
 const VotingScreen = props => {
-  const mixTitle = useSelector(currState => currState.ranking.mixTitle);
-  const votingTrack = useSelector(currState => currState.ranking.votingTrack);
+  const mixTitle = useSelector(currState => currState.mix.mixTitle);
+  const votingTrack = useSelector(currState => currState.mix.votingTrack);
 
   const navigation = props.navigation;
   useEffect(() => {

@@ -27,7 +27,7 @@ const AddTracksToMixScreen = props => {
       },
     });
     const unsubscribe = navigation.addListener('blur', () => {
-      nnavigation.replace('MixScreen');
+      navigation.replace('MixScreen');
     });
 
     return unsubscribe;

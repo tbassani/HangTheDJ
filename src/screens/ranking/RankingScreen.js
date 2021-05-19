@@ -18,12 +18,12 @@ import Sizes from '../../constants/Sizes';
 const MixScreen = props => {
   const [shareModal, setShareModal] = useState(false);
 
-  const mixId = useSelector(currState => currState.ranking.mixId);
-  const ownerId = useSelector(currState => currState.ranking.ownerId);
-  const mixTitle = useSelector(currState => currState.ranking.mixTitle);
-  const tracks = useSelector(currState => currState.ranking.tracks);
-  const topTracks = useSelector(currState => currState.ranking.topTracks);
-  const loading = useSelector(currState => currState.ranking.loading);
+  const mixId = useSelector(currState => currState.mix.mixId);
+  const ownerId = useSelector(currState => currState.mix.ownerId);
+  const mixTitle = useSelector(currState => currState.mix.mixTitle);
+  const tracks = useSelector(currState => currState.mix.tracks);
+  const topTracks = useSelector(currState => currState.mix.topTracks);
+  const loading = useSelector(currState => currState.mix.loading);
 
   const userId = useSelector(currState => currState.auth.userId);
 

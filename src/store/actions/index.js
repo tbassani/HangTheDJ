@@ -62,4 +62,4 @@ export {
   startGetRanking,
   getRanking,
   getRankingFail,
-} from './ranking';
+} from './mix';

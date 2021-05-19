@@ -19,13 +19,13 @@ import Sizes from '../../constants/Sizes';
 const MixScreen = props => {
   const [shareModal, setShareModal] = useState(false);
 
-  const mixId = useSelector(currState => currState.ranking.mixId);
-  const ownerId = useSelector(currState => currState.ranking.ownerId);
-  const mixTitle = useSelector(currState => currState.ranking.mixTitle);
-  const tracks = useSelector(currState => currState.ranking.tracks);
-  const topTracks = useSelector(currState => currState.ranking.topTracks);
-  const currTrack = useSelector(currState => currState.ranking.currTrack);
-  const loading = useSelector(currState => currState.ranking.loading);
+  const mixId = useSelector(currState => currState.mix.mixId);
+  const ownerId = useSelector(currState => currState.mix.ownerId);
+  const mixTitle = useSelector(currState => currState.mix.mixTitle);
+  const tracks = useSelector(currState => currState.mix.tracks);
+  const topTracks = useSelector(currState => currState.mix.topTracks);
+  const currTrack = useSelector(currState => currState.mix.currTrack);
+  const loading = useSelector(currState => currState.mix.loading);
 
   const userId = useSelector(currState => currState.auth.userId);
 
@@ -84,7 +84,6 @@ const MixScreen = props => {
   );
   let buttonsContent = null;
   let playerContent = null;
-  let messageContent = null;
 
   if (mixId && mixId > 0) {
     if (userId === ownerId) {
@@ -94,15 +93,11 @@ const MixScreen = props => {
           onPressPause={onPressPauseHandler}
         />
       );
-      messageContent = <Text style={styles.message}>Aperte Play!</Text>;
     }
     mixContent = (
       <View style={styles.mixContainer}>
         <View style={styles.currTrackContainer}>
           <CurrentTrack track={currTrack} />
-          {userId === ownerId ? (
-            <View style={styles.currTrackContainer}>{messageContent}</View>
-          ) : null}
         </View>
         <View style={styles.playerContainer}>{playerContent}</View>
       </View>
@@ -212,16 +207,12 @@ const styles = StyleSheet.create({
     color: Colors.textDefault,
   },
   currTrackContainer: {
-    flex: 0.75,
+    flex: 0.85,
     justifyContent: 'center',
     alignItems: 'center',
   },
-  message: {
-    color: Colors.textDefault,
-    fontSize: Sizes.huge,
-  },
   playerContainer: {
-    flex: 0.25,
+    flex: 0.15,
     justifyContent: 'center',
     alignItems: 'center',
   },

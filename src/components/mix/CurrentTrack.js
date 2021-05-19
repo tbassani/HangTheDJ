@@ -49,7 +49,8 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     width: '100%',
     justifyContent: 'center',
-    alignItems: 'center',
+    alignItems: 'flex-start',
+    marginTop: Sizes.medium,
   },
   trackContainer: {
     justifyContent: 'center',

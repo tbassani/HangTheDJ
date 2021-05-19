@@ -41,14 +41,15 @@ const reducer = (state = initialState, action) => {
         error: false,
       };
     case actionTypes.GET_RANKING:
+      console.log(action);
       return {
         ...state,
-        mixId: action.ranking.mixId,
-        mixTitle: action.ranking.mixTitle,
-        tracks: action.ranking.tracks,
-        topTracks: action.ranking.topTracks,
-        ownerId: action.ranking.ownerId,
-        timeInterval: action.ranking.timeInterval,
+        mixId: action.mix.id,
+        mixTitle: action.mix.title,
+        tracks: action.mix.tracks,
+        topTracks: action.mix.topTracks,
+        ownerId: action.mix.ownerId,
+        timeInterval: action.mix.timeInterval,
         loading: false,
         error: false,
       };

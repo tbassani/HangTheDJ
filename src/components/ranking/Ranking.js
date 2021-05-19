@@ -17,7 +17,7 @@ const CLEAR_FORM = 'CLEAR_FORM';
 
 const Ranking = props => {
   const tracks = useSelector(currState => {
-    return currState.ranking.tracks;
+    return currState.mix.tracks;
   });
 
   const [clear, setClear] = useState(false);

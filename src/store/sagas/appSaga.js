@@ -25,7 +25,17 @@ export function* initGetMixesSaga(action) {
   if (response && response !== 401) {
     const mixes = [];
     response.forEach(element => {
-      mixes.push(new Mix(element.id, element.owner_user_id, element.name));
+      mixes.push(
+        new Mix(
+          element.id,
+          element.name,
+          element.owner_user_id,
+          element.tracks,
+          element.topTracks,
+          element.currTrack,
+          element.timeInterval,
+        ),
+      );
     });
     yield put(actions.getMixes(mixes));
   } else {
@@ -41,7 +51,15 @@ export function* initAddToGroupSaga(action) {
   yield put(actions.startAddToGroup());
   const response = yield addToGroupService(action.mixId);
   if (response && response !== 401) {
-    const mix = new Mix(response.id, response.user_id, response.playlist_name);
+    const mix = new Mix(
+      response.id,
+      response.playlist_name,
+      response.user_id,
+      [],
+      [],
+      null,
+      null,
+    );
 
     yield put(actions.addToGroup(mix));
   } else {

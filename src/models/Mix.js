@@ -1,8 +1,12 @@
 class Mix {
-  constructor(id, ownerId, title) {
+  constructor(id, title, ownerId, tracks, topTracks, currTrack, timeInterval) {
     this.id = id;
-    this.ownerId = ownerId;
     this.title = title;
+    this.ownerId = ownerId;
+    this.tracks = tracks;
+    this.topTracks = topTracks;
+    this.currTrack = currTrack;
+    this.timeInterval = timeInterval;
   }
 }
 
