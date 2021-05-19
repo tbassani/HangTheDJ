@@ -53,6 +53,11 @@ const MixScreen = props => {
           }
         : () => {},
     });
+    const unsubscribe = navigation.addListener('blur', () => {
+      navigation.replace('MixScreen');
+    });
+
+    return unsubscribe;
   }, [navigation, mixTitle]);
 
   let rankingContent = null;
