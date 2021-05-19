@@ -185,7 +185,7 @@ const styles = StyleSheet.create({
     width: '100%',
     marginVertical: Sizes.tiny,
     flex: 1,
-    backgroundColor: Colors.dark,
+    backgroundColor: Colors.shadow,
   },
   queryContainer: {
     width: '70%',

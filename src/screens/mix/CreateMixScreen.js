@@ -9,7 +9,7 @@ const CreateMixScreen = props => {
     <ScreenWrapper>
       <View style={styles.mainContainer}>
         <MixMaker
-          firstTabTitle="Escolha"
+          firstTabTitle="Portifólio"
           secondTabTitle="Seu Mix"
           onCreateMix={() => props.navigation.navigate('RankingNavigator')}
         />

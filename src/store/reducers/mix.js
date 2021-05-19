@@ -41,7 +41,6 @@ const reducer = (state = initialState, action) => {
         error: false,
       };
     case actionTypes.GET_RANKING:
-      console.log(action);
       return {
         ...state,
         mixId: action.mix.id,

@@ -216,5 +216,10 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
+  message: {
+    color: Colors.textDefault,
+    fontSize: Sizes.huge,
+    textAlign: 'center',
+  },
 });
 export default MixScreen;
