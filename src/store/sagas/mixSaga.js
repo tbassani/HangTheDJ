@@ -5,7 +5,14 @@ import * as actions from '../actions';
 import MixTrack from '../../models/MixTrack';
 import Mix from '../../models/Mix';
 
-import {searchRankingTracksService, addTracksService} from '../../services/mix';
+import {
+  searchRankingTracksService,
+  addTracksService,
+  getNextTrackService,
+  getPlayingTrackService,
+  getVotingTrackService,
+  getTrackToVoteService,
+} from '../../services/mix';
 
 export function* initGetRankingTracksSaga(action) {
   yield put(actions.startGetRankingTracks());
@@ -46,7 +53,6 @@ export function* initGetRankingTracksSaga(action) {
 }
 
 export function* initGetRankingSaga(action) {
-  console.log('GET RANKING');
   yield put(actions.startGetRanking());
 
   const response = yield searchRankingTracksService(
@@ -104,10 +110,7 @@ export function* initAddTracksToMixSaga(action) {
   const mix = yield select(newMixSelector);
   const mixIdSelector = state => state.mix.mixId;
   const mixId = yield select(mixIdSelector);
-  const mixTitleSelector = state => state.mix.mixTitle;
-  const mixTitle = yield select(mixTitleSelector);
-  const ownerIdSelector = state => state.mix.ownerId;
-  const ownerId = yield select(ownerIdSelector);
+
   const selectedTracks = [];
   const selectedPlaylists = [];
 
@@ -122,15 +125,87 @@ export function* initAddTracksToMixSaga(action) {
     selectedTracks,
     mixId,
   );
-  console.log(response);
   if (response && !response.error) {
     yield put(actions.addTracksToMix());
-    //yield put(actions.initGetRanking(mixId, mixTitle, ownerId));
   } else {
     if (response.error === 401) {
       yield put(actions.initLogout());
     } else {
       yield put(actions.resetPasswordFail());
+    }
+  }
+}
+
+export function* initGetCurrentTrackSaga(action) {
+  yield put(actions.startGetCurrentTrack());
+  let response = yield getPlayingTrackService(action.mixId);
+  if (!response.id) {
+    //No track playing
+    response = yield getNextTrackService(action.mixId);
+  }
+  console.log(response);
+  if (response && !response.error) {
+    const track = yield new MixTrack(
+      response.id,
+      response.external_track_id,
+      response.playlist_id,
+      response.user_id,
+      response.track_name,
+      response.artist_name,
+      response.album_name,
+      response.album_art,
+      response.genre,
+      response.score,
+      response.was_played,
+      response.duration,
+    );
+    yield put(actions.getCurrentTrack(track));
+  } else {
+    if (response.error === 401) {
+      yield put(actions.initLogout());
+    } else {
+      yield put(actions.getCurrentTrackFail());
+    }
+  }
+  //if stopped and time < duration
+  ////user paused on Spotify
+  //else
+  ////get next track of ranking
+}
+
+export function* initGetVotingTrackSaga(action) {
+  yield put(actions.startGetVotingTrack());
+  const mixIdSelector = state => state.mix.mixId;
+  const mixId = yield select(mixIdSelector);
+  let response;
+  if (!action.trackId) {
+    response = yield getVotingTrackService(mixId);
+  } else {
+    let aux = yield getTrackToVoteService(action.trackId, mixId);
+    response = aux[0];
+  }
+
+  if (response && !response.error) {
+    const track = yield new MixTrack(
+      response.id,
+      response.external_track_id,
+      response.playlist_id,
+      response.user_id,
+      response.track_name,
+      response.artist_name,
+      response.album_name,
+      response.album_art,
+      response.genre,
+      response.score,
+      response.was_played,
+      response.duration,
+    );
+    yield put(actions.getVotingTrack(track));
+  } else {
+    if (response.error === 401) {
+      yield put(actions.initLogout());
+    } else {
+      yield put(actions.getVotingTrackFail());
     }
   }
 }

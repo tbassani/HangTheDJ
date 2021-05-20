@@ -2,6 +2,7 @@ import React, {useEffect, useState} from 'react';
 import {View, Text, TouchableOpacity, StyleSheet, Alert} from 'react-native';
 
 import {useSelector, useDispatch} from 'react-redux';
+import * as actions from '../../store/actions';
 
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
@@ -24,10 +25,12 @@ const MixScreen = props => {
   const mixTitle = useSelector(currState => currState.mix.mixTitle);
   const tracks = useSelector(currState => currState.mix.tracks);
   const topTracks = useSelector(currState => currState.mix.topTracks);
-  const currTrack = useSelector(currState => currState.mix.currTrack);
+  const currTrack = useSelector(currState => currState.mix.currentTrack);
   const loading = useSelector(currState => currState.mix.loading);
 
   const userId = useSelector(currState => currState.auth.userId);
+
+  const dispatch = useDispatch();
 
   const navigation = props.navigation;
   useEffect(() => {
@@ -75,6 +78,11 @@ const MixScreen = props => {
 
   const onPressPauseHandler = () => {};
 
+  const votingHandler = () => {
+    dispatch(actions.initGetVotingTrack());
+    navigation.navigate('VotingScreen');
+  };
+
   let mixContent = (
     <View style={styles.mainContainer}>
       <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
@@ -110,7 +118,7 @@ const MixScreen = props => {
           </SecondaryButton>
         </View>
         <View style={styles.buttonContainer}>
-          <PrimaryButton onPress={() => navigation.navigate('VotingScreen')}>
+          <PrimaryButton onPress={votingHandler}>
             <Icon name="vote" color="#FFF" size={Sizes.huge} />
           </PrimaryButton>
         </View>

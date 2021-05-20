@@ -2,6 +2,7 @@ import React, {useEffect, useState} from 'react';
 import {View, Text, TouchableOpacity, StyleSheet, Alert} from 'react-native';
 
 import {useSelector, useDispatch} from 'react-redux';
+import * as actions from '../../store/actions';
 
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
@@ -37,7 +38,7 @@ const VotingScreen = props => {
         );
       },
     });
-  });
+  }, [navigation, mixTitle]);
 
   return (
     <View style={styles.mainContainer}>
@@ -65,6 +66,7 @@ const styles = StyleSheet.create({
   mainContainer: {
     flex: 1,
     backgroundColor: Colors.dark,
+    justifyContent: 'space-between',
   },
   trackBallotContainer: {
     flex: 0.8,
@@ -73,6 +75,7 @@ const styles = StyleSheet.create({
     flex: 0.2,
     flexDirection: 'row',
     justifyContent: 'space-around',
+    alignItems: 'center',
   },
   buttonContainer: {
     flex: 0.5,

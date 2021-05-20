@@ -83,3 +83,81 @@ export const addTracksToMixFail = () => {
     type: actionTypes.ADD_TRACKS_TO_MIX_FAIL,
   };
 };
+
+export const initGetCurrentTrack = mixId => {
+  return {
+    type: actionTypes.INIT_GET_CURRENT_TRACK,
+    mixId: mixId,
+  };
+};
+
+export const startGetCurrentTrack = () => {
+  return {
+    type: actionTypes.START_GET_CURRENT_TRACK,
+  };
+};
+
+export const getCurrentTrack = currentTrack => {
+  return {
+    type: actionTypes.GET_CURRENT_TRACK,
+    currentTrack: currentTrack,
+  };
+};
+
+export const getCurrentTrackFail = () => {
+  return {
+    type: actionTypes.GET_CURRENT_TRACK_FAIL,
+  };
+};
+
+export const getNextTrack = nextTrack => {
+  return {
+    type: actionTypes.GET_NEXT_TRACK,
+    nextTrack: nextTrack,
+  };
+};
+
+export const getNextTrackFail = () => {
+  return {
+    type: actionTypes.GET_NEXT_TRACK_FAIL,
+  };
+};
+
+export const getPlayingTrack = playingTrack => {
+  return {
+    type: actionTypes.GET_PLAYING_TRACK,
+    playingTrack: playingTrack,
+  };
+};
+
+export const getPlayingTrackFail = () => {
+  return {
+    type: actionTypes.GET_PLAYING_TRACK_FAIL,
+  };
+};
+
+export const initGetVotingTrack = trackId => {
+  return {
+    type: actionTypes.INIT_GET_VOTING_TRACK,
+    trackId: trackId,
+  };
+};
+
+export const startGetVotingTrack = () => {
+  return {
+    type: actionTypes.START_GET_VOTING_TRACK,
+  };
+};
+
+export const getVotingTrack = votingTrack => {
+  return {
+    type: actionTypes.GET_VOTING_TRACK,
+    votingTrack: votingTrack,
+  };
+};
+
+export const getVotingTrackFail = () => {
+  return {
+    type: actionTypes.GET_VOTING_TRACK_FAIL,
+  };
+};

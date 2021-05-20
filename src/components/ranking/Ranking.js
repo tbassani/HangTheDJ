@@ -89,7 +89,8 @@ const Ranking = props => {
   }, [formDispatch]);
 
   const selectTrackHandler = track => {
-    //TO-DO: Send user to voting screen for this track
+    dispatch(actions.initGetVotingTrack(track.id));
+    props.onSelectTrack();
     clearInpuHandler();
   };
 

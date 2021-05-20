@@ -42,12 +42,16 @@ const MixScreen = props => {
     });
   }, [navigation, mixTitle]);
 
+  const selectTrackHandler = () => {
+    navigation.replace('VotingScreen');
+  };
+
   let rankingContent = null;
 
   if (mixId && mixId > 0) {
     rankingContent = (
       <View style={styles.rankingContainer}>
-        <Ranking />
+        <Ranking onSelectTrack={selectTrackHandler} />
       </View>
     );
   }

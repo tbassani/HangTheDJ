@@ -6,9 +6,10 @@ const initialState = {
   ownerId: '',
   tracks: [],
   topTracks: [],
-  currTrack: null,
+  currentTrack: null,
   votingTrack: null,
   timeInterval: null,
+  isPlaying: false,
   loading: false,
   error: null,
 };
@@ -53,6 +54,44 @@ const reducer = (state = initialState, action) => {
         error: false,
       };
     case actionTypes.GET_RANKING_FAIL:
+      return {
+        ...state,
+        loading: false,
+        error: true,
+      };
+    case actionTypes.START_GET_CURRENT_TRACK:
+      return {
+        ...state,
+        loading: true,
+        error: false,
+      };
+    case actionTypes.GET_CURRENT_TRACK:
+      return {
+        ...state,
+        currentTrack: action.currentTrack,
+        loading: false,
+        error: false,
+      };
+    case actionTypes.GET_CURRENT_TRACK_FAIL:
+      return {
+        ...state,
+        loading: false,
+        error: true,
+      };
+    case actionTypes.START_GET_VOTING_TRACK:
+      return {
+        ...state,
+        loading: true,
+        error: false,
+      };
+    case actionTypes.GET_VOTING_TRACK:
+      return {
+        ...state,
+        votingTrack: action.votingTrack,
+        loading: false,
+        error: false,
+      };
+    case actionTypes.GET_VOTING_TRACK_FAIL:
       return {
         ...state,
         loading: false,

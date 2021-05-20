@@ -37,7 +37,7 @@ export async function searchRankingTracksService(
   return aux;
 }
 
-export async function getVotingTrack(playlist_id, signOut) {
+export async function getVotingTrackService(playlist_id) {
   console.log('Get Voting Track from service for HDJ Playlist: ' + playlist_id);
   const jwt = await getDataFromStorage('token');
   var aux = [];
@@ -56,10 +56,9 @@ export async function getVotingTrack(playlist_id, signOut) {
     })
     .catch(error => {
       if (error.response) {
-        if (error.response.status === 401) {
-          console.log('JWT Inválido');
-          signOut();
-        }
+        aux = {
+          error: error.response.status,
+        };
       }
       console.log(error);
     });
@@ -67,7 +66,7 @@ export async function getVotingTrack(playlist_id, signOut) {
   return aux;
 }
 
-export async function upVote(playlist_id, track_id, signOut) {
+export async function upVoteService(playlist_id, track_id) {
   console.log('Get Voting Track from service for HDJ Playlist: ' + playlist_id);
   const jwt = await getDataFromStorage('token');
   var aux = [];
@@ -92,10 +91,9 @@ export async function upVote(playlist_id, track_id, signOut) {
     })
     .catch(error => {
       if (error.response) {
-        if (error.response.status === 401) {
-          console.log('JWT Inválido');
-          signOut();
-        }
+        aux = {
+          error: error.response.status,
+        };
       }
       console.log(error);
     });
@@ -103,7 +101,7 @@ export async function upVote(playlist_id, track_id, signOut) {
   return aux;
 }
 
-export async function downVote(playlist_id, track_id, signOut) {
+export async function downVoteService(playlist_id, track_id) {
   console.log('Get Voting Track from service for HDJ Playlist: ' + playlist_id);
   const jwt = await getDataFromStorage('token');
   var aux = [];
@@ -128,10 +126,9 @@ export async function downVote(playlist_id, track_id, signOut) {
     })
     .catch(error => {
       if (error.response) {
-        if (error.response.status === 401) {
-          console.log('JWT Inválido');
-          signOut();
-        }
+        aux = {
+          error: error.response.status,
+        };
       }
       console.log(error);
     });
@@ -139,11 +136,11 @@ export async function downVote(playlist_id, track_id, signOut) {
   return aux;
 }
 
-export async function getPlayingTrack(playlist_id, signOut) {
-  console.log('Get Playing track from service');
+export async function getPlayingTrackService(playlist_id) {
+  console.log('Get Playing track from service: ' + playlist_id);
   const jwt = await getDataFromStorage('token');
 
-  var aux = {};
+  var aux = undefined;
   const headers = {
     Authorization: 'Bearer ' + jwt,
     contenttype: 'application/json;',
@@ -160,17 +157,16 @@ export async function getPlayingTrack(playlist_id, signOut) {
     .catch(error => {
       console.log(error);
       if (error.response) {
-        if (error.response.status === 401) {
-          console.log('JWT Inválido');
-          signOut();
-        }
+        aux = {
+          error: error.response.status,
+        };
       }
       console.log(error);
     });
   return aux;
 }
 
-export async function getNextTrack(playlist_id, signOut) {
+export async function getNextTrackService(playlist_id) {
   const jwt = await getDataFromStorage('token');
 
   var aux = {};
@@ -190,17 +186,16 @@ export async function getNextTrack(playlist_id, signOut) {
     })
     .catch(error => {
       if (error.response) {
-        if (error.response.status === 401) {
-          console.log('JWT Inválido');
-          signOut();
-        }
+        aux = {
+          error: error.response.status,
+        };
       }
       console.log(error);
     });
   return aux;
 }
 
-export async function playTrack(playlist_id, track_id, signOut) {
+export async function playTrackService(playlist_id, track_id) {
   const jwt = await getDataFromStorage('token');
 
   var aux = {};
@@ -223,19 +218,17 @@ export async function playTrack(playlist_id, track_id, signOut) {
       aux = response.data;
     })
     .catch(error => {
-      console.log(error.response);
       console.error(error);
       if (error.response) {
-        if (error.response.status === 401) {
-          console.log('JWT Inválido');
-          signOut();
-        }
+        aux = {
+          error: error.response.status,
+        };
       }
       console.log(error);
     });
   return aux;
 }
-export async function pauseTrack(signOut) {
+export async function pauseTrackService() {
   const jwt = await getDataFromStorage('token');
   var aux = {};
   const headers = {
@@ -255,17 +248,16 @@ export async function pauseTrack(signOut) {
     })
     .catch(error => {
       if (error.response) {
-        if (error.response.status === 401) {
-          console.log('JWT Inválido');
-          signOut();
-        }
+        aux = {
+          error: error.response.status,
+        };
       }
       console.log(error);
     });
   return aux;
 }
 
-export async function getPlaybackState(signOut) {
+export async function getPlaybackStateService() {
   const jwt = await getDataFromStorage('token');
   const headers = {
     Authorization: 'Bearer ' + jwt,
@@ -279,22 +271,20 @@ export async function getPlaybackState(signOut) {
     url: APIConfig.GET_PLAYBACK_STATE_URL,
   })
     .then(response => {
-      //console.log(response.data);
       aux = response.data;
     })
     .catch(error => {
       if (error.response) {
-        if (error.response.status === 401) {
-          console.log('JWT Inválido');
-          signOut();
-        }
+        aux = {
+          error: error.response.status,
+        };
       }
       console.log(error);
     });
   return aux;
 }
 
-export async function resetPlaylist(hdj_playlist_id, signOut) {
+export async function resetPlaylistService(hdj_playlist_id) {
   const jwt = await getDataFromStorage('token');
   const headers = {
     Authorization: 'Bearer ' + jwt,
@@ -312,22 +302,20 @@ export async function resetPlaylist(hdj_playlist_id, signOut) {
     data: body,
   })
     .then(response => {
-      //console.log(response.data);
       aux = response.data;
     })
     .catch(error => {
       if (error.response) {
-        if (error.response.status === 401) {
-          console.log('JWT Inválido');
-          signOut();
-        }
+        aux = {
+          error: error.response.status,
+        };
       }
       console.log(error);
     });
   return aux;
 }
 
-export async function getTrackToVote(track_id, playlist_id, signOut) {
+export async function getTrackToVoteService(track_id, playlist_id) {
   const jwt = await getDataFromStorage('token');
   var aux;
   const headers = {
@@ -345,16 +333,13 @@ export async function getTrackToVote(track_id, playlist_id, signOut) {
     },
   })
     .then(response => {
-      console.log('RESPONSE FROM GET IF VOTED TRACK');
-      //console.log(response.data[0]);
       aux = response.data;
     })
     .catch(error => {
       if (error.response) {
-        if (error.response.status === 401) {
-          console.log('JWT Inválido');
-          signOut();
-        }
+        aux = {
+          error: error.response.status,
+        };
       }
       console.log(error);
     });
