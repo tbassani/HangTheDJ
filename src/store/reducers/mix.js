@@ -143,6 +143,7 @@ const reducer = (state = initialState, action) => {
     case actionTypes.BEGIN_PLAYBACK:
       return {
         ...state,
+        isPlaying: true,
         loading: false,
         error: false,
       };
@@ -161,6 +162,7 @@ const reducer = (state = initialState, action) => {
     case actionTypes.STOP_PLAYBACK:
       return {
         ...state,
+        isPlaying: false,
         loading: false,
         error: false,
       };

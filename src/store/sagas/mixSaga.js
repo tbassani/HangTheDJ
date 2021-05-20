@@ -248,10 +248,12 @@ export function* initBeginPlaybackSaga(action) {
   yield put(actions.startBeginPlayback());
   const mixIdSelector = state => state.mix.mixId;
   const mixId = yield select(mixIdSelector);
+  yield put(actions.beginPlayback());
 }
 
 export function* initStopPlaybackSaga(action) {
   yield put(actions.startStopPlayback());
   const mixIdSelector = state => state.mix.mixId;
   const mixId = yield select(mixIdSelector);
+  yield put(actions.stopPlayback());
 }

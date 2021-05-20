@@ -215,7 +215,6 @@ export const downvoteFail = () => {
 export const initBeginPlayback = () => {
   return {
     type: actionTypes.INIT_BEGIN_PLAYBACK,
-    trackId: trackId,
   };
 };
 
@@ -264,7 +263,6 @@ export const pauseTrackFail = () => {
 export const initStopPlayback = () => {
   return {
     type: actionTypes.INIT_STOP_PLAYBACK,
-    trackId: trackId,
   };
 };
 

@@ -26,6 +26,7 @@ const MixScreen = props => {
   const mixTitle = useSelector(currState => currState.mix.mixTitle);
   const currTrack = useSelector(currState => currState.mix.currentTrack);
   const loading = useSelector(currState => currState.mix.loading);
+  const isPlaying = useSelector(currState => currState.mix.isPlaying);
 
   const userId = useSelector(currState => currState.auth.userId);
 
@@ -74,9 +75,13 @@ const MixScreen = props => {
     Alert.alert('Código copiado!');
   };
 
-  const onPressPlayHandler = () => {};
+  const onPressPlayHandler = () => {
+    dispatch(actions.initBeginPlayback());
+  };
 
-  const onPressPauseHandler = () => {};
+  const onPressPauseHandler = () => {
+    dispatch(actions.initStopPlayback());
+  };
 
   const votingHandler = () => {
     dispatch(actions.initGetVotingTrack());
@@ -99,6 +104,7 @@ const MixScreen = props => {
         <Player
           onPressPlay={onPressPlayHandler}
           onPressPause={onPressPauseHandler}
+          isPlaying={isPlaying}
         />
       );
     }
