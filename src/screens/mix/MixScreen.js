@@ -17,6 +17,7 @@ import LoadingSpinner from '../../components/UI/LoadingSpinner';
 
 import Colors from '../../constants/Colors';
 import Sizes from '../../constants/Sizes';
+import MinMixDuration from '../../constants/MinMixDuration';
 
 const MixScreen = props => {
   const [shareModal, setShareModal] = useState(false);
@@ -27,6 +28,7 @@ const MixScreen = props => {
   const currTrack = useSelector(currState => currState.mix.currentTrack);
   const loading = useSelector(currState => currState.mix.loading);
   const isPlaying = useSelector(currState => currState.mix.isPlaying);
+  const tracks = useSelector(currState => currState.mix.tracks);
 
   const userId = useSelector(currState => currState.auth.userId);
 
@@ -75,8 +77,26 @@ const MixScreen = props => {
     Alert.alert('Código copiado!');
   };
 
+  const checkMixDuration = () => {
+    let mixDuration = 0;
+    tracks.forEach(track => {
+      mixDuration = mixDuration + track.duration;
+      if (mixDuration > MinMixDuration.duration) {
+        return true;
+      }
+    });
+    return false;
+  };
+
   const onPressPlayHandler = () => {
-    dispatch(actions.initBeginPlayback());
+    if (checkMixDuration) {
+      dispatch(actions.initBeginPlayback());
+    } else {
+      Alert.alert(
+        'Mix muito curta',
+        'Por favor, adicione ao menos 20 minutos de música.',
+      );
+    }
   };
 
   const onPressPauseHandler = () => {
