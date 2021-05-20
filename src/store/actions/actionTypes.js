@@ -115,3 +115,24 @@ export const INIT_DOWNVOTE = 'INIT_DOWNVOTE';
 export const START_DOWNVOTE = 'START_DOWNVOTE';
 export const DOWNVOTE = 'DOWNVOTE';
 export const DOWNVOTE_FAIL = 'DOWNVOTE_FAIL';
+
+//PLAYING
+export const INIT_BEGIN_PLAYBACK = 'INIT_BEGIN_PLAYBACK';
+export const START_BEGIN_PLAYBACK = 'START_BEGIN_PLAYBACK';
+export const BEGIN_PLAYBACK = 'BEGIN_PLAYBACK';
+export const BEGIN_PLAYBACK_FAIL = 'BEGIN_PLAYBACK_FAIL';
+
+export const INIT_STOP_PLAYBACK = 'INIT_STOP_PLAYBACK';
+export const START_STOP_PLAYBACK = 'START_STOP_PLAYBACK';
+export const STOP_PLAYBACK = 'STOP_PLAYBACK';
+export const STOP_PLAYBACK_FAIL = 'STOP_PLAYBACK_FAIL';
+
+export const INIT_PLAY = 'INIT_PLAY';
+export const START_PLAY = 'START_PLAY';
+export const PLAY = 'PLAY';
+export const PLAY_FAIL = 'PLAY_FAIL';
+
+export const INIT_PAUSE = 'INIT_PAUSE';
+export const START_PAUSE = 'START_PAUSE';
+export const PAUSE = 'PAUSE';
+export const PAUSE_FAIL = 'PAUSE_FAIL';
