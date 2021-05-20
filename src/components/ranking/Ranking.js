@@ -52,7 +52,7 @@ const Ranking = props => {
 
   useEffect(() => {
     cancelToken.current = axios.CancelToken.source();
-    setTimeout(() => {
+    const time = setTimeout(() => {
       dispatch(
         actions.initGetRankingTracks(
           mixId,
@@ -61,6 +61,9 @@ const Ranking = props => {
         ),
       );
     }, 500);
+    return () => {
+      clearTimeout(time);
+    };
   }, [formState.inputValues.query]);
 
   const inputChangeHandler = useCallback(
