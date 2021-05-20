@@ -23,8 +23,6 @@ const MixScreen = props => {
   const mixId = useSelector(currState => currState.mix.mixId);
   const ownerId = useSelector(currState => currState.mix.ownerId);
   const mixTitle = useSelector(currState => currState.mix.mixTitle);
-  const tracks = useSelector(currState => currState.mix.tracks);
-  const topTracks = useSelector(currState => currState.mix.topTracks);
   const currTrack = useSelector(currState => currState.mix.currentTrack);
   const loading = useSelector(currState => currState.mix.loading);
 

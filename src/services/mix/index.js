@@ -66,7 +66,7 @@ export async function getVotingTrackService(playlist_id) {
   return aux;
 }
 
-export async function upVoteService(playlist_id, track_id) {
+export async function upvoteService(playlist_id, track_id) {
   console.log('Get Voting Track from service for HDJ Playlist: ' + playlist_id);
   const jwt = await getDataFromStorage('token');
   var aux = [];
@@ -101,7 +101,7 @@ export async function upVoteService(playlist_id, track_id) {
   return aux;
 }
 
-export async function downVoteService(playlist_id, track_id) {
+export async function downvoteService(playlist_id, track_id) {
   console.log('Get Voting Track from service for HDJ Playlist: ' + playlist_id);
   const jwt = await getDataFromStorage('token');
   var aux = [];

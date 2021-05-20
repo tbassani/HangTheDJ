@@ -26,6 +26,8 @@ import {
   initAddTracksToMixSaga,
   initGetCurrentTrackSaga,
   initGetVotingTrackSaga,
+  initDownvoteSaga,
+  initUpvoteSaga,
 } from './mixSaga';
 
 export function* watchAuth() {
@@ -75,4 +77,6 @@ export function* watchMix() {
   yield all([
     takeEvery(actionTypes.INIT_GET_VOTING_TRACK, initGetVotingTrackSaga),
   ]);
+  yield all([takeEvery(actionTypes.INIT_UPVOTE, initUpvoteSaga)]);
+  yield all([takeEvery(actionTypes.INIT_DOWNVOTE, initDownvoteSaga)]);
 }

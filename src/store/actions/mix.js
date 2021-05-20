@@ -161,3 +161,53 @@ export const getVotingTrackFail = () => {
     type: actionTypes.GET_VOTING_TRACK_FAIL,
   };
 };
+
+export const initUpvote = trackId => {
+  return {
+    type: actionTypes.INIT_UPVOTE,
+    trackId: trackId,
+  };
+};
+
+export const startUpvote = () => {
+  return {
+    type: actionTypes.START_UPVOTE,
+  };
+};
+
+export const upvote = () => {
+  return {
+    type: actionTypes.UPVOTE,
+  };
+};
+
+export const upvoteFail = () => {
+  return {
+    type: actionTypes.UPVOTE_FAIL,
+  };
+};
+
+export const initDownvote = trackId => {
+  return {
+    type: actionTypes.INIT_DOWNVOTE,
+    trackId: trackId,
+  };
+};
+
+export const startDownvote = () => {
+  return {
+    type: actionTypes.START_DOWNVOTE,
+  };
+};
+
+export const downvote = () => {
+  return {
+    type: actionTypes.DOWNVOTE,
+  };
+};
+
+export const downvoteFail = () => {
+  return {
+    type: actionTypes.DOWNVOTE_FAIL,
+  };
+};

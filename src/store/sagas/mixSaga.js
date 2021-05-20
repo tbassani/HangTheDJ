@@ -12,6 +12,8 @@ import {
   getPlayingTrackService,
   getVotingTrackService,
   getTrackToVoteService,
+  upvoteService,
+  downvoteService,
 } from '../../services/mix';
 
 export function* initGetRankingTracksSaga(action) {
@@ -81,7 +83,6 @@ export function* initGetRankingSaga(action) {
         ),
       );
     });
-
     yield put(
       actions.getRanking(
         new Mix(
@@ -143,7 +144,6 @@ export function* initGetCurrentTrackSaga(action) {
     //No track playing
     response = yield getNextTrackService(action.mixId);
   }
-  console.log(response);
   if (response && !response.error) {
     const track = yield new MixTrack(
       response.id,
@@ -206,6 +206,40 @@ export function* initGetVotingTrackSaga(action) {
       yield put(actions.initLogout());
     } else {
       yield put(actions.getVotingTrackFail());
+    }
+  }
+}
+
+export function* initUpvoteSaga(action) {
+  yield put(actions.startUpvote());
+  const mixIdSelector = state => state.mix.mixId;
+  const mixId = yield select(mixIdSelector);
+  let response = yield upvoteService(mixId, action.trackId);
+  if (response && !response.error) {
+    yield put(actions.upvote());
+    yield put(actions.initGetVotingTrack());
+  } else {
+    if (response.error === 401) {
+      yield put(actions.initLogout());
+    } else {
+      yield put(actions.upvoteFail());
+    }
+  }
+}
+
+export function* initDownvoteSaga(action) {
+  yield put(actions.startDownvote());
+  const mixIdSelector = state => state.mix.mixId;
+  const mixId = yield select(mixIdSelector);
+  let response = yield downvoteService(mixId, action.trackId);
+  if (response && !response.error) {
+    yield put(actions.downvote());
+    yield put(actions.initGetVotingTrack());
+  } else {
+    if (response.error === 401) {
+      yield put(actions.initLogout());
+    } else {
+      yield put(actions.upvoteFail());
     }
   }
 }

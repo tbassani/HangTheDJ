@@ -78,4 +78,12 @@ export {
   startGetVotingTrack,
   getVotingTrack,
   getVotingTrackFail,
+  initUpvote,
+  startUpvote,
+  upvote,
+  upvoteFail,
+  initDownvote,
+  startDownvote,
+  downvote,
+  downvoteFail,
 } from './mix';

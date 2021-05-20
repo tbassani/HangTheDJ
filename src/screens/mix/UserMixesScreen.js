@@ -1,5 +1,5 @@
 import React, {useEffect, useState, useCallback, useReducer} from 'react';
-import {View, FlatList, Text, StyleSheet, AppState, Alert} from 'react-native';
+import {View, FlatList, Text, StyleSheet, Alert} from 'react-native';
 
 import {useSelector, useDispatch} from 'react-redux';
 import * as actions from '../../store/actions';

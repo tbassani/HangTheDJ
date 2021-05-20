@@ -97,6 +97,43 @@ const reducer = (state = initialState, action) => {
         loading: false,
         error: true,
       };
+
+    case actionTypes.START_UPVOTE:
+      return {
+        ...state,
+        loading: true,
+        error: false,
+      };
+    case actionTypes.UPVOTE:
+      return {
+        ...state,
+        loading: false,
+        error: false,
+      };
+    case actionTypes.UPVOTE_FAIL:
+      return {
+        ...state,
+        loading: false,
+        error: true,
+      };
+    case actionTypes.START_DOWNVOTE:
+      return {
+        ...state,
+        loading: true,
+        error: false,
+      };
+    case actionTypes.DOWNVOTE:
+      return {
+        ...state,
+        loading: false,
+        error: false,
+      };
+    case actionTypes.DOWNVOTE_FAIL:
+      return {
+        ...state,
+        loading: false,
+        error: true,
+      };
     default:
       return state;
   }

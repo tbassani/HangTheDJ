@@ -17,6 +17,9 @@ import Sizes from '../../constants/Sizes';
 const VotingScreen = props => {
   const mixTitle = useSelector(currState => currState.mix.mixTitle);
   const votingTrack = useSelector(currState => currState.mix.votingTrack);
+  const loading = useSelector(currState => currState.mix.loading);
+
+  const dispatch = useDispatch();
 
   const navigation = props.navigation;
   useEffect(() => {
@@ -40,20 +43,38 @@ const VotingScreen = props => {
     });
   }, [navigation, mixTitle]);
 
+  const upvoteHandler = () => {
+    if (votingTrack) {
+      dispatch(actions.initUpvote(votingTrack.id));
+    }
+  };
+
+  const downvoteHandler = () => {
+    if (votingTrack) {
+      dispatch(actions.initDownvote(votingTrack.id));
+    }
+  };
+
+  let trackBallotContent = <TrackBallot track={votingTrack} />;
+  if (loading) {
+    trackBallotContent = (
+      <View style={styles.mainContainer}>
+        <LoadingSpinner size="large" />
+      </View>
+    );
+  }
+
   return (
     <View style={styles.mainContainer}>
-      <View style={styles.trackBallotContainer}>
-        <TrackBallot track={votingTrack} />
-      </View>
+      <View style={styles.trackBallotContainer}>{trackBallotContent}</View>
       <View style={styles.buttonsContainer}>
         <View style={styles.buttonContainer}>
-          <PrimaryButton onPress={() => navigation.navigate('VotingScreen')}>
+          <PrimaryButton onPress={upvoteHandler}>
             <Icon name="thumb-up" color="#FFF" size={Sizes.huge} />
           </PrimaryButton>
         </View>
         <View style={styles.buttonContainer}>
-          <SecondaryButton
-            onPress={() => navigation.navigate('AddTracksToMixScreen')}>
+          <SecondaryButton onPress={downvoteHandler}>
             <Icon name="thumb-down" color="#FFF" size={Sizes.huge} />
           </SecondaryButton>
         </View>
