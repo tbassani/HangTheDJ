@@ -86,7 +86,6 @@ export async function upvoteService(playlist_id, track_id) {
     data: body,
   })
     .then(response => {
-      console.log('RESPONSE');
       aux = response.data;
     })
     .catch(error => {
@@ -97,7 +96,6 @@ export async function upvoteService(playlist_id, track_id) {
       }
       console.log(error);
     });
-  console.log(aux);
   return aux;
 }
 
@@ -121,7 +119,6 @@ export async function downvoteService(playlist_id, track_id) {
     data: body,
   })
     .then(response => {
-      console.log('RESPONSE');
       aux = response.data;
     })
     .catch(error => {
@@ -132,7 +129,6 @@ export async function downvoteService(playlist_id, track_id) {
       }
       console.log(error);
     });
-  console.log(aux);
   return aux;
 }
 

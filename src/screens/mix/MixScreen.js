@@ -5,6 +5,7 @@ import {useSelector, useDispatch} from 'react-redux';
 import * as actions from '../../store/actions';
 
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import Clipboard from '@react-native-clipboard/clipboard';
 
 import CustomModal from '../../components/UI/CustomModal';
 import PrimaryButton from '../../components/UI/PrimaryButton';
@@ -69,6 +70,7 @@ const MixScreen = props => {
   };
   const copyMixCode = () => {
     setShareModal(false);
+    Clipboard.setString(mixId + '');
     Alert.alert('Código copiado!');
   };
 
@@ -117,7 +119,7 @@ const MixScreen = props => {
         </View>
         <View style={styles.buttonContainer}>
           <PrimaryButton onPress={votingHandler}>
-            <Icon name="vote" color="#FFF" size={Sizes.huge} />
+            <Icon name="thumbs-up-down" color="#FFF" size={Sizes.huge} />
           </PrimaryButton>
         </View>
         <View style={styles.buttonContainer}>
