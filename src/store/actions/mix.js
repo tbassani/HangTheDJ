@@ -211,3 +211,77 @@ export const downvoteFail = () => {
     type: actionTypes.DOWNVOTE_FAIL,
   };
 };
+
+export const initBeginPlayback = () => {
+  return {
+    type: actionTypes.INIT_BEGIN_PLAYBACK,
+    trackId: trackId,
+  };
+};
+
+export const startBeginPlayback = () => {
+  return {
+    type: actionTypes.START_BEGIN_PLAYBACK,
+  };
+};
+
+export const beginPlayback = () => {
+  return {
+    type: actionTypes.BEGIN_PLAYBACK,
+  };
+};
+
+export const beginPlaybackFail = () => {
+  return {
+    type: actionTypes.BEGIN_PLAYBACK_FAIL,
+  };
+};
+
+export const playTrack = trackId => {
+  return {
+    type: actionTypes.PLAY_TRACK,
+  };
+};
+
+export const playTrackFail = () => {
+  return {
+    type: actionTypes.PLAY_TRACK_FAIL,
+  };
+};
+
+export const pauseTrack = () => {
+  return {
+    type: actionTypes.PAUSE_TRACK,
+  };
+};
+
+export const pauseTrackFail = () => {
+  return {
+    type: actionTypes.PAUSE_TRACK_FAIL,
+  };
+};
+
+export const initStopPlayback = () => {
+  return {
+    type: actionTypes.INIT_STOP_PLAYBACK,
+    trackId: trackId,
+  };
+};
+
+export const startStopPlayback = () => {
+  return {
+    type: actionTypes.START_STOP_PLAYBACK,
+  };
+};
+
+export const stopPlayback = () => {
+  return {
+    type: actionTypes.STOP_PLAYBACK,
+  };
+};
+
+export const stopPlaybackFail = () => {
+  return {
+    type: actionTypes.STOP_PLAYBACK_FAIL,
+  };
+};

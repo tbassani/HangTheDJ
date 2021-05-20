@@ -127,12 +127,12 @@ export const START_STOP_PLAYBACK = 'START_STOP_PLAYBACK';
 export const STOP_PLAYBACK = 'STOP_PLAYBACK';
 export const STOP_PLAYBACK_FAIL = 'STOP_PLAYBACK_FAIL';
 
-export const INIT_PLAY = 'INIT_PLAY';
-export const START_PLAY = 'START_PLAY';
-export const PLAY = 'PLAY';
-export const PLAY_FAIL = 'PLAY_FAIL';
+export const INIT_PLAY_TRACK = 'INIT_PLAY_TRACK';
+export const START_PLAY_TRACK = 'START_PLAY_TRACK';
+export const PLAY_TRACK = 'PLAY_TRACK';
+export const PLAY_TRACK_FAIL = 'PLAY_TRACK_FAIL';
 
-export const INIT_PAUSE = 'INIT_PAUSE';
-export const START_PAUSE = 'START_PAUSE';
-export const PAUSE = 'PAUSE';
-export const PAUSE_FAIL = 'PAUSE_FAIL';
+export const INIT_PAUSE_TRACK = 'INIT_PAUSE_TRACK';
+export const START_PAUSE_TRACK = 'START_PAUSE_TRACK';
+export const PAUSE_TRACK = 'PAUSE_TRACK';
+export const PAUSE_TRACK_FAIL = 'PAUSE_TRACK_FAIL';

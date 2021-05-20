@@ -86,4 +86,12 @@ export {
   startDownvote,
   downvote,
   downvoteFail,
+  initBeginPlayback,
+  startBeginPlayback,
+  beginPlayback,
+  beginPlaybackFail,
+  initStopPlayback,
+  startStopPlayback,
+  stopPlayback,
+  stopPlaybackFail,
 } from './mix';

@@ -28,6 +28,8 @@ import {
   initGetVotingTrackSaga,
   initDownvoteSaga,
   initUpvoteSaga,
+  initBeginPlaybackSaga,
+  initStopPlaybackSaga,
 } from './mixSaga';
 
 export function* watchAuth() {
@@ -79,4 +81,8 @@ export function* watchMix() {
   ]);
   yield all([takeEvery(actionTypes.INIT_UPVOTE, initUpvoteSaga)]);
   yield all([takeEvery(actionTypes.INIT_DOWNVOTE, initDownvoteSaga)]);
+  yield all([
+    takeEvery(actionTypes.INIT_BEGIN_PLAYBACK, initBeginPlaybackSaga),
+  ]);
+  yield all([takeEvery(actionTypes.INIT_STOP_PLAYBACK, initStopPlaybackSaga)]);
 }

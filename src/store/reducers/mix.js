@@ -134,6 +134,42 @@ const reducer = (state = initialState, action) => {
         loading: false,
         error: true,
       };
+    case actionTypes.START_BEGIN_PLAYBACK:
+      return {
+        ...state,
+        loading: true,
+        error: false,
+      };
+    case actionTypes.BEGIN_PLAYBACK:
+      return {
+        ...state,
+        loading: false,
+        error: false,
+      };
+    case actionTypes.BEGIN_PLAYBACK_FAIL:
+      return {
+        ...state,
+        loading: false,
+        error: true,
+      };
+    case actionTypes.START_STOP_PLAYBACK:
+      return {
+        ...state,
+        loading: true,
+        error: false,
+      };
+    case actionTypes.STOP_PLAYBACK:
+      return {
+        ...state,
+        loading: false,
+        error: false,
+      };
+    case actionTypes.STOP_PLAYBACK_FAIL:
+      return {
+        ...state,
+        loading: false,
+        error: true,
+      };
     default:
       return state;
   }
