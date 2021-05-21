@@ -19,7 +19,7 @@ import PrimaryButton from '../../components/UI/PrimaryButton';
 import SecondaryButton from '../../components/UI/SecondaryButton';
 import CurrentTrack from '../../components/mix/CurrentTrack';
 import Player from '../../components/player/Player';
-import LoadingSpinner from '../../components/UI/LoadingSpinner';
+
 //import TextLink from '../../components/UI/TextLink';
 
 import BackgroundFetch from 'react-native-background-fetch';
@@ -30,13 +30,15 @@ import MinMixDuration from '../../constants/MinMixDuration';
 
 const MixScreen = props => {
   const [shareModal, setShareModal] = useState(false);
+  const [loadingTrack, setLoadingTrack] = useState(true);
+  const [trackInterval, setTrackInterval] = useState(null);
   const pressedPlay = useRef();
 
   const mixId = useSelector(currState => currState.mix.mixId);
   const ownerId = useSelector(currState => currState.mix.ownerId);
   const mixTitle = useSelector(currState => currState.mix.mixTitle);
   const currTrack = useSelector(currState => currState.mix.currentTrack);
-  const loading = useSelector(currState => currState.mix.loading);
+  // const loading = useSelector(currState => currState.mix.loading);
   const isPlaying = useSelector(currState => currState.mix.isPlaying);
   const tracks = useSelector(currState => currState.mix.tracks);
 
@@ -90,6 +92,16 @@ const MixScreen = props => {
       BackgroundFetch.stop();
     }
   }, [isPlaying]);
+
+  useEffect(() => {
+    const timeInterval = setInterval(() => {
+      dispatch(actions.initGetCurrentTrack(mixId));
+    }, 5000);
+    setTrackInterval(timeInterval);
+    return () => {
+      clearInterval(timeInterval);
+    };
+  }, [mixId]);
 
   const initBackgroundFetch = async () => {
     // BackgroundFetch event handler.
@@ -214,14 +226,6 @@ const MixScreen = props => {
             <Icon name="music-note-plus" color="#FFF" size={Sizes.huge} />
           </SecondaryButton>
         </View>
-      </View>
-    );
-  }
-
-  if (loading) {
-    return (
-      <View style={styles.mainContainer}>
-        <LoadingSpinner size="large" />
       </View>
     );
   }
