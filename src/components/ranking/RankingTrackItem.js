@@ -24,9 +24,15 @@ const RankingTrackItem = props => {
           </View>
         </View>
       </TouchableOpacity>
-      <View style={styles.scoreContainer}>
-        <Text style={styles.score}>{props.score}</Text>
-      </View>
+      {props.topTrack ? (
+        <View style={styles.scoreContainer}>
+          <Icon name="star" color={Colors.alternative} size={Sizes.medium} />
+        </View>
+      ) : (
+        <View style={styles.scoreContainer}>
+          <Text style={styles.score}>{props.score}</Text>
+        </View>
+      )}
     </View>
   );
 };

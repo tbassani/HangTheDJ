@@ -149,6 +149,7 @@ export async function getPlayingTrackService(playlist_id) {
   })
     .then(response => {
       aux = response.data;
+      console.log(response);
     })
     .catch(error => {
       console.log(error);
@@ -204,6 +205,8 @@ export async function playTrackService(playlist_id, track_id) {
     track_id,
     playlist_id,
   };
+  console.log('PLAY SERVICE');
+  console.log(body);
   await axios({
     headers: headers,
     method: 'POST',
@@ -265,6 +268,69 @@ export async function getPlaybackStateService() {
     headers: headers,
     method: 'GET',
     url: APIConfig.GET_PLAYBACK_STATE_URL,
+  })
+    .then(response => {
+      aux = response.data;
+    })
+    .catch(error => {
+      if (error.response) {
+        aux = {
+          error: error.response.status,
+        };
+      }
+      console.log(error);
+    });
+  return aux;
+}
+
+export async function addTracksToQueueService(tracks, playlist_id) {
+  const jwt = await getDataFromStorage('token');
+  const body = {
+    tracks: tracks,
+    playlist_id: playlist_id,
+  };
+  const headers = {
+    Authorization: 'Bearer ' + jwt,
+    contenttype: 'application/json;',
+    datatype: 'json',
+  };
+  var aux = {};
+  await axios({
+    headers: headers,
+    method: 'POST',
+    url: APIConfig.ADD_TRACKS_TO_QUEUE,
+    data: body,
+  })
+    .then(response => {
+      aux = response.data;
+    })
+    .catch(error => {
+      if (error.response) {
+        aux = {
+          error: error.response.status,
+        };
+      }
+      console.log(error);
+    });
+  return aux;
+}
+
+export async function removeTracksFromQueueService(tracks, playlist_id) {
+  const jwt = await getDataFromStorage('token');
+  const body = {
+    tracks: tracks,
+    playlist_id: playlist_id,
+  };
+  const headers = {
+    Authorization: 'Bearer ' + jwt,
+    contenttype: 'application/json;',
+  };
+  var aux = {};
+  await axios({
+    headers: headers,
+    method: 'delete',
+    url: APIConfig.REMOVE_TRACKS_FROM_QUEUE,
+    data: body,
   })
     .then(response => {
       aux = response.data;

@@ -85,6 +85,7 @@ const UserMixesNavigator = () => {
 };
 
 const RankingNavigator = () => {
+  const profile = useSelector(currState => currState.app.profile);
   return (
     <Stack.Navigator
       screenOptions={{
@@ -102,14 +103,26 @@ const RankingNavigator = () => {
         name="MixScreen"
         component={MixScreen}
       />
-      <Stack.Screen
-        options={{
-          headerTitle: 'Adicionar ao Mix',
-          headerTitleStyle: {alignSelf: 'center'},
-        }}
-        name="AddTracksToMixScreen"
-        component={AddTracksToMixScreen}
-      />
+
+      {profile && profile.length > 0 ? (
+        <Stack.Screen
+          options={{
+            headerTitle: 'Adicionar ao Mix',
+            headerTitleStyle: {alignSelf: 'center'},
+          }}
+          name="AddTracksToMixScreen"
+          component={AddTracksToMixScreen}
+        />
+      ) : (
+        <Stack.Screen
+          options={{
+            headerTitle: 'Serviço de Streaming',
+            headerTitleStyle: {alignSelf: 'center'},
+          }}
+          name="StreamingProfileScreen"
+          component={StreamingProfileScreen}
+        />
+      )}
       <Stack.Screen
         options={{
           headerTitle: 'Ranking',

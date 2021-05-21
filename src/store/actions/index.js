@@ -94,4 +94,8 @@ export {
   startStopPlayback,
   stopPlayback,
   stopPlaybackFail,
+  setTopTracks,
+  setTopTracksFail,
+  playTrack,
+  pauseTrack,
 } from './mix';

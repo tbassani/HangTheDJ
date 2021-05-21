@@ -1,6 +1,8 @@
 import React, {useEffect} from 'react';
 import {View, TouchableOpacity, StyleSheet} from 'react-native';
 
+import {useSelector} from 'react-redux';
+
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 import ScreenWrapper from '../../components/hoc/ScreenWrapper';

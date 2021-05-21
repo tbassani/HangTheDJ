@@ -1,3 +1,3 @@
 export default {
-  duration: 20000,
+  duration: 1200000,
 };

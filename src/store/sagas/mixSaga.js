@@ -5,6 +5,8 @@ import * as actions from '../actions';
 import MixTrack from '../../models/MixTrack';
 import Mix from '../../models/Mix';
 
+import MinMixDuration from '../../constants/MinMixDuration';
+
 import {
   searchRankingTracksService,
   addTracksService,
@@ -14,6 +16,11 @@ import {
   getTrackToVoteService,
   upvoteService,
   downvoteService,
+  pauseTrackService,
+  playTrackService,
+  resetPlaylistService,
+  addTracksToQueueService,
+  removeTracksFromQueueService,
 } from '../../services/mix';
 
 export function* initGetRankingTracksSaga(action) {
@@ -55,6 +62,9 @@ export function* initGetRankingTracksSaga(action) {
 }
 
 export function* initGetRankingSaga(action) {
+  const topTracksSelector = state => state.mix.topTracks;
+  const topTracks = yield select(topTracksSelector);
+
   yield put(actions.startGetRanking());
 
   const response = yield searchRankingTracksService(
@@ -90,7 +100,7 @@ export function* initGetRankingSaga(action) {
           action.mixTitle,
           action.ownerId,
           rankingTracks,
-          [],
+          topTracks.length > 0 ? topTracks : [],
           null,
           null,
         ),
@@ -140,7 +150,8 @@ export function* initAddTracksToMixSaga(action) {
 export function* initGetCurrentTrackSaga(action) {
   yield put(actions.startGetCurrentTrack());
   let response = yield getPlayingTrackService(action.mixId);
-  if (!response.id) {
+  console.log(response);
+  if (!response.external_track_id) {
     //No track playing
     response = yield getNextTrackService(action.mixId);
   }
@@ -245,15 +256,188 @@ export function* initDownvoteSaga(action) {
 }
 
 export function* initBeginPlaybackSaga(action) {
+  let newTopTracks = [];
+  let newTopIds = [];
+  let tracksToQueue;
+
   yield put(actions.startBeginPlayback());
+
   const mixIdSelector = state => state.mix.mixId;
   const mixId = yield select(mixIdSelector);
+  const mixTitleSelector = state => state.mix.mixTitle;
+  const mixTitle = yield select(mixTitleSelector);
+  const ownerIdSelector = state => state.mix.ownerId;
+  const ownerId = yield select(ownerIdSelector);
+
+  const topTracksSelector = state => state.mix.topTracks;
+  const topTracks = yield select(topTracksSelector);
+  const currTrackSelector = state => state.mix.currentTrack;
+  const currentTrack = yield select(currTrackSelector);
+  const tracksSelector = state => state.mix.tracks;
+  const tracks = yield select(tracksSelector);
+  //Check playback state
+  if (action.pressedPlay) {
+    const playTrack = yield playTrackService(mixId, currentTrack.externalId);
+    //remove from queue
+    //Get the newest ranking
+    yield put(actions.initGetRanking(mixId, mixTitle, ownerId));
+    yield put(actions.playTrack());
+    if (!topTracks || topTracks.length <= 0) {
+      console.log('ADD TO QUEUE FROM PLAY');
+      let duration = 0;
+      let i = 0;
+      while (i < tracks.length && duration < MinMixDuration.duration) {
+        duration = duration + tracks[i].duration;
+        if (tracks[i].externalId !== currentTrack.externalId) {
+          newTopTracks.push(tracks[i]);
+        }
+        i++;
+      }
+      newTopTracks.forEach(track => {
+        newTopIds.push(track.externalId);
+      });
+      tracksToQueue = yield addTracksToQueueService(newTopIds, mixId);
+      yield put(actions.setTopTracks(newTopTracks));
+    }
+  } else {
+    //Get the newest ranking
+    yield put(actions.initGetRanking(mixId, mixTitle, ownerId));
+    console.log('AUTOMATIC');
+    const playingTrack = yield getPlayingTrackService(mixId);
+    if (
+      !playingTrack.is_playing &&
+      playingTrack.progress_ms > 0 &&
+      playingTrack.progress_ms < playingTrack.duration
+      //If it is paused, stop de playback
+    ) {
+      console.log('PAUSED ON SPOTIFY');
+      //const pauseTrack = yield pauseTrackService();
+      yield put(actions.pauseTrack());
+    } else {
+      console.log('PLAYING ON SPOTIFY');
+      if (!topTracks || topTracks.length <= 0) {
+        console.log('NO TOP TRACKS');
+        //If it is, then play currTrack and fill topTracks (exclude currTrack)
+        const playTrack = yield playTrackService(
+          mixId,
+          currentTrack.externalId,
+        );
+        let duration = 0;
+        let i = 0;
+        while (i < tracks.length && duration < MinMixDuration.duration) {
+          duration = duration + tracks[i].duration;
+          if (tracks[i].externalId !== currentTrack.externalId) {
+            newTopTracks.push(tracks[i]);
+          }
+        }
+        newTopIds = [];
+        newTopTracks.forEach(track => {
+          newTopIds.push(track.externalId);
+        });
+        tracksToQueue = yield addTracksToQueueService(newTopIds, mixId);
+        yield put(actions.setTopTracks(newTopTracks));
+      } else {
+        console.log('TOP TRACKS');
+        if (
+          topTracks.filter(track => {
+            track.externalId === playingTrack.external_track_id;
+          }).length <= 0
+        ) {
+          console.log('DIFFERENT TRACK FROM ANY PREV TOP TRACKS');
+          //Is playing a track that was not in the top tracks, pause the playback
+          yield put(actions.pauseTrack());
+        } else {
+          console.log('TRACK IN CURR TOP TRACKS');
+          newTopTracks = [];
+          let duration = 0;
+          let i = 0;
+          while (i < tracks.length && duration < MinMixDuration.duration) {
+            duration = duration + tracks[i].duration;
+            if (tracks[i].externalId !== currentTrack.externalId) {
+              newTopTracks.push(tracks[i]);
+            }
+          }
+          if (duration < MinMixDuration.duration) {
+            console.log('NOT ENOUGH TRACKS');
+            //reset playlist
+            const resetMix = yield resetPlaylistService(mixId);
+            //get ranking
+            yield put(actions.initGetRanking(mixId, mixTitle, ownerId));
+            //Send last tracks to queue
+            newTopIds = [];
+            newTopTracks.forEach(track => {
+              newTopIds.push(track.externalId);
+            });
+            tracksToQueue = yield addTracksToQueueService(newTopIds, mixId);
+            //recalculate topTracks
+            duration = 0;
+            i = 0;
+            newTopTracks = [];
+            while (i < tracks.length && duration < MinMixDuration.duration) {
+              duration = duration + tracks[i].duration;
+              if (tracks[i].externalId !== currentTrack.externalId) {
+                newTopTracks.push(tracks[i]);
+              }
+            }
+            newTopIds = [];
+            newTopTracks.forEach(track => {
+              newTopIds.push(track.externalId);
+            });
+            tracksToQueue = yield addTracksToQueueService(newTopIds, mixId);
+            yield put(actions.setTopTracks(newTopTracks));
+          } else {
+            console.log('NEW TOP TRACKS');
+            newTopIds = [];
+            newTopTracks.forEach(track => {
+              newTopIds.push(track.externalId);
+            });
+            tracksToQueue = yield addTracksToQueueService(newTopIds, mixId);
+            yield put(actions.setTopTracks(newTopTracks));
+          }
+        }
+      }
+    }
+  }
+  console.log('SET CURR TRACK');
+  let currPlayingTrack = yield getPlayingTrackService(mixId);
+  console.log(currPlayingTrack);
+  yield put(
+    actions.getCurrentTrack(
+      new MixTrack(
+        currPlayingTrack.id,
+        currPlayingTrack.external_track_id,
+        currPlayingTrack.playlist_id,
+        currPlayingTrack.user_id,
+        currPlayingTrack.track_name,
+        currPlayingTrack.artist_name,
+        currPlayingTrack.album_name,
+        currPlayingTrack.album_art,
+        currPlayingTrack.genre,
+        currPlayingTrack.score,
+        currPlayingTrack.was_played,
+        currPlayingTrack.duration,
+      ),
+    ),
+  );
+
+  //Check playback state
+  //If it is paused, stop de playback
+  //Check if topTracks is empty
+  //If it is, then play currTrack and fill topTracks (exclude currTrack)
+  //If it is not empty
+  ////check is the music playing is in the topTracks
+  ////If it is then most songs have probably been played already
+  //////Add new topSongs and send them to the queue
+  ////If it is not, stop the playback
+
   yield put(actions.beginPlayback());
 }
 
 export function* initStopPlaybackSaga(action) {
+  const topTracksSelector = state => state.mix.topTracks;
+
   yield put(actions.startStopPlayback());
-  const mixIdSelector = state => state.mix.mixId;
-  const mixId = yield select(mixIdSelector);
-  yield put(actions.stopPlayback());
+
+  const pauseTrack = yield pauseTrackService();
+  yield put(actions.pauseTrack());
 }

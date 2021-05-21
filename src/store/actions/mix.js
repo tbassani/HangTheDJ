@@ -212,9 +212,10 @@ export const downvoteFail = () => {
   };
 };
 
-export const initBeginPlayback = () => {
+export const initBeginPlayback = pressedPlay => {
   return {
     type: actionTypes.INIT_BEGIN_PLAYBACK,
+    pressedPlay: pressedPlay,
   };
 };
 
@@ -236,15 +237,29 @@ export const beginPlaybackFail = () => {
   };
 };
 
-export const playTrack = trackId => {
+export const playTrack = track => {
   return {
     type: actionTypes.PLAY_TRACK,
+    track: track,
   };
 };
 
 export const playTrackFail = () => {
   return {
     type: actionTypes.PLAY_TRACK_FAIL,
+  };
+};
+
+export const setTopTracks = topTracks => {
+  return {
+    type: actionTypes.SET_TOP_TRACKS,
+    topTracks: topTracks,
+  };
+};
+
+export const setTopTracksFail = () => {
+  return {
+    type: actionTypes.SET_TOP_TRACKS_FAIL,
   };
 };
 

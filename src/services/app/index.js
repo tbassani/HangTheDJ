@@ -152,7 +152,9 @@ export async function getMixPlaylistsService() {
     })
     .catch(error => {
       if (error.response) {
-        aux = error.response.status;
+        aux = {
+          error: error.response.status,
+        };
       }
     });
   return aux;

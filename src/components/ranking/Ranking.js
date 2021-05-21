@@ -28,6 +28,7 @@ const Ranking = props => {
   const tracks = useSelector(currState => {
     return currState.mix.tracks;
   });
+
   const mixId = useSelector(currState => {
     return currState.mix.mixId;
   });

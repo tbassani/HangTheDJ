@@ -22,7 +22,7 @@ import {Alert} from 'react-native';
 export function* initGetMixesSaga(action) {
   yield put(actions.startGetMixes());
   const response = yield getMixPlaylistsService();
-  if (response && response !== 401) {
+  if (response && !response.error) {
     const mixes = [];
     response.forEach(element => {
       mixes.push(
@@ -39,7 +39,7 @@ export function* initGetMixesSaga(action) {
     });
     yield put(actions.getMixes(mixes));
   } else {
-    if (response === 401) {
+    if (response.error === 401) {
       yield put(actions.initLogout());
     } else {
       yield put(actions.getMixesFail());

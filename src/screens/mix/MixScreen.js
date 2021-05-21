@@ -1,5 +1,12 @@
-import React, {useEffect, useState} from 'react';
-import {View, Text, TouchableOpacity, StyleSheet, Alert} from 'react-native';
+import React, {useEffect, useState, useRef} from 'react';
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  StyleSheet,
+  Linking,
+  Alert,
+} from 'react-native';
 
 import {useSelector, useDispatch} from 'react-redux';
 import * as actions from '../../store/actions';
@@ -15,12 +22,15 @@ import Player from '../../components/player/Player';
 import LoadingSpinner from '../../components/UI/LoadingSpinner';
 //import TextLink from '../../components/UI/TextLink';
 
+import BackgroundFetch from 'react-native-background-fetch';
+
 import Colors from '../../constants/Colors';
 import Sizes from '../../constants/Sizes';
 import MinMixDuration from '../../constants/MinMixDuration';
 
 const MixScreen = props => {
   const [shareModal, setShareModal] = useState(false);
+  const pressedPlay = useRef();
 
   const mixId = useSelector(currState => currState.mix.mixId);
   const ownerId = useSelector(currState => currState.mix.ownerId);
@@ -31,6 +41,9 @@ const MixScreen = props => {
   const tracks = useSelector(currState => currState.mix.tracks);
 
   const userId = useSelector(currState => currState.auth.userId);
+
+  const profile = useSelector(currState => currState.app.profile);
+  const profileURL = useSelector(currState => currState.app.profileURL);
 
   const dispatch = useDispatch();
 
@@ -66,7 +79,46 @@ const MixScreen = props => {
           }
         : () => {},
     });
+    const unsubscribe = navigation.addListener('focus', () => {
+      dispatch(actions.initGetCurrentTrack(mixId));
+    });
+    return unsubscribe;
   }, [navigation, mixTitle]);
+
+  useEffect(() => {
+    if (!isPlaying) {
+      BackgroundFetch.stop();
+    }
+  }, [isPlaying]);
+
+  const initBackgroundFetch = async () => {
+    // BackgroundFetch event handler.
+    console.log('PRESSED PLAY: ' + pressedPlay.current);
+    const onEvent = async taskId => {
+      console.log('[BackgroundFetch] task: ', taskId);
+      // Do your background work...
+      dispatch(actions.initBeginPlayback(pressedPlay.current));
+      pressedPlay.current = false;
+
+      BackgroundFetch.finish(taskId);
+    };
+
+    // Timeout callback is executed when your Task has exceeded its allowed running-time.
+    // You must stop what you're doing immediately BackgorundFetch.finish(taskId)
+    const onTimeout = async taskId => {
+      console.warn('[BackgroundFetch] TIMEOUT task: ', taskId);
+      BackgroundFetch.finish(taskId);
+    };
+
+    // Initialize BackgroundFetch only once when component mounts.
+    let status = await BackgroundFetch.configure(
+      {minimumFetchInterval: 15},
+      onEvent,
+      onTimeout,
+    );
+
+    console.log('[BackgroundFetch] configure status: ', status);
+  };
 
   const shareMixHandler = () => {
     setShareModal(true);
@@ -89,11 +141,12 @@ const MixScreen = props => {
   };
 
   const onPressPlayHandler = () => {
+    pressedPlay.current = true;
     if (checkMixDuration) {
-      dispatch(actions.initBeginPlayback());
+      initBackgroundFetch();
     } else {
       Alert.alert(
-        'Mix muito curta',
+        'Mix muito curta!',
         'Por favor, adicione ao menos 20 minutos de música.',
       );
     }
@@ -101,6 +154,7 @@ const MixScreen = props => {
 
   const onPressPauseHandler = () => {
     dispatch(actions.initStopPlayback());
+    BackgroundFetch.stop();
   };
 
   const votingHandler = () => {
@@ -150,7 +204,13 @@ const MixScreen = props => {
         </View>
         <View style={styles.buttonContainer}>
           <SecondaryButton
-            onPress={() => navigation.navigate('AddTracksToMixScreen')}>
+            onPress={() => {
+              if (!profile || profile.length <= 0) {
+                navigation.navigate('StreamingProfileScreen');
+              } else {
+                navigation.navigate('AddTracksToMixScreen');
+              }
+            }}>
             <Icon name="music-note-plus" color="#FFF" size={Sizes.huge} />
           </SecondaryButton>
         </View>
@@ -162,6 +222,36 @@ const MixScreen = props => {
     return (
       <View style={styles.mainContainer}>
         <LoadingSpinner size="large" />
+      </View>
+    );
+  }
+
+  const openLink = async () => {
+    if (profileURL && profileURL.length > 0) {
+      const supported = await Linking.canOpenURL(profileURL);
+      if (supported) {
+        await Linking.openURL(profileURL);
+      } else {
+        Alert.alert(`Don't know how to open this URL: ${profileURL}`);
+      }
+    }
+  };
+
+  const handleNewProfile = () => {
+    //dispatch(actions.initGetProfile());
+    try {
+      openLink();
+    } catch (error) {
+      Alert('Erro', 'Erro ao abrir link');
+    }
+  };
+
+  if ((!profile || profile.length <= 0) && ownerId === userId) {
+    return (
+      <View style={styles.mainContainer}>
+        <PrimaryButton onPress={() => handleNewProfile()}>
+          Adicionar Serviço de Streaming
+        </PrimaryButton>
       </View>
     );
   }

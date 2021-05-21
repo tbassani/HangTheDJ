@@ -143,7 +143,6 @@ const reducer = (state = initialState, action) => {
     case actionTypes.BEGIN_PLAYBACK:
       return {
         ...state,
-        isPlaying: true,
         loading: false,
         error: false,
       };
@@ -171,6 +170,33 @@ const reducer = (state = initialState, action) => {
         ...state,
         loading: false,
         error: true,
+      };
+    case actionTypes.SET_TOP_TRACKS:
+      return {
+        ...state,
+        topTracks: action.topTracks,
+        loading: false,
+        error: true,
+      };
+    case actionTypes.SET_TOP_TRACKS_FAIL:
+      return {
+        ...state,
+        loading: false,
+        error: true,
+      };
+    case actionTypes.PAUSE_TRACK:
+      return {
+        ...state,
+        isPlaying: false,
+        loading: false,
+        error: false,
+      };
+    case actionTypes.PLAY_TRACK:
+      return {
+        ...state,
+        isPlaying: true,
+        loading: false,
+        error: false,
       };
     default:
       return state;
