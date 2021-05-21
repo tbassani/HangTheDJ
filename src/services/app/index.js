@@ -247,7 +247,6 @@ export async function upVoteService(mix_id, track_id) {
       }
       console.log(error);
     });
-  console.log(aux);
   return aux;
 }
 
@@ -280,7 +279,6 @@ export async function downVoteService(mix_id, track_id) {
       }
       console.log(error);
     });
-  console.log(aux);
   return aux;
 }
 

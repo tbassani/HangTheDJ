@@ -62,7 +62,6 @@ export async function getVotingTrackService(playlist_id) {
       }
       console.log(error);
     });
-  console.log(aux);
   return aux;
 }
 
@@ -133,7 +132,7 @@ export async function downvoteService(playlist_id, track_id) {
 }
 
 export async function getPlayingTrackService(playlist_id) {
-  console.log('Get Playing track from service: ' + playlist_id);
+  console.log('Get Playing track from service');
   const jwt = await getDataFromStorage('token');
 
   var aux = undefined;
@@ -149,7 +148,6 @@ export async function getPlayingTrackService(playlist_id) {
   })
     .then(response => {
       aux = response.data;
-      console.log(response);
     })
     .catch(error => {
       console.log(error);
@@ -206,7 +204,6 @@ export async function playTrackService(playlist_id, track_id) {
     playlist_id,
   };
   console.log('PLAY SERVICE');
-  console.log(body);
   await axios({
     headers: headers,
     method: 'POST',

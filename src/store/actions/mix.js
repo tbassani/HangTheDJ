@@ -237,10 +237,9 @@ export const beginPlaybackFail = () => {
   };
 };
 
-export const playTrack = track => {
+export const playTrack = () => {
   return {
     type: actionTypes.PLAY_TRACK,
-    track: track,
   };
 };
 

@@ -80,7 +80,6 @@ export async function getPlaylistsAndTracks(query, cancelToken, signOut) {
 }
 
 export async function getPlayingTrack(playlist_id, signOut) {
-  console.log('Get Playing track from service');
   const jwt = await getDataFromStorage('token');
 
   var aux = {};
