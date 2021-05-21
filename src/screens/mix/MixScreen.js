@@ -31,7 +31,7 @@ import MinMixDuration from '../../constants/MinMixDuration';
 const MixScreen = props => {
   const [shareModal, setShareModal] = useState(false);
   const [loadingTrack, setLoadingTrack] = useState(true);
-  const [trackInterval, setTrackInterval] = useState(null);
+  const trackInterval = useRef();
   const pressedPlay = useRef();
 
   const mixId = useSelector(currState => currState.mix.mixId);
@@ -81,10 +81,17 @@ const MixScreen = props => {
           }
         : () => {},
     });
-    const unsubscribe = navigation.addListener('focus', () => {
+    const unsubscribeFocus = navigation.addListener('focus', () => {
       dispatch(actions.initGetCurrentTrack(mixId));
     });
-    return unsubscribe;
+
+    const unsubscribeBlur = navigation.addListener('blur', () => {
+      clearInterval(trackInterval.current);
+    });
+    return () => {
+      unsubscribeFocus();
+      unsubscribeBlur();
+    };
   }, [navigation, mixTitle]);
 
   useEffect(() => {
@@ -97,7 +104,7 @@ const MixScreen = props => {
     const timeInterval = setInterval(() => {
       dispatch(actions.initGetCurrentTrack(mixId));
     }, 5000);
-    setTrackInterval(timeInterval);
+    trackInterval.current = timeInterval;
     return () => {
       clearInterval(timeInterval);
     };
