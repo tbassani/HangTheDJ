@@ -62,12 +62,12 @@ export function* initGetRankingTracksSaga(action) {
   }
 }
 
-export function* initGetRankingSaga(action) {
-  console.log('Get Ranking');
+export function* initGetMixSaga(action) {
+  console.log('Get Mix');
   const topTracksSelector = state => state.mix.topTracks;
   const topTracks = yield select(topTracksSelector);
 
-  yield put(actions.startGetRanking());
+  yield put(actions.startGetMix());
 
   const response = yield searchRankingTracksService(
     action.mixId,
@@ -76,7 +76,7 @@ export function* initGetRankingSaga(action) {
   );
   const rankingTracks = [];
 
-  if (response && response !== 401) {
+  if (response && !response.error) {
     response.forEach(track => {
       rankingTracks.push(
         new MixTrack(
@@ -96,7 +96,7 @@ export function* initGetRankingSaga(action) {
       );
     });
     yield put(
-      actions.getRanking(
+      actions.getMix(
         new Mix(
           action.mixId,
           action.mixTitle,
@@ -109,10 +109,10 @@ export function* initGetRankingSaga(action) {
       ),
     );
   } else {
-    if (response === 401) {
+    if (response.error === 401) {
       yield put(actions.initLogout());
     } else {
-      yield put(actions.getRankingTracksFail());
+      yield put(actions.getMixFail());
     }
   }
 }
@@ -153,13 +153,12 @@ export function* initAddTracksToMixSaga(action) {
 export function* initGetCurrentTrackSaga(action) {
   yield put(actions.startGetCurrentTrack());
   let playingTrack = yield getPlayingTrackService(action.mixId);
-  if (!playingTrack.external_track_id) {
+  if (!playingTrack.external_track_id || playingTrack.error === 404) {
     //No track playing
-    console.log(playingTrack);
     playingTrack = yield getNextTrackService(action.mixId);
   }
 
-  if (!playingTrack.is_playing) {
+  if (!playingTrack.is_playing && !playingTrack.error) {
     yield put(actions.pauseTrack());
   } else {
     yield put(actions.playTrack());
@@ -183,8 +182,8 @@ export function* initGetCurrentTrackSaga(action) {
   } else {
     if (playingTrack.error === 401) {
       yield put(actions.initLogout());
-    } else {
-      Alert.alert('Ops! Ocorreu um erro!', 'Tente novamente mais tarde.');
+    } else if (playingTrack.error === 400) {
+      Alert.alert('Ops! Ocorreu um erro!!!', 'Tente novamente mais tarde.');
       yield put(actions.getCurrentTrackFail());
     }
   }
@@ -296,11 +295,13 @@ export function* initBeginPlaybackSaga(action) {
         'Ops! Ocorreu um erro!',
         'Verifique que seu streaming de música esta online e funcionando!',
       );
+      yield put(actions.pauseTrack());
     } else if (playTrack.error === 400) {
       Alert.alert('Ops! Ocorreu um erro!', 'Tente novamente mais tarde.');
+      yield put(actions.pauseTrack());
     } else {
       //Get the newest ranking
-      yield put(actions.initGetRanking(mixId, mixTitle, ownerId));
+      yield put(actions.initGetMix(mixId, mixTitle, ownerId));
       yield put(actions.playTrack());
       if (!topTracks || topTracks.length <= 0) {
         console.log('ADD TO QUEUE FROM PLAY');
@@ -358,7 +359,7 @@ export function* initBeginPlaybackSaga(action) {
     }
   } else {
     //Get the newest ranking
-    yield put(actions.initGetRanking(mixId, mixTitle, ownerId));
+    yield put(actions.initGetMix(mixId, mixTitle, ownerId));
     console.log('AUTOMATIC');
     const playingTrack = yield getPlayingTrackService(mixId);
     if (
@@ -392,7 +393,7 @@ export function* initBeginPlaybackSaga(action) {
           //reset playlist
           const resetMix = yield resetPlaylistService(mixId);
           //get ranking
-          yield put(actions.initGetRanking(mixId, mixTitle, ownerId));
+          yield put(actions.initGetMix(mixId, mixTitle, ownerId));
           //Send last tracks to queue
           newTopIds = [];
           newTopTracks.forEach(track => {
@@ -449,7 +450,7 @@ export function* initBeginPlaybackSaga(action) {
             //reset playlist
             const resetMix = yield resetPlaylistService(mixId);
             //get ranking
-            yield put(actions.initGetRanking(mixId, mixTitle, ownerId));
+            yield put(actions.initGetMix(mixId, mixTitle, ownerId));
             //Send last tracks to queue
             newTopIds = [];
             newTopTracks.forEach(track => {

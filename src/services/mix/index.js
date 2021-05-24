@@ -30,7 +30,9 @@ export async function searchRankingTracksService(
     })
     .catch(error => {
       if (error.response) {
-        aux = error.response.status;
+        aux = {
+          error: error.response.status,
+        };
       }
       console.log(error);
     });
@@ -213,7 +215,6 @@ export async function playTrackService(playlist_id, track_id) {
       aux = response.data;
     })
     .catch(error => {
-      console.error(error);
       if (error.response) {
         aux = {
           error: error.response.status,

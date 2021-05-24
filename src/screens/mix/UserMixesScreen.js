@@ -103,7 +103,7 @@ const UserMixesScreen = props => {
   };
 
   const selectMixHandler = (mixId, mixTitle, ownerId) => {
-    dispatch(actions.initGetRanking(mixId, mixTitle, ownerId));
+    dispatch(actions.initGetMix(mixId, mixTitle, ownerId));
     dispatch(actions.initGetCurrentTrack(mixId));
     props.navigation.navigate('RankingNavigator');
   };

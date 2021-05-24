@@ -35,13 +35,13 @@ const reducer = (state = initialState, action) => {
         loading: false,
         error: true,
       };
-    case actionTypes.START_GET_RANKING:
+    case actionTypes.START_GET_MIX:
       return {
         ...state,
         loading: true,
         error: false,
       };
-    case actionTypes.GET_RANKING:
+    case actionTypes.GET_MIX:
       return {
         ...state,
         mixId: action.mix.id,
@@ -53,7 +53,7 @@ const reducer = (state = initialState, action) => {
         loading: false,
         error: false,
       };
-    case actionTypes.GET_RANKING_FAIL:
+    case actionTypes.GET_MIX_FAIL:
       return {
         ...state,
         loading: false,

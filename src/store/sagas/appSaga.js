@@ -186,7 +186,7 @@ export function* initCreateMixSaga(action) {
   if (response && response !== 401) {
     yield put(actions.createMix());
     yield put(actions.initGetMixes());
-    yield put(actions.initGetRanking(response, action.title, userId));
+    yield put(actions.initGetMix(response, action.title, userId));
   } else {
     if (response === 401) {
       yield put(actions.initLogout());

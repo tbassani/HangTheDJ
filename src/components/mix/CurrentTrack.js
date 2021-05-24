@@ -19,7 +19,7 @@ const CurrentTrack = props => {
     </Card>
   );
 
-  if (props.track) {
+  if (props.track && props.track.title) {
     trackContent = (
       <Card>
         <View style={styles.trackContainer}>

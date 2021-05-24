@@ -28,31 +28,31 @@ export const getRankingTracksFail = () => {
   };
 };
 
-export const initGetRanking = (mixId, mixTitle, ownerId) => {
+export const initGetMix = (mixId, mixTitle, ownerId) => {
   return {
-    type: actionTypes.INIT_GET_RANKING,
+    type: actionTypes.INIT_GET_MIX,
     mixId: mixId,
     mixTitle: mixTitle,
     ownerId: ownerId,
   };
 };
 
-export const startGetRanking = () => {
+export const startGetMix = () => {
   return {
-    type: actionTypes.START_GET_RANKING,
+    type: actionTypes.START_GET_MIX,
   };
 };
 
-export const getRanking = mix => {
+export const getMix = mix => {
   return {
-    type: actionTypes.GET_RANKING,
+    type: actionTypes.GET_MIX,
     mix: mix,
   };
 };
 
-export const getRankingFail = () => {
+export const getMixFail = () => {
   return {
-    type: actionTypes.GET_RANKING_FAIL,
+    type: actionTypes.GET_MIX_FAIL,
   };
 };
 

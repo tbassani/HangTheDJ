@@ -22,7 +22,7 @@ import {
 
 import {
   initGetRankingTracksSaga,
-  initGetRankingSaga,
+  initGetMixSaga,
   initAddTracksToMixSaga,
   initGetCurrentTrackSaga,
   initGetVotingTrackSaga,
@@ -69,7 +69,7 @@ export function* watchMix() {
   yield all([
     takeEvery(actionTypes.INIT_GET_RANKING_TRACKS, initGetRankingTracksSaga),
   ]);
-  yield all([takeEvery(actionTypes.INIT_GET_RANKING, initGetRankingSaga)]);
+  yield all([takeEvery(actionTypes.INIT_GET_MIX, initGetMixSaga)]);
   yield all([
     takeEvery(actionTypes.INIT_ADD_TRACKS_TO_MIX, initAddTracksToMixSaga),
   ]);

@@ -110,6 +110,12 @@ const MixScreen = props => {
     };
   }, [mixId]);
 
+  useEffect(() => {
+    if (!isPlaying) {
+      clearInterval(trackInterval.current);
+    }
+  }, [isPlaying]);
+
   const initBackgroundFetch = async () => {
     // BackgroundFetch event handler.
     console.log('PRESSED PLAY: ' + pressedPlay.current);
@@ -173,6 +179,7 @@ const MixScreen = props => {
 
   const onPressPauseHandler = () => {
     dispatch(actions.initStopPlayback());
+    clearInterval(trackInterval.current);
     BackgroundFetch.stop();
   };
 
