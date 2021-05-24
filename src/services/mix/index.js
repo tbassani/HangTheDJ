@@ -150,7 +150,6 @@ export async function getPlayingTrackService(playlist_id) {
       aux = response.data;
     })
     .catch(error => {
-      console.log(error);
       if (error.response) {
         aux = {
           error: error.response.status,

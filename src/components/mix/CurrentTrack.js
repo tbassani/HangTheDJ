@@ -65,6 +65,7 @@ const styles = StyleSheet.create({
   },
   infoContainer: {
     flex: 0.25,
+    justifyContent: 'space-evenly',
   },
   titleContainer: {
     flex: 1,
@@ -75,7 +76,7 @@ const styles = StyleSheet.create({
     fontSize: Sizes.large,
   },
   artistsContainer: {
-    flex: 1,
+    flex: 0.65,
   },
   artists: {
     color: Colors.textDefault,
@@ -83,7 +84,7 @@ const styles = StyleSheet.create({
     fontSize: Sizes.medium,
   },
   genreContainer: {
-    flex: 1,
+    flex: 0.7,
   },
   genre: {
     color: Colors.textDefault,

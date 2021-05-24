@@ -22,6 +22,7 @@ import {
   addTracksToQueueService,
   removeTracksFromQueueService,
 } from '../../services/mix';
+import {Alert} from 'react-native';
 
 export function* initGetRankingTracksSaga(action) {
   yield put(actions.startGetRankingTracks());
@@ -62,6 +63,7 @@ export function* initGetRankingTracksSaga(action) {
 }
 
 export function* initGetRankingSaga(action) {
+  console.log('Get Ranking');
   const topTracksSelector = state => state.mix.topTracks;
   const topTracks = yield select(topTracksSelector);
 
@@ -142,6 +144,7 @@ export function* initAddTracksToMixSaga(action) {
     if (response.error === 401) {
       yield put(actions.initLogout());
     } else {
+      Alert.alert('Ops! Ocorreu um erro!', 'Tente novamente mais tarde.');
       yield put(actions.resetPasswordFail());
     }
   }
@@ -181,6 +184,7 @@ export function* initGetCurrentTrackSaga(action) {
     if (playingTrack.error === 401) {
       yield put(actions.initLogout());
     } else {
+      Alert.alert('Ops! Ocorreu um erro!', 'Tente novamente mais tarde.');
       yield put(actions.getCurrentTrackFail());
     }
   }
@@ -222,6 +226,7 @@ export function* initGetVotingTrackSaga(action) {
     if (response.error === 401) {
       yield put(actions.initLogout());
     } else {
+      Alert.alert('Ops! Ocorreu um erro!', 'Tente novamente mais tarde.');
       yield put(actions.getVotingTrackFail());
     }
   }
@@ -239,6 +244,7 @@ export function* initUpvoteSaga(action) {
     if (response.error === 401) {
       yield put(actions.initLogout());
     } else {
+      Alert.alert('Ops! Ocorreu um erro!', 'Tente novamente mais tarde.');
       yield put(actions.upvoteFail());
     }
   }
@@ -256,6 +262,7 @@ export function* initDownvoteSaga(action) {
     if (response.error === 401) {
       yield put(actions.initLogout());
     } else {
+      Alert.alert('Ops! Ocorreu um erro!', 'Tente novamente mais tarde.');
       yield put(actions.upvoteFail());
     }
   }
@@ -265,7 +272,7 @@ export function* initBeginPlaybackSaga(action) {
   let newTopTracks = [];
   let newTopIds = [];
   let tracksToQueue;
-
+  yield put(actions.playTrack());
   yield put(actions.startBeginPlayback());
 
   const mixIdSelector = state => state.mix.mixId;
@@ -284,54 +291,69 @@ export function* initBeginPlaybackSaga(action) {
   //Check playback state
   if (action.pressedPlay) {
     const playTrack = yield playTrackService(mixId, currentTrack.externalId);
-    //remove from queue
-    //Get the newest ranking
-    yield put(actions.initGetRanking(mixId, mixTitle, ownerId));
-    yield put(actions.playTrack());
-    if (!topTracks || topTracks.length <= 0) {
-      console.log('ADD TO QUEUE FROM PLAY');
-      let duration = 0;
-      let i = 0;
-      while (i < tracks.length && duration < MinMixDuration.duration) {
-        duration = duration + tracks[i].duration;
-        if (tracks[i].externalId !== currentTrack.externalId) {
-          newTopTracks.push(tracks[i]);
-        }
-        i++;
-      }
-      newTopTracks.forEach(track => {
-        newTopIds.push(track.externalId);
-      });
-      tracksToQueue = yield addTracksToQueueService(newTopIds, mixId);
-      yield put(actions.setTopTracks(newTopTracks));
-    } else {
-      const topTracksCheck = topTracks.filter(
-        track => track.externalId === currentTrack.externalId,
+    if (playTrack.error === 404) {
+      Alert.alert(
+        'Ops! Ocorreu um erro!',
+        'Verifique que seu streaming de música esta online e funcionando!',
       );
-      const index = topTracks.indexOf(topTracksCheck[0]);
-      let minDuration = 0;
-      let oldTracks = [];
-      for (let n = index; n < topTracks.length; n++) {
-        minDuration = minDuration + topTracks[n].duration;
-        oldTracks.push(topTracks[n]);
-      }
-      if (minDuration < MinMixDuration.duration) {
-        let duration = minDuration;
+    } else if (playTrack.error === 400) {
+      Alert.alert('Ops! Ocorreu um erro!', 'Tente novamente mais tarde.');
+    } else {
+      //Get the newest ranking
+      yield put(actions.initGetRanking(mixId, mixTitle, ownerId));
+      yield put(actions.playTrack());
+      if (!topTracks || topTracks.length <= 0) {
+        console.log('ADD TO QUEUE FROM PLAY');
+        let duration = 0;
         let i = 0;
         while (i < tracks.length && duration < MinMixDuration.duration) {
-          duration = duration + tracks[i].duration;
           if (tracks[i].externalId !== currentTrack.externalId) {
+            duration = duration + tracks[i].duration;
+            console.log('ADD TO QUEUE: ' + i);
             newTopTracks.push(tracks[i]);
           }
+          i++;
         }
-
-        newTopIds = [];
         newTopTracks.forEach(track => {
           newTopIds.push(track.externalId);
         });
         tracksToQueue = yield addTracksToQueueService(newTopIds, mixId);
-        newTopTracks.unshift(oldTracks);
         yield put(actions.setTopTracks(newTopTracks));
+      } else {
+        console.log('SEGUNDO CLICK');
+        const topTracksCheck = topTracks.filter(
+          track => track.externalId === currentTrack.externalId,
+        );
+        console.log('TRACKS CHECKS');
+        console.log(topTracksCheck);
+        const index = topTracks.indexOf(topTracksCheck[0]);
+        if (index >= 0) {
+          let minDuration = 0;
+          let oldTracks = [];
+          console.log('OLD TRACK INDEX: ' + index);
+          for (let n = index; n < topTracks.length; n++) {
+            minDuration = minDuration + topTracks[n].duration;
+            oldTracks.push(topTracks[n]);
+          }
+          if (minDuration < MinMixDuration.duration) {
+            let duration = minDuration;
+            let i = 0;
+            while (i < tracks.length && duration < MinMixDuration.duration) {
+              duration = duration + tracks[i].duration;
+              if (tracks[i].externalId !== currentTrack.externalId) {
+                newTopTracks.push(tracks[i]);
+              }
+            }
+
+            newTopIds = [];
+            newTopTracks.forEach(track => {
+              newTopIds.push(track.externalId);
+            });
+            tracksToQueue = yield addTracksToQueueService(newTopIds, mixId);
+            newTopTracks.unshift(oldTracks);
+            yield put(actions.setTopTracks(newTopTracks));
+          }
+        }
       }
     }
   } else {
@@ -499,8 +521,7 @@ export function* initBeginPlaybackSaga(action) {
 }
 
 export function* initStopPlaybackSaga(action) {
-  const topTracksSelector = state => state.mix.topTracks;
-
+  yield put(actions.pauseTrack());
   yield put(actions.startStopPlayback());
 
   const pauseTrack = yield pauseTrackService();

@@ -29,6 +29,10 @@ const Ranking = props => {
     return currState.mix.tracks;
   });
 
+  const topTracks = useSelector(currState => {
+    return currState.mix.topTracks;
+  });
+
   const mixId = useSelector(currState => {
     return currState.mix.mixId;
   });
@@ -36,6 +40,7 @@ const Ranking = props => {
   const loading = useSelector(currState => currState.mix.loading);
 
   const [clear, setClear] = useState(false);
+  const [data, setData] = useState(tracks);
 
   const cancelToken = useRef();
 
@@ -50,6 +55,22 @@ const Ranking = props => {
     },
     isValid: false,
   });
+
+  useEffect(() => {
+    let topTracksAux = [];
+    let tracksAux = [...tracks];
+    topTracks.forEach(track => {
+      topTracksAux.push(track.id);
+    });
+    console.log(topTracksAux);
+    topTracksAux = tracksAux.filter(track => topTracksAux.includes(track.id));
+    console.log('TOP TRACKS FOUND: ' + topTracksAux.length);
+    if (topTracksAux.length === 0 && topTracks.length > 0) {
+      console.log('NO top tracks found in tracks, but there are topTracks');
+      tracksAux = [...topTracks, ...tracks];
+      setData(tracksAux);
+    }
+  }, [tracks, topTracks]);
 
   useEffect(() => {
     cancelToken.current = axios.CancelToken.source();
@@ -99,6 +120,27 @@ const Ranking = props => {
   };
 
   const renderTrackItem = itemData => {
+    const topTracksAux = [];
+    if (topTracks.length > 0) {
+      topTracks.forEach(track => {
+        topTracksAux.push(track.id);
+      });
+      if (topTracksAux.includes(itemData.item.id)) {
+        return (
+          <RankingTrackItem
+            imgSource={itemData.item.artURL}
+            title={itemData.item.title}
+            artists={itemData.item.artists}
+            onSelectTrack={() => {
+              selectTrackHandler(itemData.item);
+            }}
+            score={itemData.item.score}
+            topTrack
+          />
+        );
+      }
+    }
+
     return (
       <RankingTrackItem
         imgSource={itemData.item.artURL}
@@ -114,9 +156,9 @@ const Ranking = props => {
 
   let listContent = (
     <FlatList
-      data={tracks}
+      data={data}
       renderItem={renderTrackItem}
-      keyExtractor={item => item.id.toString()}
+      keyExtractor={item => item.externalId}
     />
   );
 

@@ -76,7 +76,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   tabsContainer: {
-    flex: 0.09,
+    flex: 0.085,
     justifyContent: 'space-around',
     flexDirection: 'row',
     marginTop: Sizes.small,
