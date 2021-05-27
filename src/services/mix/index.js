@@ -312,10 +312,41 @@ export async function addTracksToQueueService(tracks, playlist_id) {
   return aux;
 }
 
-export async function removeTracksFromQueueService(tracks, playlist_id) {
+export async function addTopTracksToQueueService(tracks, playlist_id) {
   const jwt = await getDataFromStorage('token');
   const body = {
     tracks: tracks,
+    playlist_id: playlist_id,
+  };
+  const headers = {
+    Authorization: 'Bearer ' + jwt,
+    contenttype: 'application/json;',
+    datatype: 'json',
+  };
+  var aux = {};
+  await axios({
+    headers: headers,
+    method: 'POST',
+    url: APIConfig.ADD_TOP_TRACKS_TO_QUEUE,
+    data: body,
+  })
+    .then(response => {
+      aux = response.data;
+    })
+    .catch(error => {
+      if (error.response) {
+        aux = {
+          error: error.response.status,
+        };
+      }
+      console.log(error);
+    });
+  return aux;
+}
+
+export async function removeTracksFromQueueService(playlist_id) {
+  const jwt = await getDataFromStorage('token');
+  const body = {
     playlist_id: playlist_id,
   };
   const headers = {
@@ -325,8 +356,38 @@ export async function removeTracksFromQueueService(tracks, playlist_id) {
   var aux = {};
   await axios({
     headers: headers,
-    method: 'delete',
+    method: 'DELETE',
     url: APIConfig.REMOVE_TRACKS_FROM_QUEUE,
+    data: body,
+  })
+    .then(response => {
+      aux = response.data;
+    })
+    .catch(error => {
+      if (error.response) {
+        aux = {
+          error: error.response.status,
+        };
+      }
+      console.log(error);
+    });
+  return aux;
+}
+
+export async function getTopTracksService(playlist_id) {
+  const jwt = await getDataFromStorage('token');
+  const body = {
+    playlist_id: playlist_id,
+  };
+  const headers = {
+    Authorization: 'Bearer ' + jwt,
+    contenttype: 'application/json;',
+  };
+  var aux = {};
+  await axios({
+    headers: headers,
+    method: 'GET',
+    url: APIConfig.GET_TOP_TRACKS_URL,
     data: body,
   })
     .then(response => {

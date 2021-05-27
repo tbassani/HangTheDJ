@@ -20,7 +20,7 @@ import SecondaryButton from '../../components/UI/SecondaryButton';
 import CurrentTrack from '../../components/mix/CurrentTrack';
 import Player from '../../components/player/Player';
 
-//import TextLink from '../../components/UI/TextLink';
+import LoadingSpinner from '../../components/UI/LoadingSpinner';
 
 import BackgroundFetch from 'react-native-background-fetch';
 
@@ -30,7 +30,7 @@ import MinMixDuration from '../../constants/MinMixDuration';
 
 const MixScreen = props => {
   const [shareModal, setShareModal] = useState(false);
-  const [loadingTrack, setLoadingTrack] = useState(true);
+  //const [loadingTrack, setLoadingTrack] = useState(true);
   const trackInterval = useRef();
   const pressedPlay = useRef();
 
@@ -38,7 +38,7 @@ const MixScreen = props => {
   const ownerId = useSelector(currState => currState.mix.ownerId);
   const mixTitle = useSelector(currState => currState.mix.mixTitle);
   const currTrack = useSelector(currState => currState.mix.currentTrack);
-  // const loading = useSelector(currState => currState.mix.loading);
+  const loading = useSelector(currState => currState.mix.loading);
   const isPlaying = useSelector(currState => currState.mix.isPlaying);
   const tracks = useSelector(currState => currState.mix.tracks);
 
@@ -187,27 +187,35 @@ const MixScreen = props => {
     dispatch(actions.initGetVotingTrack());
     navigation.navigate('VotingScreen');
   };
-
-  let mixContent = (
-    <View style={styles.mainContainer}>
-      <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-        <Text style={styles.message}>Escolha ou crie um Mix!</Text>
+  let mixContent = null;
+  if (!mixTitle || mixTitle.length <= 0) {
+    mixContent = (
+      <View style={styles.mainContainer}>
+        <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+          <Text style={styles.message}>Escolha ou crie um Mix!</Text>
+        </View>
       </View>
-    </View>
-  );
+    );
+  }
+
   let buttonsContent = null;
   let playerContent = null;
 
-  if (mixId && mixId > 0) {
-    if (userId === ownerId) {
-      playerContent = (
-        <Player
-          onPressPlay={onPressPlayHandler}
-          onPressPause={onPressPauseHandler}
-          isPlaying={isPlaying}
-        />
-      );
+  if (loading) {
+    playerContent = <LoadingSpinner size="large" />;
+  } else {
+    if (mixId && mixId > 0) {
+      if (userId === ownerId) {
+        playerContent = (
+          <Player
+            onPressPlay={onPressPlayHandler}
+            onPressPause={onPressPauseHandler}
+            isPlaying={isPlaying}
+          />
+        );
+      }
     }
+
     mixContent = (
       <View style={styles.mixContainer}>
         <View style={styles.currTrackContainer}>

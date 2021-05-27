@@ -39,7 +39,7 @@ export function* initGetMixesSaga(action) {
     });
     yield put(actions.getMixes(mixes));
   } else {
-    if (response.error === 401) {
+    if (response && response.error === 401) {
       yield put(actions.initLogout());
     } else {
       yield put(actions.getMixesFail());
@@ -73,11 +73,12 @@ export function* initAddToGroupSaga(action) {
 
 export function* initGetProfileURLSaga(action) {
   yield put(actions.startGetProfileURL());
+
   const response = yield getProfileURLService();
-  if (response && response.url && response !== 401) {
+  if (response && response.url && !response.error) {
     yield put(actions.getProfileURL(response.url));
   } else {
-    if (response === 401) {
+    if (response.error === 401) {
       yield put(actions.initLogout());
     } else {
       yield put(actions.getProfileURLFail());

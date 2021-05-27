@@ -198,6 +198,33 @@ const reducer = (state = initialState, action) => {
         loading: false,
         error: false,
       };
+    case actionTypes.GET_TOP_TRACKS:
+      return {
+        ...state,
+        topTracks: action.topTracks,
+        loading: false,
+        error: false,
+      };
+    case actionTypes.GET_TOP_TRACKS_FAIL:
+      return {
+        ...state,
+        topTracks: [],
+        loading: false,
+        error: true,
+      };
+    case actionTypes.REMOVE_TOP_TRACKS:
+      return {
+        ...state,
+        topTracks: [],
+        loading: false,
+        error: false,
+      };
+    case actionTypes.REMOVE_TOP_TRACKS_FAIL:
+      return {
+        ...state,
+        loading: false,
+        error: true,
+      };
     default:
       return state;
   }

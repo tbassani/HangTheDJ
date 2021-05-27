@@ -514,30 +514,28 @@ export async function premiumClickService(signOut) {
 
 export async function getActiveProfileService() {
   const jwt = await getDataFromStorage('token');
-  var data = {
-    profile: null,
-  };
+  var data = {};
   const headers = {
     Authorization: 'Bearer ' + jwt,
     contenttype: 'application/json;',
     datatype: 'json',
   };
-  try {
-    const response = await axios({
-      headers: headers,
-      method: 'GET',
-      url: APIConfig.ACTIVE_PROFILE_URL,
+
+  await axios({
+    headers: headers,
+    method: 'GET',
+    url: APIConfig.ACTIVE_PROFILE_URL,
+  })
+    .then(response => {
+      if (response.data.profile.length > 0) {
+        data.profile = response.data.profile[0].service;
+      }
+    })
+    .catch(error => {
+      console.log(error);
+      data.error = error.response.status;
     });
-    if (response.data.profile.length > 0) {
-      data.profile = response.data.profile[0].service;
-      return data;
-    }
-  } catch (error) {
-    if (error.response.status === 401) {
-      return 401;
-    }
-    return;
-  }
+  return data;
 }
 
 export async function getProfileURLService(signOut) {
@@ -559,10 +557,9 @@ export async function getProfileURLService(signOut) {
     data.url = response.data;
     return data;
   } catch (error) {
-    if (error.response.status === 401) {
-      return 401;
-    }
-    return;
+    return {
+      error: error.response.status,
+    };
   }
 }
 

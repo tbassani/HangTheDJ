@@ -98,4 +98,10 @@ export {
   setTopTracksFail,
   playTrack,
   pauseTrack,
+  initGetTopTracks,
+  startGetTopTracks,
+  getTopTracks,
+  getTopTracksFail,
+  removeTopTracks,
+  removeTopTracksFail,
 } from './mix';

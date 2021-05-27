@@ -86,6 +86,7 @@ const UserMixesNavigator = () => {
 
 const RankingNavigator = () => {
   const profile = useSelector(currState => currState.app.profile);
+  const mixTitle = useSelector(currState => currState.mix.mixTitle);
   return (
     <Stack.Navigator
       screenOptions={{
@@ -95,14 +96,25 @@ const RankingNavigator = () => {
         headerTintColor: Platform.OS == 'android' ? 'white' : Colors.primary,
         headerLeft: null,
       }}>
-      <Stack.Screen
-        options={{
-          headerTitle: 'Tocando',
-          headerTitleStyle: {alignSelf: 'center'},
-        }}
-        name="MixScreen"
-        component={MixScreen}
-      />
+      {mixTitle ? (
+        <Stack.Screen
+          options={{
+            headerTitle: mixTitle,
+            headerTitleStyle: {alignSelf: 'center'},
+          }}
+          name="MixScreen"
+          component={MixScreen}
+        />
+      ) : (
+        <Stack.Screen
+          options={{
+            headerTitle: 'Tocando',
+            headerTitleStyle: {alignSelf: 'center'},
+          }}
+          name="MixScreen"
+          component={MixScreen}
+        />
+      )}
 
       {profile && profile.length > 0 ? (
         <Stack.Screen

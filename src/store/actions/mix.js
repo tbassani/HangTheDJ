@@ -297,3 +297,41 @@ export const stopPlaybackFail = () => {
     type: actionTypes.STOP_PLAYBACK_FAIL,
   };
 };
+
+export const initGetTopTracks = mixId => {
+  return {
+    type: actionTypes.INIT_GET_TOP_TRACKS,
+    mixId: mixId,
+  };
+};
+
+export const startGetTopTracks = () => {
+  return {
+    type: actionTypes.START_GET_TOP_TRACKS,
+  };
+};
+
+export const getTopTracks = topTracks => {
+  return {
+    type: actionTypes.GET_TOP_TRACKS,
+    topTracks: topTracks,
+  };
+};
+
+export const getTopTracksFail = () => {
+  return {
+    type: actionTypes.GET_TOP_TRACKS_FAIL,
+  };
+};
+
+export const removeTopTracks = () => {
+  return {
+    type: actionTypes.REMOVE_TOP_TRACKS,
+  };
+};
+
+export const removeTopTracksFail = () => {
+  return {
+    type: actionTypes.REMOVE_TOP_TRACKS_FAIL,
+  };
+};

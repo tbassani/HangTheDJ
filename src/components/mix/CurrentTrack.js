@@ -55,7 +55,7 @@ const styles = StyleSheet.create({
     width: '100%',
     justifyContent: 'center',
     alignItems: 'flex-start',
-    marginTop: Sizes.medium,
+    marginTop: Sizes.small,
   },
   trackContainer: {
     justifyContent: 'space-between',
@@ -64,19 +64,19 @@ const styles = StyleSheet.create({
     padding: Sizes.medium,
   },
   infoContainer: {
-    flex: 0.25,
+    flex: 0.3,
     justifyContent: 'space-evenly',
   },
   titleContainer: {
-    flex: 1,
+    flex: 0.4,
   },
   title: {
     color: Colors.textDefault,
     textAlign: 'center',
-    fontSize: Sizes.large,
+    fontSize: Sizes.medium,
   },
   artistsContainer: {
-    flex: 0.65,
+    flex: 0.3,
   },
   artists: {
     color: Colors.textDefault,
@@ -84,7 +84,7 @@ const styles = StyleSheet.create({
     fontSize: Sizes.medium,
   },
   genreContainer: {
-    flex: 0.7,
+    flex: 0.3,
   },
   genre: {
     color: Colors.textDefault,
@@ -92,7 +92,7 @@ const styles = StyleSheet.create({
     fontSize: Sizes.small,
   },
   imageContainer: {
-    flex: 0.75,
+    flex: 0.7,
     overflow: 'hidden',
     alignItems: 'center',
     justifyContent: 'center',
