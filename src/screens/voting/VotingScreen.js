@@ -1,5 +1,5 @@
-import React, {useEffect, useState} from 'react';
-import {View, Text, TouchableOpacity, StyleSheet, Alert} from 'react-native';
+import React, {useEffect} from 'react';
+import {View, TouchableOpacity, StyleSheet} from 'react-native';
 
 import {useSelector, useDispatch} from 'react-redux';
 import * as actions from '../../store/actions';
@@ -56,13 +56,6 @@ const VotingScreen = props => {
   };
 
   let trackBallotContent = <TrackBallot track={votingTrack} />;
-  if (loading) {
-    trackBallotContent = (
-      <View style={styles.mainContainer}>
-        <LoadingSpinner size="large" />
-      </View>
-    );
-  }
 
   return (
     <View style={styles.mainContainer}>
