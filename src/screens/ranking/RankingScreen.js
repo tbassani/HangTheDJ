@@ -17,7 +17,7 @@ const MixScreen = props => {
   const navigation = props.navigation;
   useEffect(() => {
     navigation.setOptions({
-      headerTitle: mixTitle.length > 0 ? mixTitle : 'Ranking',
+      headerTitle: mixTitle && mixTitle.length > 0 ? mixTitle : 'Ranking',
       headerTitleStyle: {alignSelf: 'center'},
       headerRight: mixTitle
         ? () => {
@@ -40,6 +40,11 @@ const MixScreen = props => {
           }
         : () => {},
     });
+    const unsubscribe = navigation.addListener('blur', () => {
+      navigation.pop();
+    });
+
+    return unsubscribe;
   }, [navigation, mixTitle]);
 
   const selectTrackHandler = () => {
