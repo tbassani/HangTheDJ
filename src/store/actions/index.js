@@ -102,6 +102,8 @@ export {
   startGetTopTracks,
   getTopTracks,
   getTopTracksFail,
+  initRemoveTopTracks,
+  startRemoveTopTracks,
   removeTopTracks,
   removeTopTracksFail,
 } from './mix';

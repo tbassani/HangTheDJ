@@ -324,6 +324,19 @@ export const getTopTracksFail = () => {
   };
 };
 
+export const initRemoveTopTracks = mixId => {
+  return {
+    type: actionTypes.INIT_REMOVE_TOP_TRACKS,
+    mixId: mixId,
+  };
+};
+
+export const startRemoveTopTracks = () => {
+  return {
+    type: actionTypes.START_REMOVE_TOP_TRACKS,
+  };
+};
+
 export const removeTopTracks = () => {
   return {
     type: actionTypes.REMOVE_TOP_TRACKS,

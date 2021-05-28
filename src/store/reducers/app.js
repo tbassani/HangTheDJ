@@ -1,7 +1,7 @@
 import * as actionTypes from '../actions/actionTypes';
 
 const initialState = {
-  mixes: [],
+  mixes: null,
   playlists: [],
   tracks: [],
   newMix: {

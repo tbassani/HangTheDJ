@@ -1,9 +1,9 @@
 import * as actionTypes from '../actions/actionTypes';
 
 const initialState = {
-  mixId: '',
-  mixTitle: '',
-  ownerId: '',
+  mixId: null,
+  mixTitle: null,
+  ownerId: null,
   tracks: [],
   topTracks: [],
   currentTrack: null,
@@ -211,6 +211,12 @@ const reducer = (state = initialState, action) => {
         topTracks: [],
         loading: false,
         error: true,
+      };
+    case actionTypes.START_REMOVE_TOP_TRACKS:
+      return {
+        ...state,
+        loading: true,
+        error: false,
       };
     case actionTypes.REMOVE_TOP_TRACKS:
       return {

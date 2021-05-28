@@ -134,7 +134,6 @@ export async function downvoteService(playlist_id, track_id) {
 }
 
 export async function getPlayingTrackService(playlist_id) {
-  console.log('Get Playing track from service');
   const jwt = await getDataFromStorage('token');
 
   var aux = undefined;

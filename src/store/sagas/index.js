@@ -30,6 +30,7 @@ import {
   initUpvoteSaga,
   initBeginPlaybackSaga,
   initStopPlaybackSaga,
+  initRemoveTopTracksSaga,
 } from './mixSaga';
 
 export function* watchAuth() {
@@ -85,4 +86,7 @@ export function* watchMix() {
     takeEvery(actionTypes.INIT_BEGIN_PLAYBACK, initBeginPlaybackSaga),
   ]);
   yield all([takeEvery(actionTypes.INIT_STOP_PLAYBACK, initStopPlaybackSaga)]);
+  yield all([
+    takeEvery(actionTypes.INIT_REMOVE_TOP_TRACKS, initRemoveTopTracksSaga),
+  ]);
 }
