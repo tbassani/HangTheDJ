@@ -74,12 +74,6 @@ export function* initRemoveTopTracksSaga(action) {
 }
 
 export function* initGetMixSaga(action) {
-  const mixIdSelector = state => state.mix.mixId;
-  const mixId = yield select(mixIdSelector);
-  if (mixId && action.mixId != mixId) {
-    console.log('REMOVE TOP TRACKS');
-    yield put(actions.initRemoveTopTracks(mixId));
-  }
   yield put(actions.startGetMix());
   const response = yield searchRankingTracksService(
     action.mixId,

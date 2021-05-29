@@ -11,11 +11,29 @@ import Sizes from '../../constants/Sizes';
 const CurrentTrack = props => {
   let trackContent = (
     <Card>
-      <Icon
-        name="music-circle-outline"
-        color={Colors.light}
-        size={Sizes.max * 7}
-      />
+      <View style={styles.trackContainer}>
+        <View style={styles.imageContainer}>
+          <Icon
+            name="music-circle-outline"
+            color={Colors.light}
+            size={Sizes.max * 5.5}
+          />
+        </View>
+        <View style={styles.infoContainer}>
+          <View style={styles.titleContainer}>
+            <Text style={styles.title}>Aguarde</Text>
+          </View>
+          <View style={styles.artistsContainer}>
+            <Text style={styles.artists}>Estamos buscando a música certa!</Text>
+          </View>
+          <View style={styles.genreContainer}>
+            <Text style={styles.genre}>
+              Certifique-se que seu serviço de streaming está online e
+              funcionando!
+            </Text>
+          </View>
+        </View>
+      </View>
     </Card>
   );
 

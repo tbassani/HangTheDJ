@@ -103,6 +103,7 @@ const UserMixesScreen = props => {
   };
 
   const selectMixHandler = (mixId, mixTitle, ownerId) => {
+    dispatch(actions.initRemoveTopTracks(mixId));
     dispatch(actions.initGetMix(mixId, mixTitle, ownerId));
     dispatch(actions.initGetTopTracks(mixId));
     //dispatch(actions.initGetCurrentTrack(mixId));

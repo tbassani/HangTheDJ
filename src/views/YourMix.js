@@ -76,6 +76,9 @@ const YourMix = props => {
   };
 
   const createMix = () => {
+    if (mixId) {
+      dispatch(actions.initRemoveTopTracks(mixId));
+    }
     dispatch(actions.initCreateMix(formState.inputValues.mixTitle));
     clearInpuHandler();
     setShowModal(false);
