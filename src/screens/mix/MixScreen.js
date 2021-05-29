@@ -52,7 +52,7 @@ const MixScreen = props => {
   const navigation = props.navigation;
   useEffect(() => {
     navigation.setOptions({
-      headerTitle: mixTitle.length > 0 ? mixTitle : 'Tocando',
+      headerTitle: mixTitle && mixTitle.length > 0 ? mixTitle : 'Tocando',
       headerTitleStyle: {alignSelf: 'center'},
       headerRight: mixTitle
         ? () => {
@@ -82,7 +82,10 @@ const MixScreen = props => {
         : () => {},
     });
     const unsubscribeFocus = navigation.addListener('focus', () => {
-      dispatch(actions.initGetCurrentTrack(mixId));
+      const timeInterval = setInterval(() => {
+        dispatch(actions.initGetCurrentTrack());
+      }, 5000);
+      trackInterval.current = timeInterval;
     });
 
     const unsubscribeBlur = navigation.addListener('blur', () => {
@@ -100,22 +103,6 @@ const MixScreen = props => {
     }
   }, [isPlaying]);
 
-  useEffect(() => {
-    const timeInterval = setInterval(() => {
-      dispatch(actions.initGetCurrentTrack(mixId));
-    }, 5000);
-    trackInterval.current = timeInterval;
-    return () => {
-      clearInterval(timeInterval);
-    };
-  }, [mixId]);
-
-  useEffect(() => {
-    if (!isPlaying) {
-      clearInterval(trackInterval.current);
-    }
-  }, [isPlaying]);
-
   const initBackgroundFetch = async () => {
     // BackgroundFetch event handler.
     console.log('PRESSED PLAY: ' + pressedPlay.current);
@@ -124,7 +111,6 @@ const MixScreen = props => {
       // Do your background work...
       dispatch(actions.initBeginPlayback(pressedPlay.current));
       pressedPlay.current = false;
-
       BackgroundFetch.finish(taskId);
     };
 
@@ -158,16 +144,16 @@ const MixScreen = props => {
     let mixDuration = 0;
     tracks.forEach(track => {
       mixDuration = mixDuration + track.duration;
-      if (mixDuration > MinMixDuration.duration) {
-        return true;
-      }
     });
+    if (mixDuration > MinMixDuration.duration) {
+      return true;
+    }
     return false;
   };
 
   const onPressPlayHandler = () => {
     pressedPlay.current = true;
-    if (checkMixDuration) {
+    if (checkMixDuration()) {
       initBackgroundFetch();
     } else {
       Alert.alert(
@@ -179,7 +165,6 @@ const MixScreen = props => {
 
   const onPressPauseHandler = () => {
     dispatch(actions.initStopPlayback());
-    clearInterval(trackInterval.current);
     BackgroundFetch.stop();
   };
 
@@ -188,18 +173,9 @@ const MixScreen = props => {
     navigation.navigate('VotingScreen');
   };
   let mixContent = null;
-  if (!mixTitle || mixTitle.length <= 0) {
-    mixContent = (
-      <View style={styles.mainContainer}>
-        <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-          <Text style={styles.message}>Escolha ou crie um Mix!</Text>
-        </View>
-      </View>
-    );
-  }
 
-  let buttonsContent = null;
   let playerContent = null;
+  let buttonsContent = null;
 
   if (loading) {
     playerContent = <LoadingSpinner size="large" />;
@@ -215,38 +191,49 @@ const MixScreen = props => {
         );
       }
     }
+  }
 
-    mixContent = (
-      <View style={styles.mixContainer}>
-        <View style={styles.currTrackContainer}>
-          <CurrentTrack track={currTrack} />
-        </View>
-        <View style={styles.playerContainer}>{playerContent}</View>
+  mixContent = (
+    <View style={styles.mixContainer}>
+      <View style={styles.currTrackContainer}>
+        <CurrentTrack track={currTrack} />
       </View>
-    );
-    buttonsContent = (
-      <View style={styles.buttonsContainer}>
-        <View style={styles.buttonContainer}>
-          <SecondaryButton>
-            <Icon name="lightbulb-on" color="#FFF" size={Sizes.huge} />
-          </SecondaryButton>
-        </View>
-        <View style={styles.buttonContainer}>
-          <PrimaryButton onPress={votingHandler}>
-            <Icon name="thumbs-up-down" color="#FFF" size={Sizes.huge} />
-          </PrimaryButton>
-        </View>
-        <View style={styles.buttonContainer}>
-          <SecondaryButton
-            onPress={() => {
-              if (!profile || profile.length <= 0) {
-                navigation.navigate('StreamingProfileScreen');
-              } else {
-                navigation.navigate('AddTracksToMixScreen');
-              }
-            }}>
-            <Icon name="music-note-plus" color="#FFF" size={Sizes.huge} />
-          </SecondaryButton>
+      <View style={styles.playerContainer}>{playerContent}</View>
+    </View>
+  );
+
+  buttonsContent = (
+    <View style={styles.buttonsContainer}>
+      <View style={styles.buttonContainer}>
+        <SecondaryButton>
+          <Icon name="lightbulb-on" color="#FFF" size={Sizes.huge} />
+        </SecondaryButton>
+      </View>
+      <View style={styles.buttonContainer}>
+        <PrimaryButton onPress={votingHandler}>
+          <Icon name="thumbs-up-down" color="#FFF" size={Sizes.huge} />
+        </PrimaryButton>
+      </View>
+      <View style={styles.buttonContainer}>
+        <SecondaryButton
+          onPress={() => {
+            if (!profile || profile.length <= 0) {
+              navigation.navigate('StreamingProfileScreen');
+            } else {
+              navigation.navigate('AddTracksToMixScreen');
+            }
+          }}>
+          <Icon name="music-note-plus" color="#FFF" size={Sizes.huge} />
+        </SecondaryButton>
+      </View>
+    </View>
+  );
+
+  if (!mixTitle) {
+    mixContent = (
+      <View style={styles.mainContainer}>
+        <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+          <Text style={styles.message}>Escolha ou crie um Mix!</Text>
         </View>
       </View>
     );

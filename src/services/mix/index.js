@@ -343,6 +343,38 @@ export async function addTopTracksToQueueService(tracks, playlist_id) {
   return aux;
 }
 
+export async function setTopTracksService(tracks, playlist_id) {
+  const jwt = await getDataFromStorage('token');
+  const body = {
+    tracks: tracks,
+    playlist_id: playlist_id,
+  };
+  const headers = {
+    Authorization: 'Bearer ' + jwt,
+    contenttype: 'application/json;',
+    datatype: 'json',
+  };
+  var aux = {};
+  await axios({
+    headers: headers,
+    method: 'POST',
+    url: APIConfig.SET_TOP_TRACKS_URL,
+    data: body,
+  })
+    .then(response => {
+      aux = response.data;
+    })
+    .catch(error => {
+      if (error.response) {
+        aux = {
+          error: error.response.status,
+        };
+      }
+      console.log(error);
+    });
+  return aux;
+}
+
 export async function removeTracksFromQueueService(playlist_id) {
   const jwt = await getDataFromStorage('token');
   const body = {

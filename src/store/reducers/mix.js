@@ -176,7 +176,7 @@ const reducer = (state = initialState, action) => {
         ...state,
         topTracks: action.topTracks,
         loading: false,
-        error: true,
+        error: false,
       };
     case actionTypes.SET_TOP_TRACKS_FAIL:
       return {

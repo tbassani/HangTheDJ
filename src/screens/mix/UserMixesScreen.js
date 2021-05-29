@@ -105,11 +105,11 @@ const UserMixesScreen = props => {
   const selectMixHandler = (mixId, mixTitle, ownerId) => {
     dispatch(actions.initGetTopTracks(mixId));
     dispatch(actions.initGetMix(mixId, mixTitle, ownerId));
-    dispatch(actions.initGetCurrentTrack(mixId));
+    //dispatch(actions.initGetCurrentTrack(mixId));
     props.navigation.navigate('RankingNavigator');
   };
 
-  if (!loading && mixes.length <= 0) {
+  if (!loading && mixes && mixes.length <= 0) {
     return (
       <ScreenWrapper>
         <View style={styles.mainContainer}>
@@ -145,7 +145,7 @@ const UserMixesScreen = props => {
     );
   }
 
-  if (loading) {
+  if (loading || !mixes) {
     return (
       <ScreenWrapper>
         <View style={styles.mainContainer}>
