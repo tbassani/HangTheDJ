@@ -47,7 +47,7 @@ const reducer = (state = initialState, action) => {
         mixId: action.mix.id,
         mixTitle: action.mix.title,
         tracks: action.mix.tracks,
-        topTracks: action.mix.topTracks,
+        //topTracks: action.mix.topTracks,
         ownerId: action.mix.ownerId,
         timeInterval: action.mix.timeInterval,
         loading: false,

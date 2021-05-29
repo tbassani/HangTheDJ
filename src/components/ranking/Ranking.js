@@ -62,17 +62,31 @@ const Ranking = props => {
     topTracks.forEach(track => {
       topTracksAux.push(track.id);
     });
-    console.log(topTracksAux);
     topTracksAux = tracksAux.filter(track => topTracksAux.includes(track.id));
     console.log('TOP TRACKS FOUND: ' + topTracksAux.length);
     if (topTracksAux.length === 0 && topTracks.length > 0) {
       console.log('NO top tracks found in tracks, but there are topTracks');
-      tracksAux = [...topTracks, ...tracks];
+      if (formState.inputValues.query.length > 0) {
+        topTracksAux = topTracks.filter(track => {
+          return (
+            track.title
+              .toUpperCase()
+              .includes(formState.inputValues.query.toUpperCase()) ||
+            track.artists
+              .toUpperCase()
+              .includes(formState.inputValues.query.toUpperCase())
+          );
+        });
+      } else {
+        topTracksAux = topTracks;
+      }
+      tracksAux = [...topTracksAux, ...tracks];
       setData(tracksAux);
     }
-  }, [tracks, topTracks]);
+  }, [tracks, topTracks, formState.inputValues.query]);
 
   useEffect(() => {
+    console.log(formState.inputValues.query);
     cancelToken.current = axios.CancelToken.source();
     const time = setTimeout(() => {
       dispatch(
@@ -86,7 +100,7 @@ const Ranking = props => {
     return () => {
       clearTimeout(time);
     };
-  }, [formState.inputValues.query]);
+  }, [formState.inputValues.query, mixId]);
 
   const inputChangeHandler = useCallback(
     (inputId, inputValue, inputValidity) => {
@@ -158,7 +172,7 @@ const Ranking = props => {
     <FlatList
       data={data}
       renderItem={renderTrackItem}
-      keyExtractor={item => item.externalId}
+      keyExtractor={item => item.id}
     />
   );
 
