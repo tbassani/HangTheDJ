@@ -6,10 +6,12 @@
  * @flow strict-local
  */
 import 'react-native-gesture-handler';
-import React from 'react';
+import React, {useEffect} from 'react';
 import {Provider} from 'react-redux';
 import {createStore, applyMiddleware, combineReducers} from 'redux';
 import createSagaMiddleware from 'redux-saga';
+
+import SplashScreen from 'react-native-splash-screen';
 
 import authReducer from './store/reducers/auth';
 import appReducer from './store/reducers/app';
@@ -34,6 +36,9 @@ sagaMiddleware.run(watchApp);
 sagaMiddleware.run(watchMix);
 
 const App = () => {
+  useEffect(() => {
+    SplashScreen.hide();
+  });
   return (
     <Provider store={store}>
       <MainNavigator />
