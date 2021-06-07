@@ -96,25 +96,14 @@ const RankingNavigator = () => {
         headerTintColor: Platform.OS == 'android' ? 'white' : Colors.primary,
         headerLeft: null,
       }}>
-      {mixTitle ? (
-        <Stack.Screen
-          options={{
-            headerTitle: mixTitle,
-            headerTitleStyle: {alignSelf: 'center'},
-          }}
-          name="MixScreen"
-          component={MixScreen}
-        />
-      ) : (
-        <Stack.Screen
-          options={{
-            headerTitle: 'Tocando',
-            headerTitleStyle: {alignSelf: 'center'},
-          }}
-          name="MixScreen"
-          component={MixScreen}
-        />
-      )}
+      <Stack.Screen
+        options={{
+          headerTitle: mixTitle ? mixTitle : 'Tocando',
+          headerTitleStyle: {alignSelf: 'center'},
+        }}
+        name="MixScreen"
+        component={MixScreen}
+      />
 
       {profile && profile.length > 0 ? (
         <Stack.Screen

@@ -2,6 +2,7 @@ import React, {useEffect} from 'react';
 import {View, TouchableOpacity, StyleSheet} from 'react-native';
 
 import {useSelector, useDispatch} from 'react-redux';
+import * as actions from '../../store/actions';
 
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
