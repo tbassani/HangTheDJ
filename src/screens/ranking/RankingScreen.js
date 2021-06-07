@@ -1,7 +1,7 @@
 import React, {useEffect} from 'react';
 import {View, TouchableOpacity, StyleSheet} from 'react-native';
 
-import {useSelector} from 'react-redux';
+import {useSelector, useDispatch} from 'react-redux';
 
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
@@ -13,6 +13,9 @@ import Sizes from '../../constants/Sizes';
 const MixScreen = props => {
   const mixId = useSelector(currState => currState.mix.mixId);
   const mixTitle = useSelector(currState => currState.mix.mixTitle);
+  const ownerId = useSelector(currState => currState.mix.ownerId);
+
+  const dispatch = useDispatch();
 
   const navigation = props.navigation;
   useEffect(() => {
@@ -40,8 +43,8 @@ const MixScreen = props => {
           }
         : () => {},
     });
-    const unsubscribe = navigation.addListener('blur', () => {
-      navigation.pop();
+    const unsubscribe = navigation.addListener('focus', () => {
+      dispatch(actions.initGetMix(mixId, mixTitle, ownerId));
     });
 
     return unsubscribe;
