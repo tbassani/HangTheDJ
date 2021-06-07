@@ -396,6 +396,7 @@ export function* initBeginPlaybackSaga(action) {
       console.log('TOP TRACKS');
       console.log(topTracks);
       if (!topTracks || topTracks.length <= 0) {
+        yield put(actions.initRemoveTopTracks(mixId));
         let updatedTopTracks = yield setNewTopTracks(
           tracks,
           [],
