@@ -66,6 +66,7 @@ export function* initGetRankingTracksSaga(action) {
 export function* initRemoveTopTracksSaga(action) {
   console.log('Remove top tracks saga');
   const response = yield removeTracksFromQueueService(action.mixId);
+  yield put(actions.removeTopTracks());
   if (response.error == 401) {
     yield put(actions.initLogout());
   } else if (response.error) {
@@ -396,7 +397,6 @@ export function* initBeginPlaybackSaga(action) {
       console.log('TOP TRACKS');
       console.log(topTracks);
       if (!topTracks || topTracks.length <= 0) {
-        yield put(actions.initRemoveTopTracks(mixId));
         let updatedTopTracks = yield setNewTopTracks(
           tracks,
           [],

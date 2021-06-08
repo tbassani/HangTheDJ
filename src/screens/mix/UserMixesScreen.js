@@ -37,6 +37,8 @@ const UserMixesScreen = props => {
     return currState.app.loading;
   });
 
+  const currMixId = useSelector(currState => currState.mix.mixId);
+
   useEffect(() => {
     dispatch(actions.initGetMixes());
     dispatch(actions.initGetProfileURL());
@@ -103,11 +105,14 @@ const UserMixesScreen = props => {
   };
 
   const selectMixHandler = (mixId, mixTitle, ownerId) => {
-    dispatch(actions.initRemoveTopTracks(mixId));
-    dispatch(actions.initGetMix(mixId, mixTitle, ownerId));
+    if (currMixId) {
+      dispatch(actions.initRemoveTopTracks(currMixId));
+    }
     dispatch(actions.initGetTopTracks(mixId));
+    dispatch(actions.initGetMix(mixId, mixTitle, ownerId));
+
     //dispatch(actions.initGetCurrentTrack(mixId));
-    props.navigation.navigate('RankingNavigator');
+    props.navigation.navigate('RankingNavigator', {screen: 'MixScreen'});
   };
 
   if (!loading && mixes && mixes.length <= 0) {
