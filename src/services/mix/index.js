@@ -375,10 +375,10 @@ export async function setTopTracksService(tracks, playlist_id) {
   return aux;
 }
 
-export async function removeTracksFromQueueService(playlist_id) {
+export async function removeTracksFromQueueService(owner_id) {
   const jwt = await getDataFromStorage('token');
   const body = {
-    playlist_id: playlist_id,
+    owner_id: owner_id,
   };
   const headers = {
     Authorization: 'Bearer ' + jwt,

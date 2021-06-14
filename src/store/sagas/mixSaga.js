@@ -64,13 +64,18 @@ export function* initGetRankingTracksSaga(action) {
   }
 }
 export function* initRemoveTopTracksSaga(action) {
+  const ownerIdSelector = state => state.mix.ownerId;
+  const ownerId = yield select(ownerIdSelector);
   console.log('Remove top tracks saga');
-  const response = yield removeTracksFromQueueService(action.mixId);
-  yield put(actions.removeTopTracks());
-  if (response.error == 401) {
-    yield put(actions.initLogout());
-  } else if (response.error) {
-    yield put(actions.removeTopTracksFail());
+  if (ownerId === action.userId) {
+    const response = yield removeTracksFromQueueService(action.userId);
+    const pauseTrack = yield pauseTrackService();
+    yield put(actions.removeTopTracks());
+    if (response.error == 401) {
+      yield put(actions.initLogout());
+    } else if (response.error) {
+      yield put(actions.removeTopTracksFail());
+    }
   }
 }
 
@@ -207,17 +212,17 @@ export function* initGetCurrentTrackSaga(action) {
   const topTracks = yield select(topTracksSelector);
 
   yield put(actions.startGetCurrentTrack());
-
+  const isInTopTracks = topTracks.filter(
+    track => track.externalId === playingTrack.external_track_id,
+  );
   let playingTrack = yield getPlayingTrackService(validMixId);
   if (
     !playingTrack.external_track_id ||
     playingTrack.error === 404 ||
-    playingTrack.error === 400
+    playingTrack.error === 400 ||
+    isInTopTracks.length === 0
   ) {
-    //No track playing
-    console.log('Not playing due to error');
     playingTrack = yield getNextTrackService(validMixId);
-    console.log(validMixId);
   }
 
   if (!playingTrack.is_playing && !playingTrack.error) {

@@ -324,10 +324,10 @@ export const getTopTracksFail = () => {
   };
 };
 
-export const initRemoveTopTracks = mixId => {
+export const initRemoveTopTracks = userId => {
   return {
     type: actionTypes.INIT_REMOVE_TOP_TRACKS,
-    mixId: mixId,
+    userId: userId,
   };
 };
 
