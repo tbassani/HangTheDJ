@@ -76,6 +76,8 @@ export function* initRemoveTopTracksSaga(action) {
     } else if (response.error) {
       yield put(actions.removeTopTracksFail());
     }
+  } else {
+    yield put(actions.removeTopTracks());
   }
 }
 
