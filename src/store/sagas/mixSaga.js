@@ -64,10 +64,9 @@ export function* initGetRankingTracksSaga(action) {
   }
 }
 export function* initRemoveTopTracksSaga(action) {
-  const ownerIdSelector = state => state.mix.ownerId;
-  const ownerId = yield select(ownerIdSelector);
   console.log('Remove top tracks saga');
-  if (ownerId === action.userId) {
+  if (action.ownerId === action.userId) {
+    console.log('Remove from queue Service');
     const response = yield removeTracksFromQueueService(action.userId);
     const pauseTrack = yield pauseTrackService();
     yield put(actions.removeTopTracks());
@@ -443,8 +442,8 @@ export function* initBeginPlaybackSaga(action) {
           ),
           mixId,
         );
-        yield setTopTracksService(updatedTopTracks.newTopTracks, mixId);
         yield put(actions.setTopTracks(updatedTopTracks.newTopTracks));
+        yield setTopTracksService(updatedTopTracks.newTopTracks, mixId);
       } else {
         console.log('SEGUNDO CLICK');
         const playingTrack = yield getPlayingTrackService(mixId);
@@ -493,15 +492,15 @@ export function* initBeginPlaybackSaga(action) {
             ),
             mixId,
           );
-          yield setTopTracksService(
-            [...oldTracks, ...updatedTopTracks.newTopTracks],
-            mixId,
-          );
           yield put(
             actions.setTopTracks([
               ...oldTracks,
               ...updatedTopTracks.newTopTracks,
             ]),
+          );
+          yield setTopTracksService(
+            [...oldTracks, ...updatedTopTracks.newTopTracks],
+            mixId,
           );
         } else {
           //Is playing a song not in the Top Tracks
@@ -570,15 +569,15 @@ export function* initBeginPlaybackSaga(action) {
           ),
           mixId,
         );
-        yield setTopTracksService(
-          [...oldTracks, ...updatedTopTracks.newTopTracks],
-          mixId,
-        );
         yield put(
           actions.setTopTracks([
             ...oldTracks,
             ...updatedTopTracks.newTopTracks,
           ]),
+        );
+        yield setTopTracksService(
+          [...oldTracks, ...updatedTopTracks.newTopTracks],
+          mixId,
         );
       } else {
         //Is playing a song not in the Top Tracks
