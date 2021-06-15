@@ -1,7 +1,8 @@
 import React, {useEffect} from 'react';
 import {View, TouchableOpacity, StyleSheet} from 'react-native';
 
-import {useSelector} from 'react-redux';
+import {useSelector, useDispatch} from 'react-redux';
+import * as actions from '../../store/actions';
 
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
@@ -12,6 +13,12 @@ import Colors from '../../constants/Colors';
 import Sizes from '../../constants/Sizes';
 
 const AddTracksToMixScreen = props => {
+  const ownerId = useSelector(currState => currState.mix.ownerId);
+  const mixId = useSelector(currState => currState.mix.mixId);
+  const mixTitle = useSelector(currState => currState.mix.mixTitle);
+
+  const dispatch = useDispatch();
+
   const navigation = props.navigation;
   useEffect(() => {
     navigation.setOptions({
@@ -39,6 +46,7 @@ const AddTracksToMixScreen = props => {
           addTracks
           onAddTracksToMix={() => {
             props.navigation.goBack();
+            dispatch(actions.initGetMix(mixId, mixTitle, ownerId));
           }}
         />
       </View>

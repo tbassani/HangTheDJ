@@ -220,6 +220,10 @@ export function* initGetCurrentTrackSaga(action) {
 
   let playingTrack = yield getPlayingTrackService(validMixId);
 
+  const isInTopTracks = topTracks.filter(
+    track => track.externalId === playingTrack.external_track_id,
+  );
+
   if (
     !playingTrack.external_track_id ||
     playingTrack.error === 404 ||
@@ -228,23 +232,30 @@ export function* initGetCurrentTrackSaga(action) {
     console.log('Not playing due to error.');
     playingTrack = yield getNextTrackService(validMixId);
   }
-
-  if (!playingTrack.is_playing && !playingTrack.error) {
-    console.log('Not playing, no error');
-    if (action.mixId) {
-      console.log('Get next');
-      playingTrack = yield getNextTrackService(action.mixId);
-    } else {
-      console.log('No mixId');
-      if (!topTracks || topTracks.length <= 0) {
-        console.log('No top tracks, get next');
-        playingTrack = yield getNextTrackService(validMixId);
-      }
-    }
+  if (!topTracks || topTracks.length <= 0) {
+    console.log('No top tracks, get next');
+    playingTrack = yield getNextTrackService(validMixId);
     yield put(actions.pauseTrack());
-  } else if (playingTrack.is_playing && !playingTrack.error) {
-    yield put(actions.playTrack());
+  } else {
+    if (!playingTrack.is_playing && !playingTrack.error) {
+      console.log('Not playing, no error');
+      if (action.mixId) {
+        console.log('Get next');
+        playingTrack = yield getNextTrackService(action.mixId);
+      }
+      yield put(actions.pauseTrack());
+    } else if (playingTrack.is_playing && !playingTrack.error) {
+      if (isInTopTracks.length === 0) {
+        playingTrack = yield getNextTrackService(action.mixId);
+        yield put(actions.pauseTrack());
+      } else {
+        yield put(actions.playTrack());
+      }
+    } else {
+      yield put(actions.pauseTrack());
+    }
   }
+
   if (playingTrack.external_track_id && !playingTrack.error) {
     const track = yield new MixTrack(
       playingTrack.id,
@@ -353,11 +364,11 @@ const setNewTopTracks = (tracks, oldTopTracks, beginDuration, currentTrack) => {
   let duration = beginDuration;
   let i = 0;
   while (i < tracks.length && duration < MinMixDuration.duration) {
-    if (tracks[i].externalId !== currentTrack.externalId) {
-      duration = duration + tracks[i].duration;
-      console.log('ADD TO QUEUE: ' + i);
-      newTopTracks.push(tracks[i]);
-    }
+    //if (tracks[i].externalId !== currentTrack.externalId) {
+    duration = duration + tracks[i].duration;
+    console.log('ADD TO QUEUE: ' + i);
+    newTopTracks.push(tracks[i]);
+    //}
     i++;
   }
   return {
@@ -406,6 +417,7 @@ export function* initBeginPlaybackSaga(action) {
       console.log('TOP TRACKS');
       console.log(topTracks);
       if (!topTracks || topTracks.length <= 0) {
+        console.log('NO TOP TRACKS, ADD CURR TRACK PLUS TOP');
         let updatedTopTracks = yield setNewTopTracks(
           tracks,
           [],
@@ -424,7 +436,9 @@ export function* initBeginPlaybackSaga(action) {
           );
         }
         tracksToQueue = yield addTopTracksToQueueService(
-          updatedTopTracks.newTopTracks,
+          updatedTopTracks.newTopTracks.filter(
+            track => track.externalId !== currentTrack.externalId,
+          ),
           mixId,
         );
         yield setTopTracksService(updatedTopTracks.newTopTracks, mixId);
@@ -472,7 +486,9 @@ export function* initBeginPlaybackSaga(action) {
             );
           }
           tracksToQueue = yield addTopTracksToQueueService(
-            updatedTopTracks.newTopTracks,
+            updatedTopTracks.newTopTracks.filter(
+              track => track.externalId !== currentTrack.externalId,
+            ),
             mixId,
           );
           yield setTopTracksService(
@@ -547,7 +563,9 @@ export function* initBeginPlaybackSaga(action) {
           );
         }
         tracksToQueue = yield addTopTracksToQueueService(
-          updatedTopTracks.newTopTracks,
+          updatedTopTracks.newTopTracks.filter(
+            track => track.externalId !== currentTrack.externalId,
+          ),
           mixId,
         );
         yield setTopTracksService(
