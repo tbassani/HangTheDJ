@@ -232,28 +232,29 @@ export function* initGetCurrentTrackSaga(action) {
   ) {
     console.log('Not playing due to error.');
     playingTrack = yield getNextTrackService(validMixId);
-  }
-  if (!topTracks || topTracks.length <= 0) {
-    console.log('No top tracks, get next');
-    playingTrack = yield getNextTrackService(validMixId);
-    yield put(actions.pauseTrack());
   } else {
-    if (!playingTrack.is_playing && !playingTrack.error) {
-      console.log('Not playing, no error');
-      if (action.mixId) {
-        console.log('Get next');
-        playingTrack = yield getNextTrackService(action.mixId);
-      }
+    if (!topTracks || topTracks.length <= 0) {
+      console.log('No top tracks, get next');
+      playingTrack = yield getNextTrackService(validMixId);
       yield put(actions.pauseTrack());
-    } else if (playingTrack.is_playing && !playingTrack.error) {
-      if (isInTopTracks.length === 0) {
-        playingTrack = yield getNextTrackService(action.mixId);
-        yield put(actions.pauseTrack());
-      } else {
-        yield put(actions.playTrack());
-      }
     } else {
-      yield put(actions.pauseTrack());
+      if (!playingTrack.is_playing && !playingTrack.error) {
+        console.log('Not playing, no error');
+        if (action.mixId) {
+          console.log('Get next');
+          playingTrack = yield getNextTrackService(action.mixId);
+        }
+        yield put(actions.pauseTrack());
+      } else if (playingTrack.is_playing && !playingTrack.error) {
+        if (isInTopTracks.length === 0) {
+          playingTrack = yield getNextTrackService(action.mixId);
+          yield put(actions.pauseTrack());
+        } else {
+          yield put(actions.playTrack());
+        }
+      } else {
+        yield put(actions.pauseTrack());
+      }
     }
   }
 
@@ -436,13 +437,13 @@ export function* initBeginPlaybackSaga(action) {
             currentTrack,
           );
         }
+        yield put(actions.setTopTracks(updatedTopTracks.newTopTracks));
         tracksToQueue = yield addTopTracksToQueueService(
           updatedTopTracks.newTopTracks.filter(
             track => track.externalId !== currentTrack.externalId,
           ),
           mixId,
         );
-        yield put(actions.setTopTracks(updatedTopTracks.newTopTracks));
         yield setTopTracksService(updatedTopTracks.newTopTracks, mixId);
       } else {
         console.log('SEGUNDO CLICK');
@@ -486,17 +487,17 @@ export function* initBeginPlaybackSaga(action) {
               currentTrack,
             );
           }
-          tracksToQueue = yield addTopTracksToQueueService(
-            updatedTopTracks.newTopTracks.filter(
-              track => track.externalId !== currentTrack.externalId,
-            ),
-            mixId,
-          );
           yield put(
             actions.setTopTracks([
               ...oldTracks,
               ...updatedTopTracks.newTopTracks,
             ]),
+          );
+          tracksToQueue = yield addTopTracksToQueueService(
+            updatedTopTracks.newTopTracks.filter(
+              track => track.externalId !== currentTrack.externalId,
+            ),
+            mixId,
           );
           yield setTopTracksService(
             [...oldTracks, ...updatedTopTracks.newTopTracks],
@@ -563,17 +564,17 @@ export function* initBeginPlaybackSaga(action) {
             currentTrack,
           );
         }
-        tracksToQueue = yield addTopTracksToQueueService(
-          updatedTopTracks.newTopTracks.filter(
-            track => track.externalId !== currentTrack.externalId,
-          ),
-          mixId,
-        );
         yield put(
           actions.setTopTracks([
             ...oldTracks,
             ...updatedTopTracks.newTopTracks,
           ]),
+        );
+        tracksToQueue = yield addTopTracksToQueueService(
+          updatedTopTracks.newTopTracks.filter(
+            track => track.externalId !== currentTrack.externalId,
+          ),
+          mixId,
         );
         yield setTopTracksService(
           [...oldTracks, ...updatedTopTracks.newTopTracks],
