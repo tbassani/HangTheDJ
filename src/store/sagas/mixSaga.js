@@ -173,6 +173,10 @@ export function* initAddTracksToMixSaga(action) {
   const mix = yield select(newMixSelector);
   const mixIdSelector = state => state.mix.mixId;
   const mixId = yield select(mixIdSelector);
+  const mixTitleSelector = state => state.mix.mixTitle;
+  const mixTitle = yield select(mixTitleSelector);
+  const mixOwnerSelector = state => state.mix.ownerId;
+  const ownerId = yield select(mixOwnerSelector);
 
   const selectedTracks = [];
   const selectedPlaylists = [];
@@ -190,6 +194,7 @@ export function* initAddTracksToMixSaga(action) {
   );
   if (response && !response.error) {
     yield put(actions.addTracksToMix());
+    yield put(actions.initGetMix(mixId, mixTitle, ownerId));
   } else {
     if (response.error === 401) {
       yield put(actions.initLogout());
@@ -212,16 +217,15 @@ export function* initGetCurrentTrackSaga(action) {
   const topTracks = yield select(topTracksSelector);
 
   yield put(actions.startGetCurrentTrack());
-  const isInTopTracks = topTracks.filter(
-    track => track.externalId === playingTrack.external_track_id,
-  );
+
   let playingTrack = yield getPlayingTrackService(validMixId);
+
   if (
     !playingTrack.external_track_id ||
     playingTrack.error === 404 ||
-    playingTrack.error === 400 ||
-    isInTopTracks.length === 0
+    playingTrack.error === 400
   ) {
+    console.log('Not playing due to error.');
     playingTrack = yield getNextTrackService(validMixId);
   }
 

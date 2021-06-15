@@ -37,7 +37,7 @@ const UserMixesScreen = props => {
     return currState.app.loading;
   });
 
-  const currMixId = useSelector(currState => currState.mix.mixId);
+  const mixOwnerId = useSelector(currState => currState.mix.ownerId);
 
   useEffect(() => {
     dispatch(actions.initGetMixes());
@@ -106,7 +106,10 @@ const UserMixesScreen = props => {
 
   const selectMixHandler = (mixId, mixTitle, ownerId) => {
     dispatch(actions.initGetMix(mixId, mixTitle, ownerId));
-    dispatch(actions.initRemoveTopTracks(userId));
+    if (mixOwnerId === userId) {
+      console.log('remove top tracks');
+      dispatch(actions.initRemoveTopTracks(userId));
+    }
     dispatch(actions.initGetTopTracks(mixId));
 
     //dispatch(actions.initGetCurrentTrack(mixId));
