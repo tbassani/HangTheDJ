@@ -63,7 +63,7 @@ const styles = StyleSheet.create({
     flex: 0.25,
   },
   titleContainer: {
-    flex: 1,
+    flex: 0.5,
   },
   title: {
     color: Colors.textDefault,
@@ -71,7 +71,7 @@ const styles = StyleSheet.create({
     fontSize: Sizes.large,
   },
   artistsContainer: {
-    flex: 1,
+    flex: 0.3,
   },
   artists: {
     color: Colors.textDefault,
@@ -79,7 +79,7 @@ const styles = StyleSheet.create({
     fontSize: Sizes.medium,
   },
   genreContainer: {
-    flex: 1,
+    flex: 0.2,
   },
   genre: {
     color: Colors.textDefault,

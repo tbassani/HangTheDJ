@@ -83,7 +83,7 @@ const MixScreen = props => {
     });
     const unsubscribeFocus = navigation.addListener('focus', () => {
       const timeInterval = setInterval(() => {
-        dispatch(actions.initGetCurrentTrack());
+        dispatch(actions.initGetCurrentTrack(mixId));
       }, 5000);
       trackInterval.current = timeInterval;
     });
@@ -105,11 +105,13 @@ const MixScreen = props => {
 
   const initBackgroundFetch = async () => {
     // BackgroundFetch event handler.
+    const timer = ms => new Promise(res => setTimeout(res, ms));
     console.log('PRESSED PLAY: ' + pressedPlay.current);
     const onEvent = async taskId => {
       console.log('[BackgroundFetch] task: ', taskId);
       // Do your background work...
       dispatch(actions.initBeginPlayback(pressedPlay.current));
+      await timer(2000);
       pressedPlay.current = false;
       BackgroundFetch.finish(taskId);
     };
@@ -158,7 +160,7 @@ const MixScreen = props => {
     } else {
       Alert.alert(
         'Mix muito curta!',
-        'Por favor, adicione ao menos 20 minutos de música.',
+        'Por favor, adicione ao menos 30 minutos de música.',
       );
     }
   };

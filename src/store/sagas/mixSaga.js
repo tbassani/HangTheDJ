@@ -437,14 +437,14 @@ export function* initBeginPlaybackSaga(action) {
             currentTrack,
           );
         }
+        yield setTopTracksService(updatedTopTracks.newTopTracks, mixId);
         yield put(actions.setTopTracks(updatedTopTracks.newTopTracks));
-        tracksToQueue = yield addTopTracksToQueueService(
+        tracksToQueue = addTopTracksToQueueService(
           updatedTopTracks.newTopTracks.filter(
             track => track.externalId !== currentTrack.externalId,
           ),
           mixId,
         );
-        yield setTopTracksService(updatedTopTracks.newTopTracks, mixId);
       } else {
         console.log('SEGUNDO CLICK');
         const playingTrack = yield getPlayingTrackService(mixId);
@@ -493,14 +493,14 @@ export function* initBeginPlaybackSaga(action) {
               ...updatedTopTracks.newTopTracks,
             ]),
           );
-          tracksToQueue = yield addTopTracksToQueueService(
+          yield setTopTracksService(
+            [...oldTracks, ...updatedTopTracks.newTopTracks],
+            mixId,
+          );
+          tracksToQueue = addTopTracksToQueueService(
             updatedTopTracks.newTopTracks.filter(
               track => track.externalId !== currentTrack.externalId,
             ),
-            mixId,
-          );
-          yield setTopTracksService(
-            [...oldTracks, ...updatedTopTracks.newTopTracks],
             mixId,
           );
         } else {
@@ -570,14 +570,14 @@ export function* initBeginPlaybackSaga(action) {
             ...updatedTopTracks.newTopTracks,
           ]),
         );
-        tracksToQueue = yield addTopTracksToQueueService(
+        yield setTopTracksService(
+          [...oldTracks, ...updatedTopTracks.newTopTracks],
+          mixId,
+        );
+        tracksToQueue = addTopTracksToQueueService(
           updatedTopTracks.newTopTracks.filter(
             track => track.externalId !== currentTrack.externalId,
           ),
-          mixId,
-        );
-        yield setTopTracksService(
-          [...oldTracks, ...updatedTopTracks.newTopTracks],
           mixId,
         );
       } else {
