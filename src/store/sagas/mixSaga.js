@@ -2,6 +2,8 @@ import {put, select} from 'redux-saga/effects';
 
 import * as actions from '../actions';
 
+import {saveDataToStorage, getDataFromStorage} from '../../services/storage';
+
 import MixTrack from '../../models/MixTrack';
 import Mix from '../../models/Mix';
 
@@ -87,6 +89,9 @@ export function* initGetMixSaga(action) {
     '',
     undefined,
   );
+  yield saveDataToStorage('mixId', action.mixId.toString());
+  yield saveDataToStorage('mixTitle', action.mixTitle);
+  yield saveDataToStorage('ownerId', action.ownerId.toString());
   const rankingTracks = [];
 
   if (response && !response.error) {
@@ -212,6 +217,10 @@ export function* initGetCurrentTrackSaga(action) {
 
   let validMixId = mixId ? mixId : action.mixId;
 
+  if (!validMixId) {
+    validMixId = yield parseInt(yield getDataFromStorage('mixId'));
+  }
+
   //yield put(actions.initGetTopTracks(validMixId));
 
   const topTracksSelector = state => state.mix.topTracks;
@@ -242,12 +251,12 @@ export function* initGetCurrentTrackSaga(action) {
         console.log('Not playing, no error');
         if (action.mixId) {
           console.log('Get next');
-          playingTrack = yield getNextTrackService(action.mixId);
+          playingTrack = yield getNextTrackService(validMixId);
         }
         yield put(actions.pauseTrack());
       } else if (playingTrack.is_playing && !playingTrack.error) {
         if (isInTopTracks.length === 0) {
-          playingTrack = yield getNextTrackService(action.mixId);
+          playingTrack = yield getNextTrackService(validMixId);
           yield put(actions.pauseTrack());
         } else {
           yield put(actions.playTrack());
@@ -278,7 +287,6 @@ export function* initGetCurrentTrackSaga(action) {
     if (playingTrack.error === 401) {
       yield put(actions.initLogout());
     } else if (playingTrack.error === 400) {
-      Alert.alert('Ops! Ocorreu um erro!', 'Tente novamente mais tarde.');
       yield put(actions.getCurrentTrackFail());
     } else if (playingTrack.error === 404) {
       yield put(actions.getCurrentTrackFail());
@@ -403,7 +411,7 @@ export function* initBeginPlaybackSaga(action) {
   console.log(topTracks.length);
   //Check playback state
   if (action.pressedPlay) {
-    const playTrack = yield playTrackService(mixId, currentTrack.externalId);
+    const playTrack = yield playTrackService(mixId, currentTrack?.externalId);
     if (playTrack.error === 404) {
       Alert.alert(
         'Ops! Ocorreu um erro!',
@@ -439,12 +447,11 @@ export function* initBeginPlaybackSaga(action) {
         }
         yield setTopTracksService(updatedTopTracks.newTopTracks, mixId);
         yield put(actions.setTopTracks(updatedTopTracks.newTopTracks));
-        tracksToQueue = addTopTracksToQueueService(
-          updatedTopTracks.newTopTracks.filter(
-            track => track.externalId !== currentTrack.externalId,
-          ),
-          mixId,
+
+        const addedTopTracks = yield updatedTopTracks.newTopTracks.filter(
+          track => track.externalId !== currentTrack?.externalId,
         );
+        tracksToQueue = addTopTracksToQueueService(addedTopTracks, mixId);
       } else {
         console.log('SEGUNDO CLICK');
         const playingTrack = yield getPlayingTrackService(mixId);
@@ -497,12 +504,10 @@ export function* initBeginPlaybackSaga(action) {
             [...oldTracks, ...updatedTopTracks.newTopTracks],
             mixId,
           );
-          tracksToQueue = addTopTracksToQueueService(
-            updatedTopTracks.newTopTracks.filter(
-              track => track.externalId !== currentTrack.externalId,
-            ),
-            mixId,
+          const addedTopTracks = yield updatedTopTracks.newTopTracks.filter(
+            track => track.externalId !== currentTrack?.externalId,
           );
+          tracksToQueue = addTopTracksToQueueService(addedTopTracks, mixId);
         } else {
           //Is playing a song not in the Top Tracks
           yield put(actions.pauseTrack());
@@ -514,7 +519,6 @@ export function* initBeginPlaybackSaga(action) {
     yield put(actions.initGetMix(mixId, mixTitle, ownerId));
     console.log('AUTOMATIC');
     const playingTrack = yield getPlayingTrackService(mixId);
-    yield put(actions.initGetCurrentTrack());
     if (
       !playingTrack.is_playing &&
       playingTrack.progress_ms > 0 &&
@@ -574,12 +578,11 @@ export function* initBeginPlaybackSaga(action) {
           [...oldTracks, ...updatedTopTracks.newTopTracks],
           mixId,
         );
-        tracksToQueue = addTopTracksToQueueService(
-          updatedTopTracks.newTopTracks.filter(
-            track => track.externalId !== currentTrack.externalId,
-          ),
-          mixId,
+
+        const addedTopTracks = yield updatedTopTracks.newTopTracks.filter(
+          track => track.externalId !== currentTrack.externalId,
         );
+        tracksToQueue = addTopTracksToQueueService(addedTopTracks, mixId);
       } else {
         //Is playing a song not in the Top Tracks
         yield put(actions.pauseTrack());

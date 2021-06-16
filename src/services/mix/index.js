@@ -312,6 +312,7 @@ export async function addTracksToQueueService(tracks, playlist_id) {
 }
 
 export async function addTopTracksToQueueService(tracks, playlist_id) {
+  console.log('add top tracks to queue service');
   const jwt = await getDataFromStorage('token');
   const body = {
     tracks: tracks,
@@ -323,7 +324,7 @@ export async function addTopTracksToQueueService(tracks, playlist_id) {
     datatype: 'json',
   };
   var aux = {};
-  await axios({
+  axios({
     headers: headers,
     method: 'POST',
     url: APIConfig.ADD_TOP_TRACKS_TO_QUEUE,

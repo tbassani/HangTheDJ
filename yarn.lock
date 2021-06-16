@@ -5549,6 +5549,11 @@ react-native-gesture-handler@^1.10.3:
     invariant "^2.2.4"
     prop-types "^15.7.2"
 
+react-native-idle-timer@^2.1.6:
+  version "2.1.6"
+  resolved "https://registry.yarnpkg.com/react-native-idle-timer/-/react-native-idle-timer-2.1.6.tgz#6076c9e6127aabdc8eb1e1d846014bfe3dfa7527"
+  integrity sha512-rqeU7DCbzaXN+xchw/bFatvV/keHxhY1+X//Jqjs/h6XWvhP9gV+EN6isoDNnFI7pKAN4yZJ6QTqaw5sDiEpPQ==
+
 react-native-iphone-x-helper@^1.3.0:
   version "1.3.1"
   resolved "https://registry.yarnpkg.com/react-native-iphone-x-helper/-/react-native-iphone-x-helper-1.3.1.tgz#20c603e9a0e765fd6f97396638bdeb0e5a60b010"

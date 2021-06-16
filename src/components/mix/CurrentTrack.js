@@ -94,7 +94,7 @@ const styles = StyleSheet.create({
     fontSize: Sizes.medium,
   },
   artistsContainer: {
-    flex: 0.3,
+    flex: 0.35,
   },
   artists: {
     color: Colors.textDefault,
@@ -102,7 +102,7 @@ const styles = StyleSheet.create({
     fontSize: Sizes.medium,
   },
   genreContainer: {
-    flex: 0.3,
+    flex: 0.25,
   },
   genre: {
     color: Colors.textDefault,

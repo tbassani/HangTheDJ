@@ -13,6 +13,7 @@ import * as actions from '../../store/actions';
 
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import Clipboard from '@react-native-clipboard/clipboard';
+import IdleTimerManager from 'react-native-idle-timer';
 
 import CustomModal from '../../components/UI/CustomModal';
 import PrimaryButton from '../../components/UI/PrimaryButton';
@@ -82,10 +83,12 @@ const MixScreen = props => {
         : () => {},
     });
     const unsubscribeFocus = navigation.addListener('focus', () => {
-      const timeInterval = setInterval(() => {
-        dispatch(actions.initGetCurrentTrack(mixId));
-      }, 5000);
-      trackInterval.current = timeInterval;
+      if (mixId) {
+        const timeInterval = setInterval(() => {
+          dispatch(actions.initGetCurrentTrack(mixId));
+        }, 5000);
+        trackInterval.current = timeInterval;
+      }
     });
 
     const unsubscribeBlur = navigation.addListener('blur', () => {
@@ -95,13 +98,26 @@ const MixScreen = props => {
       unsubscribeFocus();
       unsubscribeBlur();
     };
-  }, [navigation, mixTitle]);
+  }, [navigation, mixTitle, mixId]);
 
   useEffect(() => {
     if (!isPlaying) {
       BackgroundFetch.stop();
     }
   }, [isPlaying]);
+
+  useEffect(() => {
+    if (mixId) {
+      const timeInterval = setInterval(() => {
+        dispatch(actions.initGetCurrentTrack(mixId));
+      }, 5000);
+      trackInterval.current = timeInterval;
+
+      return () => {
+        clearInterval(trackInterval.current);
+      };
+    }
+  }, [mixId]);
 
   const initBackgroundFetch = async () => {
     // BackgroundFetch event handler.
@@ -155,6 +171,7 @@ const MixScreen = props => {
 
   const onPressPlayHandler = () => {
     pressedPlay.current = true;
+    IdleTimerManager.setIdleTimerDisabled(true);
     if (checkMixDuration()) {
       initBackgroundFetch();
     } else {
@@ -166,6 +183,7 @@ const MixScreen = props => {
   };
 
   const onPressPauseHandler = () => {
+    IdleTimerManager.setIdleTimerDisabled(false);
     dispatch(actions.initStopPlayback());
     BackgroundFetch.stop();
   };
