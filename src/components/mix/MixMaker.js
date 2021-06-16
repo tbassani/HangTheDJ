@@ -76,7 +76,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   tabsContainer: {
-    flex: 0.085,
+    flex: 0.1,
     justifyContent: 'space-around',
     flexDirection: 'row',
     marginTop: Sizes.small,
@@ -89,6 +89,7 @@ const styles = StyleSheet.create({
     borderTopLeftRadius: Sizes.medium,
     backgroundColor: Colors.dark,
     padding: Sizes.small,
+    height: '100%',
   },
   mixCounterContainer: {
     marginHorizontal: Sizes.small,
@@ -111,7 +112,7 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.shadow,
   },
   contentContainer: {
-    flex: 1,
+    flex: 0.9,
     backgroundColor: Colors.dark,
   },
   selectedContent: {
