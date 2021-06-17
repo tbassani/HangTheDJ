@@ -86,7 +86,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-evenly',
   },
   titleContainer: {
-    flex: 0.4,
+    flex: 0.35,
   },
   title: {
     color: Colors.textDefault,
@@ -102,7 +102,7 @@ const styles = StyleSheet.create({
     fontSize: Sizes.medium,
   },
   genreContainer: {
-    flex: 0.25,
+    flex: 0.3,
   },
   genre: {
     color: Colors.textDefault,
