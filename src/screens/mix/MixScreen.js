@@ -121,14 +121,12 @@ const MixScreen = props => {
 
   const initBackgroundFetch = async () => {
     // BackgroundFetch event handler.
-    const timer = ms => new Promise(res => setTimeout(res, ms));
-    console.log('PRESSED PLAY: ' + pressedPlay.current);
     const onEvent = async taskId => {
       console.log('[BackgroundFetch] task: ', taskId);
       // Do your background work...
       dispatch(actions.initBeginPlayback(pressedPlay.current));
-      await timer(2000);
-      pressedPlay.current = false;
+      await this.addEvent(taskId);
+      // IMPORTANT:  You must signal to the OS that your task is complete.
       BackgroundFetch.finish(taskId);
     };
 
@@ -146,7 +144,7 @@ const MixScreen = props => {
       onTimeout,
     );
 
-    console.log('[BackgroundFetch] configure status: ', status);
+    //console.log('[BackgroundFetch] configure status: ', status);
   };
 
   const shareMixHandler = () => {
