@@ -1,7 +1,37 @@
-import React from 'react';
-import {SafeAreaView, StyleSheet} from 'react-native';
+import React, {useEffect} from 'react';
+import {SafeAreaView, StyleSheet, AppState} from 'react-native';
+
+import {useSelector, useDispatch} from 'react-redux';
+import * as actions from '../../store/actions';
 
 const ScreenWrapper = props => {
+  const dispatch = useDispatch();
+  useEffect(() => {
+    AppState.addEventListener('change', _handleAppStateChange);
+
+    return () => {
+      AppState.removeEventListener('change', _handleAppStateChange);
+    };
+  }, []);
+
+  const _handleAppStateChange = nextAppState => {
+    if (
+      appState.current.match(/inactive|background/) &&
+      nextAppState === 'active'
+    ) {
+      getDataFromStorage('mixId').then(currMixId => {
+        getDataFromStorage('ownerId').then(mixOwnerId => {
+          if (currMixId && mixOwnerId) {
+            dispatch(actions.initGetMix(currMixId, mixOwnerId));
+            dispatch(actions.initGetTopTracks(currMixId));
+          }
+        });
+      });
+    }
+
+    appState.current = nextAppState;
+  };
+
   return (
     <SafeAreaView style={{...styles.wrapperContainer, ...props.style}}>
       {props.children}
