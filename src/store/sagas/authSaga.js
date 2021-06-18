@@ -73,6 +73,8 @@ export function* initLogoutSaga(action) {
   yield put(actions.startAuth());
   yield removeDataFromStorage('token');
   yield removeDataFromStorage('userId');
+  yield removeDataFromStorage('ownerId');
+  yield removeDataFromStorage('mixId');
   yield removeDataFromStorage('email');
   yield put(actions.logout());
 }
