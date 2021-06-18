@@ -13,6 +13,7 @@ import * as actions from '../../store/actions';
 
 import PrimaryButton from '../../components/UI/PrimaryButton';
 import LoadingSpinner from '../../components/UI/LoadingSpinner';
+import ScreenWrapper from '../../components/hoc/ScreenWrapper';
 
 import Colors from '../../constants/Colors';
 
@@ -78,7 +79,7 @@ const ProfileScreen = props => {
   }
 
   return (
-    <View style={styles.mainContainer}>
+    <ScreenWrapper style={styles.mainContainer}>
       <View style={styles.buttonContainer}>
         <PrimaryButton onPress={() => dispatch(actions.initLogout())}>
           Logout
@@ -100,7 +101,7 @@ const ProfileScreen = props => {
           </PrimaryButton>
         ) : null}
       </View>
-    </View>
+    </ScreenWrapper>
   );
 };
 

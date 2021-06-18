@@ -4,11 +4,13 @@ import {View, StyleSheet} from 'react-native';
 import LoadingSpinner from '../components/UI/LoadingSpinner';
 import Colors from '../constants/Colors';
 
+import ScreenWrapper from '../components/hoc/ScreenWrapper';
+
 const LoadingScreen = props => {
   return (
-    <View style={styles.mainContainer}>
+    <ScreenWrapper style={styles.mainContainer}>
       <LoadingSpinner size="large" />
-    </View>
+    </ScreenWrapper>
   );
 };
 

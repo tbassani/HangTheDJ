@@ -13,6 +13,7 @@ import * as actions from '../../store/actions';
 
 import PrimaryButton from '../../components/UI/PrimaryButton';
 import LoadingSpinner from '../../components/UI/LoadingSpinner';
+import ScreenWrapper from '../../components/hoc/ScreenWrapper';
 
 import Colors from '../../constants/Colors';
 
@@ -73,13 +74,13 @@ const StreamingProfileScreen = props => {
   }
 
   return (
-    <View style={styles.mainContainer}>
+    <ScreenWrapper style={styles.mainContainer}>
       <View style={styles.buttonContainer}>
         <PrimaryButton onPress={() => handleNewProfile()}>
           Adicionar Serviço de Streaming
         </PrimaryButton>
       </View>
-    </View>
+    </ScreenWrapper>
   );
 };
 

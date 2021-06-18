@@ -9,6 +9,7 @@ import PrimaryButton from '../../components/UI/PrimaryButton';
 import TextLink from '../../components/UI/TextLink';
 import LoadingSpinner from '../../components/UI/LoadingSpinner';
 import MixItem from '../../components/mix/MixItem';
+import ScreenWrapper from '../../components/hoc/ScreenWrapper';
 
 import Colors from '../../constants/Colors';
 
@@ -17,7 +18,6 @@ const CLEAR_FORM = 'CLEAR_FORM';
 
 import formReducer from '../../shared/formReducer';
 
-import ScreenWrapper from '../../components/hoc/ScreenWrapper';
 import Sizes from '../../constants/Sizes';
 
 const UserMixesScreen = props => {

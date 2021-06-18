@@ -7,6 +7,7 @@ import * as actions from '../../store/actions';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 import Ranking from '../../components/ranking/Ranking';
+import ScreenWrapper from '../../components/hoc/ScreenWrapper';
 
 import Colors from '../../constants/Colors';
 import Sizes from '../../constants/Sizes';
@@ -65,7 +66,9 @@ const MixScreen = props => {
     );
   }
 
-  return <View style={styles.mainContainer}>{rankingContent}</View>;
+  return (
+    <ScreenWrapper style={styles.mainContainer}>{rankingContent}</ScreenWrapper>
+  );
 };
 const styles = StyleSheet.create({
   mainContainer: {
