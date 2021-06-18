@@ -8,6 +8,8 @@ import TextLink from '../../components/UI/TextLink';
 import {useSelector, useDispatch} from 'react-redux';
 import * as actions from '../../store/actions';
 
+import ScreenWrapper from '../../components/hoc/ScreenWrapper';
+
 import formReducer from '../../shared/formReducer';
 
 import Colors from '../../constants/Colors';
@@ -55,7 +57,7 @@ const ForgotPasswordScreen = props => {
   };
 
   return (
-    <SafeAreaView style={styles.outterContainer}>
+    <ScreenWrapper style={styles.outterContainer}>
       <View style={styles.mainContainer}>
         <Input
           required
@@ -75,7 +77,7 @@ const ForgotPasswordScreen = props => {
           Voltar
         </TextLink>
       </View>
-    </SafeAreaView>
+    </ScreenWrapper>
   );
 };
 

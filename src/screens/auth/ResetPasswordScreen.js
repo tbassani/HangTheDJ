@@ -6,6 +6,7 @@ import * as actions from '../../store/actions';
 
 import Input from '../../components/UI/Input';
 import PrimaryButton from '../../components/UI/PrimaryButton';
+import ScreenWrapper from '../../components/hoc/ScreenWrapper';
 
 import Colors from '../../constants/Colors';
 
@@ -92,7 +93,7 @@ const ResetPasswordScreen = props => {
   };
 
   return (
-    <SafeAreaView style={styles.outterContainer}>
+    <ScreenWrapper style={styles.outterContainer}>
       <View style={styles.mainContainer}>
         <Input
           required
@@ -129,7 +130,7 @@ const ResetPasswordScreen = props => {
         />
         <PrimaryButton onPress={resetHandler}>Atualizar Senha</PrimaryButton>
       </View>
-    </SafeAreaView>
+    </ScreenWrapper>
   );
 };
 

@@ -8,6 +8,7 @@ import Input from '../../components/UI/Input';
 import PrimaryButton from '../../components/UI/PrimaryButton';
 import TextLink from '../../components/UI/TextLink';
 import LoadingSpinner from '../../components/UI/LoadingSpinner';
+import ScreenWrapper from '../../components/hoc/ScreenWrapper';
 
 import Colors from '../../constants/Colors';
 
@@ -76,7 +77,7 @@ const LoginScreen = props => {
     return <LoadingSpinner size="large" />;
   }
   return (
-    <SafeAreaView style={styles.outterContainer}>
+    <ScreenWrapper style={styles.outterContainer}>
       <View style={styles.mainContainer}>
         <Input
           required
@@ -107,7 +108,7 @@ const LoginScreen = props => {
           Esqueci minha senha
         </TextLink>
       </View>
-    </SafeAreaView>
+    </ScreenWrapper>
   );
 };
 

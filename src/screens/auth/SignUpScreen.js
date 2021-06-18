@@ -7,6 +7,7 @@ import * as actions from '../../store/actions';
 import Input from '../../components/UI/Input';
 import PrimaryButton from '../../components/UI/PrimaryButton';
 import TextLink from '../../components/UI/TextLink';
+import ScreenWrapper from '../../components/hoc/ScreenWrapper';
 
 import formReducer from '../../shared/formReducer';
 
@@ -72,7 +73,7 @@ const SignUpScreen = props => {
     }
   };
   return (
-    <SafeAreaView style={styles.outterContainer}>
+    <ScreenWrapper style={styles.outterContainer}>
       <View style={styles.mainContainer}>
         <Input
           required
@@ -91,7 +92,7 @@ const SignUpScreen = props => {
           Já possui uma conta?
         </TextLink>
       </View>
-    </SafeAreaView>
+    </ScreenWrapper>
   );
 };
 

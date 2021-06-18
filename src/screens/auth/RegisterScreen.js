@@ -7,6 +7,7 @@ import * as actions from '../../store/actions';
 import Input from '../../components/UI/Input';
 import PrimaryButton from '../../components/UI/PrimaryButton';
 import TextLink from '../../components/UI/TextLink';
+import ScreenWrapper from '../../components/hoc/ScreenWrapper';
 
 import Colors from '../../constants/Colors';
 
@@ -76,7 +77,7 @@ const RegisterScreen = props => {
   };
 
   return (
-    <SafeAreaView style={styles.outterContainer}>
+    <ScreenWrapper style={styles.outterContainer}>
       <View style={styles.mainContainer}>
         <Input
           required
@@ -113,7 +114,7 @@ const RegisterScreen = props => {
           Voltar para Login
         </TextLink>
       </View>
-    </SafeAreaView>
+    </ScreenWrapper>
   );
 };
 

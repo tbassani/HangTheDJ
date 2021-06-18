@@ -9,7 +9,7 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import PrimaryButton from '../../components/UI/PrimaryButton';
 import SecondaryButton from '../../components/UI/SecondaryButton';
 import TrackBallot from '../../components/voting/TrackBallot';
-import LoadingSpinner from '../../components/UI/LoadingSpinner';
+import ScreenWrapper from '../../components/hoc/ScreenWrapper';
 
 import Colors from '../../constants/Colors';
 import Sizes from '../../constants/Sizes';
@@ -58,7 +58,7 @@ const VotingScreen = props => {
   let trackBallotContent = <TrackBallot track={votingTrack} />;
 
   return (
-    <View style={styles.mainContainer}>
+    <ScreenWrapper style={styles.mainContainer}>
       <View style={styles.trackBallotContainer}>{trackBallotContent}</View>
       <View style={styles.buttonsContainer}>
         <View style={styles.buttonContainer}>
@@ -72,7 +72,7 @@ const VotingScreen = props => {
           </SecondaryButton>
         </View>
       </View>
-    </View>
+    </ScreenWrapper>
   );
 };
 
