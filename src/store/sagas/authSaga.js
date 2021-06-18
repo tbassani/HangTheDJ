@@ -10,7 +10,7 @@ import {
   forgotPasswordService,
 } from '../../services/auth';
 
-import {saveDataToStorage, removeDataToStorage} from '../../services/storage';
+import {saveDataToStorage, removeDataFromStorage} from '../../services/storage';
 import {Alert} from 'react-native';
 
 export function* initLoginSaga(action) {
@@ -71,9 +71,9 @@ export function* initRegisterSaga(action) {
 
 export function* initLogoutSaga(action) {
   yield put(actions.startAuth());
-  yield removeDataToStorage('token');
-  yield removeDataToStorage('userId');
-  yield removeDataToStorage('email');
+  yield removeDataFromStorage('token');
+  yield removeDataFromStorage('userId');
+  yield removeDataFromStorage('email');
   yield put(actions.logout());
 }
 

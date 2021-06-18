@@ -551,3 +551,35 @@ export async function addTracksService(
     return aux;
   }
 }
+
+export async function updateQueueService(playlist_id) {
+  console.log('Update queue service');
+  const jwt = await getDataFromStorage('token');
+  const body = {
+    playlist_id: playlist_id,
+  };
+  const headers = {
+    Authorization: 'Bearer ' + jwt,
+    contenttype: 'application/json;',
+    datatype: 'json',
+  };
+  var aux = {};
+  axios({
+    headers: headers,
+    method: 'POST',
+    url: APIConfig.UPDATE_QUEUE_URL,
+    data: body,
+  })
+    .then(response => {
+      aux = response.data;
+    })
+    .catch(error => {
+      if (error.response) {
+        aux = {
+          error: error.response.status,
+        };
+      }
+      console.log(error);
+    });
+  return aux;
+}
