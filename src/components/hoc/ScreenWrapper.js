@@ -1,10 +1,13 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useRef} from 'react';
 import {SafeAreaView, StyleSheet, AppState} from 'react-native';
 
 import {useSelector, useDispatch} from 'react-redux';
 import * as actions from '../../store/actions';
 
+import {getDataFromStorage} from '../../services/storage';
+
 const ScreenWrapper = props => {
+  const appState = useRef(AppState.currentState);
   const dispatch = useDispatch();
   useEffect(() => {
     AppState.addEventListener('change', _handleAppStateChange);
