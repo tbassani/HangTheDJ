@@ -25,8 +25,10 @@ const ScreenWrapper = props => {
       getDataFromStorage('mixId').then(currMixId => {
         getDataFromStorage('ownerId').then(mixOwnerId => {
           if (currMixId && mixOwnerId) {
-            dispatch(actions.initGetMix(currMixId, mixOwnerId));
-            dispatch(actions.initGetTopTracks(currMixId));
+            dispatch(
+              actions.initGetMix(parseInt(currMixId), parseInt(mixOwnerId)),
+            );
+            dispatch(actions.initGetTopTracks(parseInt(currMixId)));
           }
         });
       });
