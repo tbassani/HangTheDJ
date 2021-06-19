@@ -28,13 +28,17 @@ import {
   initGetVotingTrackSaga,
   initDownvoteSaga,
   initUpvoteSaga,
-  initBeginPlaybackSaga,
+  //initBeginPlaybackSaga,
   initStopPlaybackSaga,
   initRemoveTopTracksSaga,
   initGetTopTracksSaga,
+  initPlayTrackSaga,
+  initPauseTrackSaga,
 } from './mixSaga';
 
 export function* watchAuth() {
+  yield all([takeEvery(actionTypes.INIT_PLAY_TRACK, initPlayTrackSaga)]);
+  yield all([takeEvery(actionTypes.INIT_PAUSE_TRACK, initPauseTrackSaga)]);
   yield all([takeEvery(actionTypes.INIT_LOGIN, initLoginSaga)]);
   yield all([takeEvery(actionTypes.INIT_SIGNUP, initSignUpSaga)]);
   yield all([takeEvery(actionTypes.INIT_LOGOUT, initLogoutSaga)]);
@@ -83,9 +87,9 @@ export function* watchMix() {
   ]);
   yield all([takeEvery(actionTypes.INIT_UPVOTE, initUpvoteSaga)]);
   yield all([takeEvery(actionTypes.INIT_DOWNVOTE, initDownvoteSaga)]);
-  yield all([
-    takeEvery(actionTypes.INIT_BEGIN_PLAYBACK, initBeginPlaybackSaga),
-  ]);
+  // yield all([
+  //   takeEvery(actionTypes.INIT_BEGIN_PLAYBACK, initBeginPlaybackSaga),
+  // ]);
   yield all([takeEvery(actionTypes.INIT_STOP_PLAYBACK, initStopPlaybackSaga)]);
   yield all([
     takeEvery(actionTypes.INIT_REMOVE_TOP_TRACKS, initRemoveTopTracksSaga),

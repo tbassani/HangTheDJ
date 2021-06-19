@@ -212,10 +212,10 @@ export const downvoteFail = () => {
   };
 };
 
-export const initBeginPlayback = pressedPlay => {
+export const initBeginPlayback = mixId => {
   return {
     type: actionTypes.INIT_BEGIN_PLAYBACK,
-    pressedPlay: pressedPlay,
+    mixId: mixId,
   };
 };
 
@@ -234,6 +234,20 @@ export const beginPlayback = () => {
 export const beginPlaybackFail = () => {
   return {
     type: actionTypes.BEGIN_PLAYBACK_FAIL,
+  };
+};
+
+export const initPlayTrack = (mixId, trackId) => {
+  return {
+    type: actionTypes.INIT_PLAY_TRACK,
+    mixId: mixId,
+    trackId: trackId,
+  };
+};
+
+export const startPlayTrack = () => {
+  return {
+    type: actionTypes.INIT_PLAY_TRACK,
   };
 };
 
@@ -259,6 +273,18 @@ export const setTopTracks = topTracks => {
 export const setTopTracksFail = () => {
   return {
     type: actionTypes.SET_TOP_TRACKS_FAIL,
+  };
+};
+
+export const initPauseTrack = () => {
+  return {
+    type: actionTypes.PAUSE_TRACK,
+  };
+};
+
+export const startPauseTrack = () => {
+  return {
+    type: actionTypes.PAUSE_TRACK,
   };
 };
 

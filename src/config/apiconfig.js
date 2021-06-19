@@ -41,6 +41,7 @@ const APIConfig = {
     'https://hdj-server.herokuapp.com/spotify/delete_from_queue',
   GET_TOP_TRACKS_URL: 'https://hdj-server.herokuapp.com/spotify/get_top_tracks',
   SET_TOP_TRACKS_URL: 'https://hdj-server.herokuapp.com/spotify/set_top_tracks',
+  UPDATE_QUEUE_URL: 'https://hdj-server.herokuapp.com/playlists/update_queue',
 };
 
 export default APIConfig;
