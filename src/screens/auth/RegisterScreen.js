@@ -77,7 +77,7 @@ const RegisterScreen = props => {
   };
 
   return (
-    <ScreenWrapper style={styles.outterContainer}>
+    <ScreenWrapper style={styles.outterContainer} navigation={props.navigation}>
       <View style={styles.mainContainer}>
         <Input
           required

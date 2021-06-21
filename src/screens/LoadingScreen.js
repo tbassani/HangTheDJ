@@ -8,7 +8,7 @@ import ScreenWrapper from '../components/hoc/ScreenWrapper';
 
 const LoadingScreen = props => {
   return (
-    <ScreenWrapper style={styles.mainContainer}>
+    <ScreenWrapper style={styles.mainContainer} navigation={props.navigation}>
       <LoadingSpinner size="large" />
     </ScreenWrapper>
   );

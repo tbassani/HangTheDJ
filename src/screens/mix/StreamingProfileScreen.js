@@ -74,7 +74,7 @@ const StreamingProfileScreen = props => {
   }
 
   return (
-    <ScreenWrapper style={styles.mainContainer}>
+    <ScreenWrapper style={styles.mainContainer} navigations={props.navigation}>
       <View style={styles.buttonContainer}>
         <PrimaryButton onPress={() => handleNewProfile()}>
           Adicionar Serviço de Streaming

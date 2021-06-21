@@ -8,6 +8,8 @@ import {
   Alert,
 } from 'react-native';
 
+import Heartbeat from '../../Heartbeat';
+
 import {useSelector, useDispatch} from 'react-redux';
 import * as actions from '../../store/actions';
 
@@ -22,12 +24,15 @@ import CurrentTrack from '../../components/mix/CurrentTrack';
 import Player from '../../components/player/Player';
 
 import LoadingSpinner from '../../components/UI/LoadingSpinner';
+import ScreenWrapper from '../../components/hoc/ScreenWrapper';
 
 import BackgroundFetch from 'react-native-background-fetch';
+import {saveDataToStorage} from '../../services/storage';
 
 import Colors from '../../constants/Colors';
 import Sizes from '../../constants/Sizes';
 import MinMixDuration from '../../constants/MinMixDuration';
+import {updateQueueService} from '../../services/mix';
 
 const MixScreen = props => {
   const [shareModal, setShareModal] = useState(false);
@@ -83,8 +88,9 @@ const MixScreen = props => {
         : () => {},
     });
     const unsubscribeFocus = navigation.addListener('focus', () => {
-      if (mixId) {
+      if (mixId && !trackInterval.current) {
         const timeInterval = setInterval(() => {
+          dispatch(actions.initGetTopTracks(mixId));
           dispatch(actions.initGetCurrentTrack(mixId));
         }, 5000);
         trackInterval.current = timeInterval;
@@ -93,6 +99,7 @@ const MixScreen = props => {
 
     const unsubscribeBlur = navigation.addListener('blur', () => {
       clearInterval(trackInterval.current);
+      trackInterval.current = undefined;
     });
     return () => {
       unsubscribeFocus();
@@ -101,51 +108,20 @@ const MixScreen = props => {
   }, [navigation, mixTitle, mixId]);
 
   useEffect(() => {
-    if (!isPlaying) {
-      BackgroundFetch.stop();
-    }
-  }, [isPlaying]);
-
-  useEffect(() => {
-    if (mixId) {
+    const timer = ms => new Promise(res => setTimeout(res, ms));
+    if (mixId && !trackInterval.current) {
       const timeInterval = setInterval(() => {
+        dispatch(actions.initGetTopTracks(mixId));
         dispatch(actions.initGetCurrentTrack(mixId));
       }, 5000);
       trackInterval.current = timeInterval;
 
       return () => {
         clearInterval(trackInterval.current);
+        trackInterval.current = undefined;
       };
     }
   }, [mixId]);
-
-  const initBackgroundFetch = async () => {
-    // BackgroundFetch event handler.
-    const onEvent = async taskId => {
-      console.log('[BackgroundFetch] task: ', taskId);
-      // Do your background work...
-      dispatch(actions.initBeginPlayback(pressedPlay.current));
-      await this.addEvent(taskId);
-      // IMPORTANT:  You must signal to the OS that your task is complete.
-      BackgroundFetch.finish(taskId);
-    };
-
-    // Timeout callback is executed when your Task has exceeded its allowed running-time.
-    // You must stop what you're doing immediately BackgorundFetch.finish(taskId)
-    const onTimeout = async taskId => {
-      console.warn('[BackgroundFetch] TIMEOUT task: ', taskId);
-      BackgroundFetch.finish(taskId);
-    };
-
-    // Initialize BackgroundFetch only once when component mounts.
-    let status = await BackgroundFetch.configure(
-      {minimumFetchInterval: 15},
-      onEvent,
-      onTimeout,
-    );
-
-    //console.log('[BackgroundFetch] configure status: ', status);
-  };
 
   const shareMixHandler = () => {
     setShareModal(true);
@@ -171,7 +147,8 @@ const MixScreen = props => {
     pressedPlay.current = true;
     IdleTimerManager.setIdleTimerDisabled(true);
     if (checkMixDuration()) {
-      initBackgroundFetch();
+      dispatch(actions.initPlayTrack(mixId, currTrack.externalId));
+      updateQueueService(mixId);
     } else {
       Alert.alert(
         'Mix muito curta!',
@@ -183,7 +160,6 @@ const MixScreen = props => {
   const onPressPauseHandler = () => {
     IdleTimerManager.setIdleTimerDisabled(false);
     dispatch(actions.initStopPlayback());
-    BackgroundFetch.stop();
   };
 
   const votingHandler = () => {
@@ -288,7 +264,7 @@ const MixScreen = props => {
   }
 
   return (
-    <View style={styles.mainContainer}>
+    <ScreenWrapper style={styles.mainContainer} navigation={props.navigation}>
       <CustomModal show={shareModal} close={() => setShareModal(false)}>
         <View style={styles.modalContent}>
           <View style={styles.formContainer}>
@@ -308,7 +284,7 @@ const MixScreen = props => {
       </CustomModal>
       {mixContent}
       <View style={styles.bottomContainer}>{buttonsContent}</View>
-    </View>
+    </ScreenWrapper>
   );
 };
 const styles = StyleSheet.create({

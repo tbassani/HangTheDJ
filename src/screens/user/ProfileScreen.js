@@ -79,7 +79,7 @@ const ProfileScreen = props => {
   }
 
   return (
-    <ScreenWrapper style={styles.mainContainer}>
+    <ScreenWrapper style={styles.mainContainer} navigation={props.navigation}>
       <View style={styles.buttonContainer}>
         <PrimaryButton onPress={() => dispatch(actions.initLogout())}>
           Logout

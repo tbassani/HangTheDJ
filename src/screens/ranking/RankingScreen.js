@@ -67,7 +67,9 @@ const MixScreen = props => {
   }
 
   return (
-    <ScreenWrapper style={styles.mainContainer}>{rankingContent}</ScreenWrapper>
+    <ScreenWrapper style={styles.mainContainer} navigation={props.navigation}>
+      {rankingContent}
+    </ScreenWrapper>
   );
 };
 const styles = StyleSheet.create({

@@ -58,7 +58,7 @@ const VotingScreen = props => {
   let trackBallotContent = <TrackBallot track={votingTrack} />;
 
   return (
-    <ScreenWrapper style={styles.mainContainer}>
+    <ScreenWrapper style={styles.mainContainer} navigation={props.navigation}>
       <View style={styles.trackBallotContainer}>{trackBallotContent}</View>
       <View style={styles.buttonsContainer}>
         <View style={styles.buttonContainer}>
