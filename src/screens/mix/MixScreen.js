@@ -47,6 +47,7 @@ const MixScreen = props => {
   const loading = useSelector(currState => currState.mix.loading);
   const isPlaying = useSelector(currState => currState.mix.isPlaying);
   const tracks = useSelector(currState => currState.mix.tracks);
+  const topTracks = useSelector(currState => currState.mix.topTracks);
 
   const userId = useSelector(currState => currState.auth.userId);
 
@@ -91,7 +92,6 @@ const MixScreen = props => {
       if (mixId && !trackInterval.current) {
         const timeInterval = setInterval(() => {
           dispatch(actions.initGetTopTracks(mixId));
-          dispatch(actions.initGetCurrentTrack(mixId));
         }, 5000);
         trackInterval.current = timeInterval;
       }
@@ -112,7 +112,6 @@ const MixScreen = props => {
     if (mixId && !trackInterval.current) {
       const timeInterval = setInterval(() => {
         dispatch(actions.initGetTopTracks(mixId));
-        dispatch(actions.initGetCurrentTrack(mixId));
       }, 5000);
       trackInterval.current = timeInterval;
 
@@ -122,6 +121,10 @@ const MixScreen = props => {
       };
     }
   }, [mixId]);
+
+  useEffect(() => {
+    dispatch(actions.initGetCurrentTrack(mixId));
+  }, [topTracks, mixId]);
 
   const shareMixHandler = () => {
     setShareModal(true);
@@ -148,7 +151,6 @@ const MixScreen = props => {
     IdleTimerManager.setIdleTimerDisabled(true);
     if (checkMixDuration()) {
       dispatch(actions.initPlayTrack(mixId, currTrack.externalId));
-      updateQueueService(mixId);
     } else {
       Alert.alert(
         'Mix muito curta!',
@@ -264,7 +266,7 @@ const MixScreen = props => {
   }
 
   return (
-    <ScreenWrapper style={styles.mainContainer} navigation={props.navigation}>
+    <ScreenWrapper style={styles.mainContainer} navigation={navigation}>
       <CustomModal show={shareModal} close={() => setShareModal(false)}>
         <View style={styles.modalContent}>
           <View style={styles.formContainer}>

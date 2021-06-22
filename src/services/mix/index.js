@@ -408,9 +408,7 @@ export async function removeTracksFromQueueService(owner_id) {
 
 export async function getTopTracksService(playlist_id) {
   const jwt = await getDataFromStorage('token');
-  const body = {
-    playlist_id: playlist_id,
-  };
+
   const headers = {
     Authorization: 'Bearer ' + jwt,
     contenttype: 'application/json;',
@@ -419,8 +417,7 @@ export async function getTopTracksService(playlist_id) {
   await axios({
     headers: headers,
     method: 'GET',
-    url: APIConfig.GET_TOP_TRACKS_URL,
-    data: body,
+    url: APIConfig.GET_TOP_TRACKS_URL + '/' + playlist_id,
   })
     .then(response => {
       aux = response.data;
@@ -553,7 +550,6 @@ export async function addTracksService(
 }
 
 export async function updateQueueService(playlist_id) {
-  console.log('Update queue service');
   const jwt = await getDataFromStorage('token');
   const body = {
     playlist_id: playlist_id,
@@ -564,7 +560,7 @@ export async function updateQueueService(playlist_id) {
     datatype: 'json',
   };
   var aux = {};
-  axios({
+  await axios({
     headers: headers,
     method: 'POST',
     url: APIConfig.UPDATE_QUEUE_URL,

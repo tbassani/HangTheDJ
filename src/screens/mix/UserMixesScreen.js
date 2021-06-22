@@ -109,7 +109,7 @@ const UserMixesScreen = props => {
     dispatch(actions.initRemoveTopTracks(userId, ownerId));
     dispatch(actions.initGetTopTracks(mixId));
 
-    //dispatch(actions.initGetCurrentTrack(mixId));
+    dispatch(actions.initGetCurrentTrack(mixId));
     props.navigation.navigate('RankingNavigator', {screen: 'MixScreen'});
   };
 
