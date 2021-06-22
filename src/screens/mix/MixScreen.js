@@ -89,42 +89,40 @@ const MixScreen = props => {
         : () => {},
     });
     const unsubscribeFocus = navigation.addListener('focus', () => {
-      if (mixId && !trackInterval.current) {
-        const timeInterval = setInterval(() => {
-          dispatch(actions.initGetTopTracks(mixId));
-        }, 5000);
-        trackInterval.current = timeInterval;
+      if (mixId) {
+        dispatch(actions.initGetTopTracks(mixId));
       }
     });
 
-    const unsubscribeBlur = navigation.addListener('blur', () => {
-      clearInterval(trackInterval.current);
-      trackInterval.current = undefined;
-    });
     return () => {
       unsubscribeFocus();
-      unsubscribeBlur();
     };
   }, [navigation, mixTitle, mixId]);
 
   useEffect(() => {
-    const timer = ms => new Promise(res => setTimeout(res, ms));
-    if (mixId && !trackInterval.current) {
-      const timeInterval = setInterval(() => {
-        dispatch(actions.initGetTopTracks(mixId));
-      }, 5000);
-      trackInterval.current = timeInterval;
-
-      return () => {
-        clearInterval(trackInterval.current);
-        trackInterval.current = undefined;
-      };
+    if (mixId) {
+      console.log('[USE-EFFECT]: GET TOP TRACKS');
+      dispatch(actions.initGetTopTracks(mixId));
     }
   }, [mixId]);
 
   useEffect(() => {
+    console.log('[USE-EFFECT]: GET CURR TRACK');
     dispatch(actions.initGetCurrentTrack(mixId));
   }, [topTracks, mixId]);
+
+  useEffect(() => {
+    console.log('[USE-EFFECT]: GET TOP TRACKS');
+    if (isPlaying) {
+      const timeInterval = setInterval(() => {
+        dispatch(actions.initGetTopTracks(mixId));
+      }, 5000);
+      trackInterval.current = timeInterval;
+    } else {
+      clearInterval(trackInterval.current);
+      trackInterval.current = undefined;
+    }
+  }, [isPlaying]);
 
   const shareMixHandler = () => {
     setShareModal(true);
@@ -247,7 +245,6 @@ const MixScreen = props => {
   };
 
   const handleNewProfile = () => {
-    //dispatch(actions.initGetProfile());
     try {
       openLink();
     } catch (error) {

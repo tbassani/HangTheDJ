@@ -247,7 +247,7 @@ export const initPlayTrack = (mixId, trackId) => {
 
 export const startPlayTrack = () => {
   return {
-    type: actionTypes.INIT_PLAY_TRACK,
+    type: actionTypes.START_PLAY_TRACK,
   };
 };
 
@@ -278,13 +278,13 @@ export const setTopTracksFail = () => {
 
 export const initPauseTrack = () => {
   return {
-    type: actionTypes.PAUSE_TRACK,
+    type: actionTypes.INIT_PAUSE_TRACK,
   };
 };
 
 export const startPauseTrack = () => {
   return {
-    type: actionTypes.PAUSE_TRACK,
+    type: actionTypes.START_PAUSE_TRACK,
   };
 };
 

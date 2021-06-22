@@ -388,6 +388,7 @@ export function* initStopPlaybackSaga(action) {
 }
 
 export function* initPlayTrackSaga(action) {
+  yield put(actions.startPlayTrack());
   let playTrack = yield playTrackService(action.mixId, action.trackId);
   console.log('PLAY TRACK');
   console.log(playTrack);
