@@ -15,29 +15,6 @@ const ScreenWrapper = props => {
 
   const dispatch = useDispatch();
 
-  // useEffect(() => {
-  //   if (!isPlaying) {
-  //     BackgroundFetch.stop();
-  //     clearInterval(playbackInterval.current);
-  //     playbackInterval.current = undefined;
-  //   } else {
-  //     //BackgroundFetch.start();
-
-  //     if (!playbackInterval.current) {
-  //       console.log('No current interval');
-  //       playbackInterval.current = setInterval(() => {
-  //         console.log('updateQueue');
-  //         updateQueueService(mixId);
-  //       }, 900000);
-  //     }
-  //   }
-  //   saveDataToStorage('isPlaying', isPlaying ? 'true' : 'false');
-  //   return () => {
-  //     playbackInterval.current = undefined;
-  //     clearInterval(playbackInterval.current);
-  //   };
-  // }, [isPlaying]);
-
   useEffect(() => {
     AppState.addEventListener('change', _handleAppStateChange);
 

@@ -185,11 +185,30 @@ const reducer = (state = initialState, action) => {
         loading: false,
         error: true,
       };
+    case actionTypes.START_PAUSE_TRACK:
+      return {
+        ...state,
+        loading: true,
+        error: false,
+      };
     case actionTypes.PAUSE_TRACK:
       return {
         ...state,
         isPlaying: false,
         loading: false,
+        error: false,
+      };
+    case actionTypes.PAUSE_TRACK_FAIL:
+      return {
+        ...state,
+        isPlaying: true,
+        loading: false,
+        error: true,
+      };
+    case actionTypes.START_PLAY_TRACK:
+      return {
+        ...state,
+        loading: true,
         error: false,
       };
     case actionTypes.PLAY_TRACK:
@@ -198,6 +217,13 @@ const reducer = (state = initialState, action) => {
         isPlaying: true,
         loading: false,
         error: false,
+      };
+    case actionTypes.PLAY_TRACK_FAIL:
+      return {
+        ...state,
+        isPlaying: false,
+        loading: false,
+        error: true,
       };
     case actionTypes.GET_TOP_TRACKS:
       return {
