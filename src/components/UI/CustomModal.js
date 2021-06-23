@@ -1,6 +1,7 @@
 import React from 'react';
 import {
   Modal,
+  SafeAreaView,
   KeyboardAvoidingView,
   View,
   Text,
@@ -15,7 +16,7 @@ import Sizes from '../../constants/Sizes';
 
 const CustomModal = props => {
   return (
-    <View>
+    <SafeAreaView>
       <Modal
         visible={props.show}
         transparent={true}
@@ -24,16 +25,16 @@ const CustomModal = props => {
           <View style={styles.modalOverlay} />
         </TouchableWithoutFeedback>
 
-        <KeyboardAvoidingView
+        <View
           style={styles.modalContent}
           behavior={Platform.OS === 'android' ? undefined : 'position'}>
           <View style={styles.modalTextContainer}>
             <Text style={styles.modalTitle}>{props.title}</Text>
           </View>
           {props.children}
-        </KeyboardAvoidingView>
+        </View>
       </Modal>
-    </View>
+    </SafeAreaView>
   );
 };
 
