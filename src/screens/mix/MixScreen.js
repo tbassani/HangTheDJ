@@ -38,6 +38,7 @@ const MixScreen = props => {
   const [shareModal, setShareModal] = useState(false);
   //const [loadingTrack, setLoadingTrack] = useState(true);
   const trackInterval = useRef();
+  const playbackInterval = useRef();
   const pressedPlay = useRef();
 
   const mixId = useSelector(currState => currState.mix.mixId);
@@ -113,7 +114,7 @@ const MixScreen = props => {
 
   useEffect(() => {
     console.log('[USE-EFFECT]: GET TOP TRACKS');
-    if (isPlaying) {
+    if (isPlaying && !trackInterval.current) {
       const timeInterval = setInterval(() => {
         dispatch(actions.initGetTopTracks(mixId));
       }, 5000);
@@ -122,7 +123,20 @@ const MixScreen = props => {
       clearInterval(trackInterval.current);
       trackInterval.current = undefined;
     }
-  }, [isPlaying]);
+    if (isPlaying && !playbackInterval.current) {
+      const newInterval = setInterval(() => {
+        updateQueueService(mixId);
+      }, 900000);
+      playbackInterval.current = newInterval;
+    } else {
+      clearInterval(playbackInterval.current);
+      playbackInterval.current = undefined;
+    }
+    return () => {
+      clearInterval(trackInterval.current);
+      trackInterval.current = undefined;
+    };
+  }, [isPlaying, mixId]);
 
   const shareMixHandler = () => {
     setShareModal(true);
