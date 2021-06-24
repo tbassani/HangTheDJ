@@ -30,6 +30,7 @@ import {
   getTopTracksService,
   setTopTracksService,
   updateQueueService,
+  getUserDevicesService,
 } from '../../services/mix';
 import {Alert} from 'react-native';
 
@@ -411,4 +412,23 @@ export function* initPlayTrackSaga(action) {
 export function* initPauseTrackSaga(action) {
   const pauseTrack = yield pauseTrackService();
   yield put(actions.pauseTrack());
+}
+
+export function* initGetUserDevicesSaga(action) {
+  yield put(actions.startGetUserDevices());
+  const response = yield getUserDevicesService();
+  console.log(response);
+  if (response.error === 401) {
+    yield put(actions.initLogout());
+  } else if (response.error === 400) {
+    yield put(actions.getUserDevicesFail());
+  } else if (response.error === 404) {
+    yield put(actions.getUserDevicesFail());
+  } else {
+    if (response.devices) {
+      yield put(actions.getUserDevices(response.devices));
+    } else {
+      yield put(actions.getUserDevices([]));
+    }
+  }
 }

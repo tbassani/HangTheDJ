@@ -579,3 +579,30 @@ export async function updateQueueService(playlist_id) {
     });
   return aux;
 }
+
+export async function getUserDevicesService() {
+  const jwt = await getDataFromStorage('token');
+  var aux;
+  const headers = {
+    Authorization: 'Bearer ' + jwt,
+    contenttype: 'application/json;',
+    datatype: 'json',
+  };
+  await axios({
+    headers: headers,
+    method: 'GET',
+    url: APIConfig.GET_USER_DEVICES_URL,
+  })
+    .then(response => {
+      aux = response.data;
+    })
+    .catch(error => {
+      if (error.response) {
+        aux = {
+          error: error.response.status,
+        };
+      }
+      console.log(error);
+    });
+  return aux;
+}

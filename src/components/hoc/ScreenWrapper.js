@@ -5,11 +5,12 @@ import {useSelector, useDispatch} from 'react-redux';
 import * as actions from '../../store/actions';
 
 import {getDataFromStorage, saveDataToStorage} from '../../services/storage';
-import {updateQueueService} from '../../services/mix';
+
 import BackgroundFetch from 'react-native-background-fetch';
 
 const ScreenWrapper = props => {
   const appState = useRef(AppState.currentState);
+  const backgroundFetch = useRef(false);
 
   const isPlaying = useSelector(state => state.mix.isPlaying);
 
@@ -56,19 +57,23 @@ const ScreenWrapper = props => {
                   } catch (error) {
                     console.log(error);
                   }
+                  backgroundFetch.current = false;
                 }
               });
             });
           });
         });
       } else {
-        console.log('Background from wrapper');
+        console.log('Background from wrapper: ' + nextAppState);
         console.log(isPlaying);
         saveDataToStorage('isPlaying', isPlaying ? 'true' : 'false');
         BackgroundFetch.stop();
         if (isPlaying) {
-          console.log('Start background fetch!');
-          BackgroundFetch.start();
+          if (!backgroundFetch.current) {
+            console.log('Start background fetch!');
+            BackgroundFetch.start();
+            backgroundFetch.current = true;
+          }
         }
       }
 

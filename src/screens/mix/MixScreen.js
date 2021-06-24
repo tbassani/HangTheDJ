@@ -16,6 +16,7 @@ import * as actions from '../../store/actions';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import Clipboard from '@react-native-clipboard/clipboard';
 import IdleTimerManager from 'react-native-idle-timer';
+import MusicControl from 'react-native-music-control';
 
 import CustomModal from '../../components/UI/CustomModal';
 import PrimaryButton from '../../components/UI/PrimaryButton';
@@ -26,13 +27,12 @@ import Player from '../../components/player/Player';
 import LoadingSpinner from '../../components/UI/LoadingSpinner';
 import ScreenWrapper from '../../components/hoc/ScreenWrapper';
 
-import BackgroundFetch from 'react-native-background-fetch';
-import {saveDataToStorage} from '../../services/storage';
-
 import Colors from '../../constants/Colors';
 import Sizes from '../../constants/Sizes';
 import MinMixDuration from '../../constants/MinMixDuration';
 import {updateQueueService} from '../../services/mix';
+
+const icon = require('../../assets/icon.png');
 
 const MixScreen = props => {
   const [shareModal, setShareModal] = useState(false);
@@ -40,6 +40,7 @@ const MixScreen = props => {
   const trackInterval = useRef();
   const playbackInterval = useRef();
   const pressedPlay = useRef();
+  const playbackCounter = useRef(0);
 
   const mixId = useSelector(currState => currState.mix.mixId);
   const ownerId = useSelector(currState => currState.mix.ownerId);
@@ -125,8 +126,16 @@ const MixScreen = props => {
     }
     if (isPlaying && !playbackInterval.current) {
       const newInterval = setInterval(() => {
-        updateQueueService(mixId);
-      }, 900000);
+        playbackCounter.current = playbackCounter.current + 5;
+        if (playbackCounter.current >= 900) {
+          updateQueueService(mixId);
+          playbackCounter.current = 0;
+          MusicControl.setNowPlaying({
+            title: 'Hang the DJ',
+            artwork: icon, // URL or RN's image require()
+          });
+        }
+      }, 5000);
       playbackInterval.current = newInterval;
     } else {
       clearInterval(playbackInterval.current);
@@ -136,7 +145,7 @@ const MixScreen = props => {
       clearInterval(trackInterval.current);
       trackInterval.current = undefined;
     };
-  }, [isPlaying, mixId]);
+  });
 
   const shareMixHandler = () => {
     setShareModal(true);

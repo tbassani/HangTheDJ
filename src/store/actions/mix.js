@@ -375,3 +375,28 @@ export const removeTopTracksFail = () => {
     type: actionTypes.REMOVE_TOP_TRACKS_FAIL,
   };
 };
+
+export const initGetUserDevices = () => {
+  return {
+    type: actionTypes.INIT_GET_DEVICES,
+  };
+};
+
+export const startGetUserDevices = () => {
+  return {
+    type: actionTypes.START_GET_DEVICES,
+  };
+};
+
+export const getUserDevices = devices => {
+  return {
+    type: actionTypes.GET_DEVICES,
+    devices: devices,
+  };
+};
+
+export const getUserDevicesFail = () => {
+  return {
+    type: actionTypes.GET_DEVICES_FAIL,
+  };
+};

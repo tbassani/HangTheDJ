@@ -112,4 +112,8 @@ export {
   startRemoveTopTracks,
   removeTopTracks,
   removeTopTracksFail,
+  initGetUserDevices,
+  startGetUserDevices,
+  getUserDevices,
+  getUserDevicesFail,
 } from './mix';

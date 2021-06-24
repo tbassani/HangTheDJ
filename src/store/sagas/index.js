@@ -34,6 +34,7 @@ import {
   initGetTopTracksSaga,
   initPlayTrackSaga,
   initPauseTrackSaga,
+  initGetUserDevicesSaga,
 } from './mixSaga';
 
 export function* watchAuth() {
@@ -95,4 +96,5 @@ export function* watchMix() {
     takeEvery(actionTypes.INIT_REMOVE_TOP_TRACKS, initRemoveTopTracksSaga),
   ]);
   yield all([takeEvery(actionTypes.INIT_GET_TOP_TRACKS, initGetTopTracksSaga)]);
+  yield all([takeEvery(actionTypes.INIT_GET_DEVICES, initGetUserDevicesSaga)]);
 }

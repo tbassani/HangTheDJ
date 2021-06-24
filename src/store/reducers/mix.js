@@ -12,6 +12,7 @@ const initialState = {
   isPlaying: false,
   loading: false,
   error: null,
+  devices: [],
 };
 
 const reducer = (state = initialState, action) => {
@@ -254,6 +255,25 @@ const reducer = (state = initialState, action) => {
         error: false,
       };
     case actionTypes.REMOVE_TOP_TRACKS_FAIL:
+      return {
+        ...state,
+        loading: false,
+        error: true,
+      };
+    case actionTypes.START_GET_DEVICES:
+      return {
+        ...state,
+        loading: true,
+        error: false,
+      };
+    case actionTypes.GET_DEVICES:
+      return {
+        ...state,
+        devices: action.devices,
+        loading: false,
+        error: false,
+      };
+    case actionTypes.GET_DEVICES_FAIL:
       return {
         ...state,
         loading: false,

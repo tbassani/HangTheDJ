@@ -38,18 +38,16 @@ const AddTracksToMixScreen = props => {
   }, [navigation]);
 
   return (
-    <ScreenWrapper>
-      <View style={styles.mainContainer}>
-        <MixMaker
-          firstTabTitle="Escolha"
-          secondTabTitle="Seu Mix"
-          addTracks
-          onAddTracksToMix={() => {
-            props.navigation.goBack();
-            dispatch(actions.initGetMix(mixId, mixTitle, ownerId));
-          }}
-        />
-      </View>
+    <ScreenWrapper style={styles.mainContainer}>
+      <MixMaker
+        firstTabTitle="Escolha"
+        secondTabTitle="Seu Mix"
+        addTracks
+        onAddTracksToMix={() => {
+          props.navigation.goBack();
+          dispatch(actions.initGetMix(mixId, mixTitle, ownerId));
+        }}
+      />
     </ScreenWrapper>
   );
 };
@@ -58,6 +56,7 @@ const styles = StyleSheet.create({
   mainContainer: {
     flex: 1,
     justifyContent: 'flex-start',
+    backgroundColor: Colors.dark,
   },
   backButtonContainer: {
     margin: Sizes.tiny,

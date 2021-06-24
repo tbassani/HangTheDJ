@@ -4,6 +4,8 @@ import {View, FlatList, Text, StyleSheet, Alert} from 'react-native';
 import {useSelector, useDispatch} from 'react-redux';
 import * as actions from '../../store/actions';
 
+import {getUserDevicesService} from '../../services/mix';
+
 import Input from '../../components/UI/Input';
 import PrimaryButton from '../../components/UI/PrimaryButton';
 import TextLink from '../../components/UI/TextLink';
@@ -36,8 +38,6 @@ const UserMixesScreen = props => {
   const loading = useSelector(currState => {
     return currState.app.loading;
   });
-
-  const mixOwnerId = useSelector(currState => currState.mix.ownerId);
 
   useEffect(() => {
     dispatch(actions.initGetMixes());
@@ -105,12 +105,28 @@ const UserMixesScreen = props => {
   };
 
   const selectMixHandler = (mixId, mixTitle, ownerId) => {
-    dispatch(actions.initGetMix(mixId, mixTitle, ownerId));
-    dispatch(actions.initRemoveTopTracks(userId, ownerId));
-    dispatch(actions.initGetTopTracks(mixId));
+    if (userId !== ownerId) {
+      dispatch(actions.initGetMix(mixId, mixTitle, ownerId));
+      dispatch(actions.initRemoveTopTracks(userId, ownerId));
+      dispatch(actions.initGetTopTracks(mixId));
 
-    dispatch(actions.initGetCurrentTrack(mixId));
-    props.navigation.navigate('RankingNavigator', {screen: 'MixScreen'});
+      props.navigation.navigate('RankingNavigator', {screen: 'MixScreen'});
+    } else {
+      getUserDevicesService().then(resp => {
+        if (resp.devices && resp.devices.length > 0) {
+          dispatch(actions.initGetMix(mixId, mixTitle, ownerId));
+          dispatch(actions.initRemoveTopTracks(userId, ownerId));
+          dispatch(actions.initGetTopTracks(mixId));
+
+          props.navigation.navigate('RankingNavigator', {screen: 'MixScreen'});
+        } else {
+          Alert.alert(
+            'Ative seu streaming',
+            'Seu aplicativo de streaming de música deve estar online e tocando!',
+          );
+        }
+      });
+    }
   };
 
   if (!loading && mixes && mixes.length <= 0) {
