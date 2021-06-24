@@ -4,6 +4,7 @@
 #import <React/RCTBundleURLProvider.h>
 #import <React/RCTRootView.h>
 #import "RNSplashScreen.h"
+#import <TSBackgroundFetch/TSBackgroundFetch.h>
 
 #if RCT_DEV
 #import <React/RCTDevLoadingView.h>
@@ -56,6 +57,9 @@ static void InitializeFlipper(UIApplication *application) {
   self.window.rootViewController = rootViewController;
   [self.window makeKeyAndVisible];
   [RNSplashScreen show];
+  
+  [[TSBackgroundFetch sharedInstance] didFinishLaunching];
+  
   return YES;
 }
 

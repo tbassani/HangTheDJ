@@ -1,4 +1,4 @@
-import React, {useEffect, useState, useRef} from 'react';
+import React, {useEffect, useRef} from 'react';
 import {
   View,
   AppState,
@@ -6,6 +6,7 @@ import {
   DevSettings,
   StyleSheet,
   Alert,
+  Platform,
 } from 'react-native';
 
 import {useSelector, useDispatch} from 'react-redux';
@@ -28,12 +29,16 @@ const ProfileScreen = props => {
 
   useEffect(() => {
     AppState.addEventListener('change', _handleAppStateChange);
-    AppState.addEventListener('focus', _handleAppStateChange);
+    if (Platform.OS === 'android') {
+      AppState.addEventListener('focus', _handleAppStateChange);
 
-    return () => {
-      AppState.removeEventListener('change', _handleAppStateChange);
-      AppState.removeEventListener('focus', _handleAppStateChange);
-    };
+      return () => {
+        AppState.removeEventListener('change', _handleAppStateChange);
+        if (Platform.OS === 'android') {
+          AppState.removeEventListener('focus', _handleAppStateChange);
+        }
+      };
+    }
   }, []);
 
   const _handleAppStateChange = nextAppState => {
@@ -43,7 +48,9 @@ const ProfileScreen = props => {
       !nextAppState
     ) {
       AppState.removeEventListener('change', _handleAppStateChange);
-      AppState.removeEventListener('focus', _handleAppStateChange);
+      if (Platform.OS === 'android') {
+        AppState.removeEventListener('focus', _handleAppStateChange);
+      }
       dispatch(actions.initGetProfile());
       props.navigation.navigate('LoadingScreen');
       DevSettings.reload();

@@ -12,11 +12,8 @@ target 'HangTheDJ' do
     :hermes_enabled => false
   )
 
-  pod 'RNVectorIcons', :path => '../node_modules/react-native-vector-icons'
 
-  pod 'react-native-idle-timer', :path => '../node_modules/react-native-idle-timer'
 
-  pod 'RNBackgroundFetch', :path => '../node_modules/react-native-background-fetch'
 
   target 'HangTheDJTests' do
     inherit! :complete
