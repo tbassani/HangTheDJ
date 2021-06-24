@@ -550,6 +550,7 @@ export async function addTracksService(
 }
 
 export async function updateQueueService(playlist_id) {
+  console.log('update queue for mix: ' + playlist_id);
   const jwt = await getDataFromStorage('token');
   const body = {
     playlist_id: playlist_id,
@@ -568,6 +569,7 @@ export async function updateQueueService(playlist_id) {
   })
     .then(response => {
       aux = response.data;
+      console.log(response);
     })
     .catch(error => {
       if (error.response) {

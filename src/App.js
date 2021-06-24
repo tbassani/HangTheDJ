@@ -11,10 +11,7 @@ import {Provider} from 'react-redux';
 import {createStore, applyMiddleware, combineReducers} from 'redux';
 import createSagaMiddleware from 'redux-saga';
 
-import {getDataFromStorage} from './services/storage';
-import {updateQueueService} from './services/mix';
 import BackgroundFetch from 'react-native-background-fetch';
-import MusicControl from 'react-native-music-control';
 
 import SplashScreen from 'react-native-splash-screen';
 
@@ -43,49 +40,8 @@ sagaMiddleware.run(watchMix);
 const icon = require('./assets/icon.png');
 
 const App = () => {
-  const initBackgroundFetch = async () => {
-    BackgroundFetch.configure(
-      {
-        minimumFetchInterval: 15,
-        //forceAlarmManager: true,
-      },
-      async taskId => {
-        console.log('Execute background fetch');
-        const currMixId = await getDataFromStorage('mixId');
-        const currUserId = await getDataFromStorage('userId');
-        const mixOwnerId = await getDataFromStorage('ownerId');
-        const isPlaying = await getDataFromStorage('isPlaying');
-        if (
-          currMixId &&
-          currUserId &&
-          mixOwnerId &&
-          currUserId === mixOwnerId
-        ) {
-          MusicControl.setNowPlaying({
-            title: 'Hang the DJ',
-            artwork: icon, // URL or RN's image require()
-          });
-          if (isPlaying === 'true') {
-            console.log('Called updatedQueue from background fetch');
-            updateQueueService(parseInt(currMixId));
-          }
-        }
-      },
-      async taskId => {
-        // <-- Task timeout callback
-        // This task has exceeded its allowed running-time.
-        // You must stop what you're doing and immediately .finish(taskId)
-        BackgroundFetch.finish(taskId);
-      },
-    );
-  };
   useEffect(() => {
-    const startService = async () => {
-      console.log('START');
-      await initBackgroundFetch();
-      BackgroundFetch.stop();
-    };
-    startService();
+    BackgroundFetch.stop();
   }, []);
 
   useEffect(() => {
