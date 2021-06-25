@@ -145,15 +145,19 @@ const MixScreen = props => {
       clearInterval(trackInterval.current);
       trackInterval.current = undefined;
     };
-  });
+  }, [isPlaying]);
 
   const shareMixHandler = () => {
-    setShareModal(true);
+    if (mixId && mixId > 0) {
+      setShareModal(true);
+    }
   };
   const copyMixCode = () => {
-    setShareModal(false);
-    Clipboard.setString(mixId + '');
-    Alert.alert('Código copiado!');
+    if (mixId && mixId > 0) {
+      setShareModal(false);
+      Clipboard.setString(mixId + '');
+      Alert.alert('Código copiado!');
+    }
   };
 
   const checkMixDuration = () => {
@@ -186,9 +190,32 @@ const MixScreen = props => {
   };
 
   const votingHandler = () => {
-    dispatch(actions.initGetVotingTrack());
-    navigation.navigate('VotingScreen');
+    if (mixId) {
+      dispatch(actions.initGetVotingTrack());
+      navigation.navigate('VotingScreen');
+    } else {
+      Alert.alert(
+        'Não há nada aqui!',
+        'Escolha um Mix ou crie o seu para votar!',
+      );
+    }
   };
+
+  const handleAddTracks = () => {
+    if (!profile || profile.length <= 0) {
+      navigation.navigate('StreamingProfileScreen');
+    } else {
+      if (mixId && mixId > 0) {
+        navigation.navigate('AddTracksToMixScreen');
+      } else {
+        Alert.alert(
+          'Não há nada aqui!',
+          'Escolha um Mix ou crie o seu para adicionar músicas!',
+        );
+      }
+    }
+  };
+
   let mixContent = null;
 
   let playerContent = null;
@@ -222,7 +249,13 @@ const MixScreen = props => {
   buttonsContent = (
     <View style={styles.buttonsContainer}>
       <View style={styles.buttonContainer}>
-        <SecondaryButton>
+        <SecondaryButton
+          onPress={() => {
+            Alert.alert(
+              'Sugestões',
+              'Adquira o PREMIUM para sugerir gêneros musicais!',
+            );
+          }}>
           <Icon name="lightbulb-on" color="#FFF" size={Sizes.huge} />
         </SecondaryButton>
       </View>
@@ -232,14 +265,7 @@ const MixScreen = props => {
         </PrimaryButton>
       </View>
       <View style={styles.buttonContainer}>
-        <SecondaryButton
-          onPress={() => {
-            if (!profile || profile.length <= 0) {
-              navigation.navigate('StreamingProfileScreen');
-            } else {
-              navigation.navigate('AddTracksToMixScreen');
-            }
-          }}>
+        <SecondaryButton onPress={handleAddTracks}>
           <Icon name="music-note-plus" color="#FFF" size={Sizes.huge} />
         </SecondaryButton>
       </View>
