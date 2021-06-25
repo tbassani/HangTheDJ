@@ -5,6 +5,7 @@
 	<key>BGTaskSchedulerPermittedIdentifiers</key>
 	<array>
 		<string>com.transistorsoft.fetch</string>
+		<string>react-native-background-fetch</string>
 	</array>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>en</string>
