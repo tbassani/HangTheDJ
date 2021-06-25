@@ -3,7 +3,6 @@ import {
   View,
   AppState,
   Linking,
-  DevSettings,
   StyleSheet,
   Alert,
   Platform,
@@ -19,6 +18,7 @@ import ScreenWrapper from '../../components/hoc/ScreenWrapper';
 import Colors from '../../constants/Colors';
 
 const ProfileScreen = props => {
+  const leftApp = useRef(false);
   const profile = useSelector(currState => currState.app.profile);
   const profileURL = useSelector(currState => currState.app.profileURL);
   const loading = useSelector(currState => currState.app.loading);
@@ -26,6 +26,27 @@ const ProfileScreen = props => {
   const appState = useRef(AppState.currentState);
 
   const dispatch = useDispatch();
+
+  const navigation = props.navigation;
+
+  useEffect(() => {
+    const unsubscribeFocus = navigation.addListener('focus', () => {
+      if (!profile || profile.length <= 0) {
+        dispatch(actions.initGetProfile());
+      }
+    });
+    return () => {
+      unsubscribeFocus();
+    };
+  }, [navigation, profile]);
+
+  useEffect(() => {
+    if (profile && profile.length > 0 && leftApp.current) {
+      props.navigation.navigate('UserMixesNavigator', {
+        screen: 'UserMixesScreen',
+      });
+    }
+  }, [profile, leftApp]);
 
   useEffect(() => {
     AppState.addEventListener('change', _handleAppStateChange);
@@ -52,8 +73,7 @@ const ProfileScreen = props => {
         AppState.removeEventListener('focus', _handleAppStateChange);
       }
       dispatch(actions.initGetProfile());
-      props.navigation.navigate('LoadingScreen');
-      DevSettings.reload();
+      leftApp.current = true;
     }
   };
 
