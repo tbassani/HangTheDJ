@@ -35,7 +35,7 @@ const ScreenWrapper = props => {
         getDataFromStorage('mixId').then(currMixId => {
           getDataFromStorage('ownerId').then(mixOwnerId => {
             getDataFromStorage('mixTitle').then(mixTitle => {
-              getDataFromStorage('isPlaying').then(currPlaying => {
+              getDataFromStorage('isPlaying').then(async currPlaying => {
                 if (currMixId && mixOwnerId && mixTitle) {
                   dispatch(
                     actions.initGetMix(
@@ -44,14 +44,14 @@ const ScreenWrapper = props => {
                       parseInt(mixOwnerId),
                     ),
                   );
-                  dispatch(actions.initGetTopTracks(parseInt(currMixId)));
                   if (currPlaying === 'true') {
-                    updateQueueService(currMixId);
+                    await updateQueueService(currMixId);
                     console.log('isPlaying');
                     dispatch(actions.playTrack());
                   } else {
                     dispatch(actions.pauseTrack());
                   }
+                  dispatch(actions.initGetTopTracks(parseInt(currMixId)));
                   try {
                     props.navigation.navigate('RankingNavigator', {
                       screen: 'MixScreen',

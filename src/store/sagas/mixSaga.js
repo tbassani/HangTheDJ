@@ -217,18 +217,16 @@ export function* initAddTracksToMixSaga(action) {
 }
 
 export function* initGetCurrentTrackSaga(action) {
-  const timer = ms => new Promise(res => setTimeout(res, ms));
   const mixIdSelector = state => state.mix.mixId;
   const mixId = yield select(mixIdSelector);
+  const topTracksSelector = state => state.mix.topTracks;
+  const topTracks = yield select(topTracksSelector);
 
   let validMixId = mixId ? mixId : action.mixId;
 
   if (!validMixId) {
     validMixId = yield parseInt(yield getDataFromStorage('mixId'));
   }
-
-  const topTracksSelector = state => state.mix.topTracks;
-  const topTracks = yield select(topTracksSelector);
 
   yield put(actions.startGetCurrentTrack());
 
