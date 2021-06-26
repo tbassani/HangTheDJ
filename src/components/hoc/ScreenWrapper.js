@@ -5,6 +5,7 @@ import {useSelector, useDispatch} from 'react-redux';
 import * as actions from '../../store/actions';
 
 import {getDataFromStorage, saveDataToStorage} from '../../services/storage';
+import {updateQueueService} from '../../services/mix';
 
 import BackgroundFetch from 'react-native-background-fetch';
 
@@ -45,6 +46,7 @@ const ScreenWrapper = props => {
                   );
                   dispatch(actions.initGetTopTracks(parseInt(currMixId)));
                   if (currPlaying === 'true') {
+                    updateQueueService(currMixId);
                     console.log('isPlaying');
                     dispatch(actions.playTrack());
                   } else {

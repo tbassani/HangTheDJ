@@ -569,7 +569,6 @@ export async function updateQueueService(playlist_id) {
   })
     .then(response => {
       aux = response.data;
-      console.log(response);
     })
     .catch(error => {
       if (error.response) {

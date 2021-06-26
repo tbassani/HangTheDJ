@@ -391,8 +391,6 @@ export function* initStopPlaybackSaga(action) {
 export function* initPlayTrackSaga(action) {
   yield put(actions.startPlayTrack());
   let playTrack = yield playTrackService(action.mixId, action.trackId);
-  console.log('PLAY TRACK');
-  console.log(playTrack);
   if (playTrack.error === 404) {
     Alert.alert(
       'Ops! Ocorreu um erro!',
@@ -403,13 +401,13 @@ export function* initPlayTrackSaga(action) {
     Alert.alert('Ops! Ocorreu um erro!', 'Tente novamente mais tarde.');
     yield put(actions.pauseTrack());
   } else {
-    yield updateQueueService(action.mixId);
-    yield put(actions.initGetTopTracks(action.mixId));
+    yield saveDataToStorage('isPlaying', 'true');
     yield put(actions.playTrack());
   }
 }
 
 export function* initPauseTrackSaga(action) {
+  yield saveDataToStorage('isPlaying', 'false');
   const pauseTrack = yield pauseTrackService();
   yield put(actions.pauseTrack());
 }

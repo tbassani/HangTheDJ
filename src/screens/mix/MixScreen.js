@@ -103,27 +103,35 @@ const MixScreen = props => {
 
   useEffect(() => {
     if (mixId) {
-      console.log('[USE-EFFECT]: GET TOP TRACKS');
+      console.log('[USE-EFFECT]: INITIAL GET TOP TRACKS');
       dispatch(actions.initGetTopTracks(mixId));
     }
   }, [mixId]);
 
   useEffect(() => {
     console.log('[USE-EFFECT]: GET CURR TRACK');
-    dispatch(actions.initGetCurrentTrack(mixId));
+    if (!pressedPlay.current) {
+      dispatch(actions.initGetCurrentTrack(mixId));
+    }
   }, [topTracks, mixId]);
 
   useEffect(() => {
-    console.log('[USE-EFFECT]: GET TOP TRACKS');
     if (isPlaying && !trackInterval.current) {
       const timeInterval = setInterval(() => {
         dispatch(actions.initGetTopTracks(mixId));
       }, 5000);
       trackInterval.current = timeInterval;
-    } else {
+    } else if (!isPlaying) {
       clearInterval(trackInterval.current);
       trackInterval.current = undefined;
     }
+    return () => {
+      clearInterval(trackInterval.current);
+      trackInterval.current = undefined;
+    };
+  }, [isPlaying]);
+
+  useEffect(() => {
     if (isPlaying && !playbackInterval.current) {
       const newInterval = setInterval(() => {
         playbackCounter.current = playbackCounter.current + 5;
@@ -137,14 +145,24 @@ const MixScreen = props => {
         }
       }, 5000);
       playbackInterval.current = newInterval;
-    } else {
+    } else if (!isPlaying) {
       clearInterval(playbackInterval.current);
       playbackInterval.current = undefined;
     }
     return () => {
-      clearInterval(trackInterval.current);
-      trackInterval.current = undefined;
+      clearInterval(playbackInterval.current);
+      playbackInterval.current = undefined;
     };
+  }, [isPlaying]);
+
+  useEffect(() => {
+    if (isPlaying && pressedPlay.current === true) {
+      updateQueueService(mixId).then(resp => {
+        dispatch(actions.initGetTopTracks(mixId));
+        dispatch(actions.initGetCurrentTrack(mixId));
+      });
+      pressedPlay.current = false;
+    }
   }, [isPlaying]);
 
   const shareMixHandler = () => {
