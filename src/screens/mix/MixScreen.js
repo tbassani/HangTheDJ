@@ -39,7 +39,7 @@ const MixScreen = props => {
   //const [loadingTrack, setLoadingTrack] = useState(true);
   const trackInterval = useRef();
   const playbackInterval = useRef();
-  const pressedPlay = useRef();
+  const pressedPlay = useRef(false);
   const playbackCounter = useRef(0);
 
   const mixId = useSelector(currState => currState.mix.mixId);
@@ -92,11 +92,13 @@ const MixScreen = props => {
     });
     const unsubscribeFocus = navigation.addListener('focus', () => {
       if (mixId) {
+        console.log('[FOCUS]: GET TOP TRACKS');
         dispatch(actions.initGetTopTracks(mixId));
       }
     });
 
     return () => {
+      console.log('UNSUB FOCUS');
       unsubscribeFocus();
     };
   }, [navigation, mixTitle, mixId]);
@@ -109,14 +111,15 @@ const MixScreen = props => {
   }, [mixId]);
 
   useEffect(() => {
-    console.log('[USE-EFFECT]: GET CURR TRACK');
     if (!pressedPlay.current) {
+      console.log('[USE-EFFECT]: GET CURR TRACK');
       dispatch(actions.initGetCurrentTrack(mixId));
     }
   }, [topTracks, mixId]);
 
   useEffect(() => {
     if (isPlaying && !trackInterval.current) {
+      console.log('SET TOP TRACKS INTERVAL');
       const timeInterval = setInterval(() => {
         dispatch(actions.initGetTopTracks(mixId));
       }, 5000);
@@ -190,15 +193,17 @@ const MixScreen = props => {
   };
 
   const onPressPlayHandler = () => {
-    pressedPlay.current = true;
-    IdleTimerManager.setIdleTimerDisabled(true);
-    if (checkMixDuration()) {
-      dispatch(actions.initPlayTrack(mixId, currTrack.externalId));
-    } else {
-      Alert.alert(
-        'Mix muito curta!',
-        'Por favor, adicione ao menos 30 minutos de música.',
-      );
+    if (currTrack && currTrack.length > 0) {
+      pressedPlay.current = true;
+      IdleTimerManager.setIdleTimerDisabled(true);
+      if (checkMixDuration()) {
+        dispatch(actions.initPlayTrack(mixId, currTrack.externalId));
+      } else {
+        Alert.alert(
+          'Mix muito curta!',
+          'Por favor, adicione ao menos 30 minutos de música.',
+        );
+      }
     }
   };
 
