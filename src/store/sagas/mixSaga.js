@@ -24,12 +24,8 @@ import {
   downvoteService,
   pauseTrackService,
   playTrackService,
-  resetPlaylistService,
-  addTopTracksToQueueService,
   removeTracksFromQueueService,
   getTopTracksService,
-  setTopTracksService,
-  updateQueueService,
   getUserDevicesService,
 } from '../../services/mix';
 import {Alert} from 'react-native';

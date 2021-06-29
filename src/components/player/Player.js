@@ -7,23 +7,35 @@ import Colors from '../../constants/Colors';
 import Sizes from '../../constants/Sizes';
 
 const Player = props => {
+  let playerButton = null;
+  if (!props.isPlaying && props.currTrack) {
+    playerButton = (
+      <TouchableOpacity
+        style={styles.buttonContainer}
+        onPress={props.onPressPlay}>
+        <Icon name="play" color="#FFF" size={Sizes.max * 1.5} />
+      </TouchableOpacity>
+    );
+  } else if (props.isPlaying && props.currTrack) {
+    playerButton = (
+      <TouchableOpacity
+        style={styles.buttonContainer}
+        onPress={props.onPressPause}>
+        <Icon name="pause" color="#FFF" size={Sizes.max * 1.5} />
+      </TouchableOpacity>
+    );
+  } else {
+    playerButton = (
+      <TouchableOpacity
+        style={styles.buttonContainer}
+        onPress={props.onPressPause}>
+        <Icon name="refresh" color="#FFF" size={Sizes.max * 1.5} />
+      </TouchableOpacity>
+    );
+  }
   return (
     <View style={styles.mainContainer}>
-      <View style={styles.buttonsContainer}>
-        {!props.isPlaying ? (
-          <TouchableOpacity
-            style={styles.buttonContainer}
-            onPress={props.onPressPlay}>
-            <Icon name="play" color="#FFF" size={Sizes.max * 1.5} />
-          </TouchableOpacity>
-        ) : (
-          <TouchableOpacity
-            style={styles.buttonContainer}
-            onPress={props.onPressPause}>
-            <Icon name="pause" color="#FFF" size={Sizes.max * 1.5} />
-          </TouchableOpacity>
-        )}
-      </View>
+      <View style={styles.buttonsContainer}>{playerButton}</View>
     </View>
   );
 };

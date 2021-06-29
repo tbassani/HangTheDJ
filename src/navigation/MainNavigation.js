@@ -1,12 +1,6 @@
-import React, {useEffect, useRef, useCallback} from 'react';
-import {AppState} from 'react-native';
+import React from 'react';
 
-import {useSelector, useDispatch} from 'react-redux';
-import * as actions from '../store/actions';
-
-import {getDataFromStorage, saveDataToStorage} from '../services/storage';
-import {updateQueueService} from '../services/mix';
-import BackgroundFetch from 'react-native-background-fetch';
+import {useSelector} from 'react-redux';
 
 import {createStackNavigator} from '@react-navigation/stack';
 import {NavigationContainer} from '@react-navigation/native';

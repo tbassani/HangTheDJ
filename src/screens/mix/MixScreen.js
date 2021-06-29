@@ -135,10 +135,11 @@ const MixScreen = props => {
   }, [isPlaying]);
 
   useEffect(() => {
-    if (isPlaying && !playbackInterval.current) {
+    if (isPlaying && !playbackInterval.current && userId === ownerId) {
       const newInterval = setInterval(() => {
         playbackCounter.current = playbackCounter.current + 5;
         if (playbackCounter.current >= 900) {
+          console.log('UPDATE QUEUE INTERVAL');
           updateQueueService(mixId);
           playbackCounter.current = 0;
           MusicControl.setNowPlaying({
@@ -156,11 +157,12 @@ const MixScreen = props => {
       clearInterval(playbackInterval.current);
       playbackInterval.current = undefined;
     };
-  }, [isPlaying]);
+  }, [isPlaying, userId, ownerId]);
 
   useEffect(() => {
     if (isPlaying && pressedPlay.current === true) {
       updateQueueService(mixId).then(resp => {
+        console.log('UPDATE QUEUE FROM PLAYING');
         dispatch(actions.initGetTopTracks(mixId));
         dispatch(actions.initGetCurrentTrack(mixId));
       });
@@ -193,7 +195,7 @@ const MixScreen = props => {
   };
 
   const onPressPlayHandler = () => {
-    if (currTrack && currTrack.length > 0) {
+    if (currTrack) {
       pressedPlay.current = true;
       IdleTimerManager.setIdleTimerDisabled(true);
       if (checkMixDuration()) {
@@ -204,6 +206,8 @@ const MixScreen = props => {
           'Por favor, adicione ao menos 30 minutos de música.',
         );
       }
+    } else {
+      dispatch(actions.initGetTopTracks(mixId));
     }
   };
 
@@ -254,6 +258,7 @@ const MixScreen = props => {
             onPressPlay={onPressPlayHandler}
             onPressPause={onPressPauseHandler}
             isPlaying={isPlaying}
+            currTrack={currTrack}
           />
         );
       }

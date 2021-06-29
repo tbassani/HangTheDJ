@@ -32,40 +32,45 @@ const ScreenWrapper = props => {
         appState.current.match(/inactive|background/) &&
         nextAppState === 'active'
       ) {
-        getDataFromStorage('mixId').then(currMixId => {
-          getDataFromStorage('ownerId').then(mixOwnerId => {
-            getDataFromStorage('mixTitle').then(mixTitle => {
-              getDataFromStorage('isPlaying').then(async currPlaying => {
-                if (currMixId && mixOwnerId && mixTitle) {
-                  dispatch(
-                    actions.initGetMix(
-                      parseInt(currMixId),
-                      mixTitle,
-                      parseInt(mixOwnerId),
-                    ),
-                  );
-                  if (currPlaying === 'true') {
-                    await updateQueueService(currMixId);
-                    console.log('isPlaying');
-                    dispatch(actions.playTrack());
-                  } else {
-                    dispatch(actions.pauseTrack());
+        getDataFromStorage('userId').then(userId => {
+          getDataFromStorage('mixId').then(currMixId => {
+            getDataFromStorage('ownerId').then(mixOwnerId => {
+              getDataFromStorage('mixTitle').then(mixTitle => {
+                getDataFromStorage('isPlaying').then(async currPlaying => {
+                  if (currMixId && mixOwnerId && mixTitle) {
+                    dispatch(
+                      actions.initGetMix(
+                        parseInt(currMixId),
+                        mixTitle,
+                        parseInt(mixOwnerId),
+                      ),
+                    );
+                    if (userId === mixOwnerId) {
+                      if (currPlaying === 'true') {
+                        console.log('UPDATE QUEUE FROM FOREGROUND');
+                        await updateQueueService(currMixId);
+
+                        dispatch(actions.playTrack());
+                      } else {
+                        dispatch(actions.pauseTrack());
+                      }
+                    }
+                    dispatch(actions.initGetTopTracks(parseInt(currMixId)));
+                    try {
+                      props.navigation.navigate('RankingNavigator', {
+                        screen: 'MixScreen',
+                      });
+                    } catch (error) {
+                      console.log(error);
+                    }
+                    backgroundFetch.current = false;
                   }
-                  dispatch(actions.initGetTopTracks(parseInt(currMixId)));
-                  try {
-                    props.navigation.navigate('RankingNavigator', {
-                      screen: 'MixScreen',
-                    });
-                  } catch (error) {
-                    console.log(error);
-                  }
-                  backgroundFetch.current = false;
-                }
+                });
               });
             });
           });
         });
-      } else {
+      } else if (nextAppState === 'background') {
         console.log('Background from wrapper: ' + nextAppState);
         console.log(isPlaying);
         saveDataToStorage('isPlaying', isPlaying ? 'true' : 'false');
