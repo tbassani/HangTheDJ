@@ -28,7 +28,7 @@ const Player = props => {
     playerButton = (
       <TouchableOpacity
         style={styles.buttonContainer}
-        onPress={props.onPressPause}>
+        onPress={props.onPressPlay}>
         <Icon name="refresh" color="#FFF" size={Sizes.max * 1.5} />
       </TouchableOpacity>
     );

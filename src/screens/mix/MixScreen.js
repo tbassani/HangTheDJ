@@ -208,6 +208,7 @@ const MixScreen = props => {
       }
     } else {
       dispatch(actions.initGetTopTracks(mixId));
+      dispatch(actions.initGetCurrentTrack(mixId));
     }
   };
 

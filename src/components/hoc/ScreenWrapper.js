@@ -12,6 +12,7 @@ import BackgroundFetch from 'react-native-background-fetch';
 const ScreenWrapper = props => {
   const appState = useRef(AppState.currentState);
   const backgroundFetch = useRef(false);
+  const foregroundFetch = useRef(false);
 
   const isPlaying = useSelector(state => state.mix.isPlaying);
 
@@ -47,10 +48,12 @@ const ScreenWrapper = props => {
                     );
                     if (userId === mixOwnerId) {
                       if (currPlaying === 'true') {
-                        console.log('UPDATE QUEUE FROM FOREGROUND');
-                        await updateQueueService(currMixId);
-
-                        dispatch(actions.playTrack());
+                        if (!foregroundFetch.current) {
+                          await updateQueueService(currMixId);
+                          console.log('UPDATE QUEUE FROM FOREGROUND');
+                          foregroundFetch.current = true;
+                          dispatch(actions.playTrack());
+                        }
                       } else {
                         dispatch(actions.pauseTrack());
                       }
@@ -64,13 +67,17 @@ const ScreenWrapper = props => {
                       console.log(error);
                     }
                     backgroundFetch.current = false;
+                    foregroundFetch.current = false;
                   }
                 });
               });
             });
           });
         });
-      } else if (nextAppState === 'background') {
+      } else if (
+        nextAppState === 'background' &&
+        appState.current.match(/active/)
+      ) {
         console.log('Background from wrapper: ' + nextAppState);
         console.log(isPlaying);
         saveDataToStorage('isPlaying', isPlaying ? 'true' : 'false');
