@@ -95,6 +95,7 @@ const MixScreen = props => {
       if (mixId) {
         console.log('[FOCUS]: GET TOP TRACKS');
         dispatch(actions.initGetTopTracks(mixId));
+        dispatch(actions.initGetCurrentTrack(mixId));
       }
     });
 
