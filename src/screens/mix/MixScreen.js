@@ -41,6 +41,7 @@ const MixScreen = props => {
   const playbackInterval = useRef();
   const pressedPlay = useRef(false);
   const playbackCounter = useRef(0);
+  const initialCurrTrack = useRef(false);
 
   const mixId = useSelector(currState => currState.mix.mixId);
   const ownerId = useSelector(currState => currState.mix.ownerId);
@@ -111,9 +112,10 @@ const MixScreen = props => {
   }, [mixId]);
 
   useEffect(() => {
-    if (!pressedPlay.current) {
+    if (!pressedPlay.current && !initialCurrTrack.current) {
       console.log('[USE-EFFECT]: GET CURR TRACK');
       dispatch(actions.initGetCurrentTrack(mixId));
+      initialCurrTrack.current = true;
     }
   }, [topTracks, mixId]);
 
@@ -121,6 +123,7 @@ const MixScreen = props => {
     if (isPlaying && !trackInterval.current) {
       console.log('SET TOP TRACKS INTERVAL');
       const timeInterval = setInterval(() => {
+        initialCurrTrack.current = false;
         dispatch(actions.initGetTopTracks(mixId));
       }, 5000);
       trackInterval.current = timeInterval;
@@ -207,6 +210,7 @@ const MixScreen = props => {
         );
       }
     } else {
+      dispatch(actions.initGetMix(mixId, mixTitle, ownerId));
       dispatch(actions.initGetTopTracks(mixId));
       dispatch(actions.initGetCurrentTrack(mixId));
     }
