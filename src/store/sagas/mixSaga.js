@@ -385,7 +385,7 @@ export function* initPlayTrackSaga(action) {
   if (playTrack.error === 404) {
     Alert.alert(
       'Ops! Ocorreu um erro!',
-      'Verifique que seu streaming de música esta online e funcionando!',
+      'Verifique que seu streaming de música esta online e tocando!',
     );
     yield put(actions.pauseTrack());
   } else if (playTrack.error === 400) {
