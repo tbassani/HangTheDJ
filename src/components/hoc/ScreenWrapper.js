@@ -54,6 +54,7 @@ const ScreenWrapper = props => {
                           await updateQueueService(currMixId);
                         }
                       }
+                      dispatch(actions.playTrack());
                     }
                     dispatch(actions.initGetTopTracks(parseInt(currMixId)));
                     try {
