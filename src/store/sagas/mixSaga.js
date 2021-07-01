@@ -11,8 +11,6 @@ import {
 import MixTrack from '../../models/MixTrack';
 import Mix from '../../models/Mix';
 
-import MinMixDuration from '../../constants/MinMixDuration';
-
 import {
   searchRankingTracksService,
   addTracksService,
