@@ -49,13 +49,10 @@ const ScreenWrapper = props => {
                     if (userId === mixOwnerId) {
                       if (currPlaying === 'true') {
                         if (!foregroundFetch.current) {
-                          await updateQueueService(currMixId);
                           console.log('UPDATE QUEUE FROM FOREGROUND');
                           foregroundFetch.current = true;
-                          dispatch(actions.playTrack());
+                          await updateQueueService(currMixId);
                         }
-                      } else {
-                        dispatch(actions.pauseTrack());
                       }
                     }
                     dispatch(actions.initGetTopTracks(parseInt(currMixId)));
@@ -67,19 +64,14 @@ const ScreenWrapper = props => {
                       console.log(error);
                     }
                     backgroundFetch.current = false;
-                    foregroundFetch.current = false;
                   }
                 });
               });
             });
           });
         });
-      } else if (
-        nextAppState === 'background' &&
-        appState.current.match(/active/)
-      ) {
+      } else if (nextAppState === 'background') {
         console.log('Background from wrapper: ' + nextAppState);
-        console.log(isPlaying);
         saveDataToStorage('isPlaying', isPlaying ? 'true' : 'false');
         BackgroundFetch.stop();
         if (isPlaying) {
@@ -89,6 +81,7 @@ const ScreenWrapper = props => {
             backgroundFetch.current = true;
           }
         }
+        foregroundFetch.current = false;
       }
 
       appState.current = nextAppState;

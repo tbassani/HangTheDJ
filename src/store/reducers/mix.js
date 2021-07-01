@@ -250,7 +250,6 @@ const reducer = (state = initialState, action) => {
       return {
         ...state,
         topTracks: [],
-        currentTrack: null,
         loading: false,
         error: false,
       };

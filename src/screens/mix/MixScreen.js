@@ -108,6 +108,7 @@ const MixScreen = props => {
     if (mixId) {
       console.log('[USE-EFFECT]: INITIAL GET TOP TRACKS');
       dispatch(actions.initGetTopTracks(mixId));
+      dispatch(actions.initGetCurrentTrack(mixId));
     }
   }, [mixId]);
 

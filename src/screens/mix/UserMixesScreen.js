@@ -114,10 +114,8 @@ const UserMixesScreen = props => {
     } else {
       getUserDevicesService().then(resp => {
         if (resp.devices && resp.devices.length > 0) {
-          dispatch(actions.initGetMix(mixId, mixTitle, ownerId));
           dispatch(actions.initRemoveTopTracks(userId, ownerId));
-          dispatch(actions.initGetTopTracks(mixId));
-
+          dispatch(actions.initGetMix(mixId, mixTitle, ownerId));
           props.navigation.navigate('RankingNavigator', {screen: 'MixScreen'});
         } else {
           Alert.alert(

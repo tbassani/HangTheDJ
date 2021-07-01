@@ -260,7 +260,6 @@ export function* initGetCurrentTrackSaga(action) {
           yield put(actions.pauseTrack());
         } else {
           console.log('Is in the top tracks, play.');
-          //yield put(actions.playTrack());
         }
       } else {
         console.log('Error, pause');
