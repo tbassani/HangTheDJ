@@ -25,7 +25,7 @@ const ScreenWrapper = props => {
       console.log('remove event listener');
       AppState.removeEventListener('change', _handleAppStateChange);
     };
-  }, [isPlaying]);
+  }, []);
 
   const _handleAppStateChange = useCallback(
     nextAppState => {
@@ -53,8 +53,8 @@ const ScreenWrapper = props => {
                           foregroundFetch.current = true;
                           await updateQueueService(currMixId);
                         }
+                        dispatch(actions.playTrack());
                       }
-                      dispatch(actions.playTrack());
                     }
                     dispatch(actions.initGetTopTracks(parseInt(currMixId)));
                     try {

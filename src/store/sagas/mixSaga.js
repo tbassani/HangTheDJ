@@ -36,7 +36,6 @@ export function* initGetRankingTracksSaga(action) {
     action.cancelToken,
   );
   const rankingTracks = [];
-
   if (response && !response.error) {
     response.forEach(track => {
       rankingTracks.push(
@@ -258,6 +257,7 @@ export function* initGetCurrentTrackSaga(action) {
           yield put(actions.pauseTrack());
         } else {
           console.log('Is in the top tracks, play.');
+          yield put(actions.playTrack());
         }
       } else {
         console.log('Error, pause');

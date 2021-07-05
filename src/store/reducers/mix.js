@@ -278,6 +278,10 @@ const reducer = (state = initialState, action) => {
         loading: false,
         error: true,
       };
+    case actionTypes.REMOVE_MIX:
+      return {
+        ...initialState,
+      };
     default:
       return state;
   }

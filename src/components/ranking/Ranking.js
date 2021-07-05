@@ -82,6 +82,8 @@ const Ranking = props => {
       }
       tracksAux = [...topTracksAux, ...tracks];
       setData(tracksAux);
+    } else {
+      setData(tracksAux);
     }
   }, [tracks, topTracks, formState.inputValues.query]);
 
