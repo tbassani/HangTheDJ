@@ -241,6 +241,7 @@ export function* initGetCurrentTrackSaga(action) {
     if (!topTracks || topTracks.length <= 0) {
       console.log('No top tracks, get next');
       playingTrack = yield getNextTrackService(validMixId);
+      yield saveDataToStorage('isPlaying', 'false');
       yield put(actions.pauseTrack());
     } else {
       if (!playingTrack.is_playing && !playingTrack.error) {
@@ -254,13 +255,16 @@ export function* initGetCurrentTrackSaga(action) {
         if (isInTopTracks.length === 0) {
           console.log('Not in the top tracks, pause.');
           playingTrack = yield getNextTrackService(validMixId);
+          yield saveDataToStorage('isPlaying', 'false');
           yield put(actions.pauseTrack());
         } else {
           console.log('Is in the top tracks, play.');
+          yield saveDataToStorage('isPlaying', 'true');
           yield put(actions.playTrack());
         }
       } else {
         console.log('Error, pause');
+        yield saveDataToStorage('isPlaying', 'false');
         yield put(actions.pauseTrack());
       }
     }

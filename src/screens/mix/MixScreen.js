@@ -37,8 +37,8 @@ const icon = require('../../assets/icon.png');
 const MixScreen = props => {
   const [shareModal, setShareModal] = useState(false);
   //const [loadingTrack, setLoadingTrack] = useState(true);
-  const trackInterval = useRef();
-  const playbackInterval = useRef();
+  const trackInterval = useRef(undefined);
+  const playbackInterval = useRef(undefined);
   const pressedPlay = useRef(false);
   const playbackCounter = useRef(0);
   const initialCurrTrack = useRef(false);
@@ -127,7 +127,9 @@ const MixScreen = props => {
   useEffect(() => {
     if (isPlaying && !trackInterval.current) {
       console.log('SET TOP TRACKS INTERVAL');
+      clearInterval(trackInterval.current);
       const timeInterval = setInterval(() => {
+        console.log('CALL INIT TOP TRACKS');
         initialCurrTrack.current = false;
         dispatch(actions.initGetTopTracks(mixId));
       }, 5000);

@@ -10,6 +10,7 @@ import PrimaryButton from '../../components/UI/PrimaryButton';
 import SecondaryButton from '../../components/UI/SecondaryButton';
 import TrackBallot from '../../components/voting/TrackBallot';
 import ScreenWrapper from '../../components/hoc/ScreenWrapper';
+import LoadingSpinner from '../../components/UI/LoadingSpinner';
 
 import Colors from '../../constants/Colors';
 import Sizes from '../../constants/Sizes';
@@ -57,9 +58,16 @@ const VotingScreen = props => {
 
   let trackBallotContent = <TrackBallot track={votingTrack} />;
 
-  return (
-    <ScreenWrapper style={styles.mainContainer} navigation={props.navigation}>
-      <View style={styles.trackBallotContainer}>{trackBallotContent}</View>
+  let buttonsContent = null;
+
+  if (loading) {
+    buttonsContent = (
+      <View style={styles.buttonsContainer}>
+        <LoadingSpinner size="large" />
+      </View>
+    );
+  } else {
+    buttonsContent = (
       <View style={styles.buttonsContainer}>
         <View style={styles.buttonContainer}>
           <PrimaryButton onPress={upvoteHandler}>
@@ -72,6 +80,13 @@ const VotingScreen = props => {
           </SecondaryButton>
         </View>
       </View>
+    );
+  }
+
+  return (
+    <ScreenWrapper style={styles.mainContainer} navigation={props.navigation}>
+      <View style={styles.trackBallotContainer}>{trackBallotContent}</View>
+      {buttonsContent}
     </ScreenWrapper>
   );
 };

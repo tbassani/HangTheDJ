@@ -25,7 +25,7 @@ const ScreenWrapper = props => {
       console.log('remove event listener');
       AppState.removeEventListener('change', _handleAppStateChange);
     };
-  }, []);
+  }, [isPlaying]);
 
   const _handleAppStateChange = useCallback(
     nextAppState => {
