@@ -119,6 +119,9 @@ const MixScreen = props => {
       dispatch(actions.initGetCurrentTrack(mixId));
       initialCurrTrack.current = true;
     }
+    return () => {
+      initialCurrTrack.current = false;
+    };
   }, [topTracks, mixId]);
 
   useEffect(() => {
