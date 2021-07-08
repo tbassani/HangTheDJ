@@ -1,4 +1,4 @@
-import React, {useEffect, useState, useRef} from 'react';
+import React, {useEffect, useState, useRef, useCallback} from 'react';
 import {
   View,
   Text,
@@ -91,19 +91,42 @@ const MixScreen = props => {
           }
         : () => {},
     });
-    const unsubscribeFocus = navigation.addListener('focus', () => {
-      if (mixId) {
-        console.log('[FOCUS]: GET TOP TRACKS');
-        dispatch(actions.initGetTopTracks(mixId));
-        dispatch(actions.initGetCurrentTrack(mixId));
-      }
-    });
+    const unsubscribeFocus = navigation.addListener('focus', _focusHandler);
+    const unsubscribeBlur = navigation.addListener('blur', _blurHandler);
 
     return () => {
       console.log('UNSUB FOCUS');
       unsubscribeFocus();
+      unsubscribeBlur();
     };
   }, [navigation, mixTitle, mixId]);
+
+  const _focusHandler = useCallback(() => {
+    if (mixId) {
+      console.log('[FOCUS]: GET TOP TRACKS');
+      dispatch(actions.initGetTopTracks(mixId));
+      dispatch(actions.initGetCurrentTrack(mixId));
+    }
+    if (isPlaying && !trackInterval.current) {
+      console.log('[FOCUS]: SET TOP TRACKS INTERVAL');
+      clearInterval(trackInterval.current);
+      const timeInterval = setInterval(() => {
+        console.log('[FOCUS]: CALL INIT TOP TRACKS');
+        initialCurrTrack.current = false;
+        dispatch(actions.initGetTopTracks(mixId));
+      }, 5000);
+      trackInterval.current = timeInterval;
+    } else if (!isPlaying) {
+      clearInterval(trackInterval.current);
+      trackInterval.current = undefined;
+    }
+  }, [mixId, isPlaying, trackInterval]);
+
+  const _blurHandler = useCallback(() => {
+    console.log('[BLUR]:CLEAR TRACK INTERVAL');
+    clearInterval(trackInterval.current);
+    trackInterval.current = undefined;
+  }, []);
 
   useEffect(() => {
     if (mixId) {
