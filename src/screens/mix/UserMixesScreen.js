@@ -4,7 +4,7 @@ import {View, FlatList, Text, StyleSheet, Alert} from 'react-native';
 import {useSelector, useDispatch} from 'react-redux';
 import * as actions from '../../store/actions';
 
-import {getUserDevicesService} from '../../services/mix';
+import {getPlayingTrackService} from '../../services/mix';
 
 import Input from '../../components/UI/Input';
 import PrimaryButton from '../../components/UI/PrimaryButton';
@@ -112,8 +112,8 @@ const UserMixesScreen = props => {
 
       props.navigation.navigate('RankingNavigator', {screen: 'MixScreen'});
     } else {
-      getUserDevicesService().then(resp => {
-        if (resp.devices && resp.devices.length > 0) {
+      getPlayingTrackService().then(resp => {
+        if (resp && resp.external_track_id && !resp.error) {
           dispatch(actions.initRemoveTopTracks(userId, ownerId));
           dispatch(actions.initGetMix(mixId, mixTitle, ownerId));
           props.navigation.navigate('RankingNavigator', {screen: 'MixScreen'});
