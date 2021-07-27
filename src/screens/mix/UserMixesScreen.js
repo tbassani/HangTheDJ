@@ -112,7 +112,7 @@ const UserMixesScreen = props => {
 
       props.navigation.navigate('RankingNavigator', {screen: 'MixScreen'});
     } else {
-      getPlayingTrackService().then(resp => {
+      getPlayingTrackService(mixId).then(resp => {
         if (resp && resp.external_track_id && !resp.error) {
           dispatch(actions.initRemoveTopTracks(userId, ownerId));
           dispatch(actions.initGetMix(mixId, mixTitle, ownerId));
