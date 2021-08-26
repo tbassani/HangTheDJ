@@ -71,7 +71,7 @@ const RegisterScreen = props => {
             formState.inputValues.password,
           ),
         );
-        //navigation.navigate('App');
+        navigation.navigate('App');
       }
     }
   };

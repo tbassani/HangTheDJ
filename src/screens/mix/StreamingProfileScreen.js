@@ -35,7 +35,7 @@ const StreamingProfileScreen = props => {
 
   const _handleAppStateChange = nextAppState => {
     if (
-      (appState.current.match(/inactive|background/) &&
+      (AppState.current.match(/inactive|background/) &&
         nextAppState === 'active') ||
       !nextAppState
     ) {
