@@ -107,9 +107,7 @@ const UserMixesScreen = props => {
   const selectMixHandler = (mixId, mixTitle, ownerId) => {
     if (userId !== ownerId) {
       dispatch(actions.initGetMix(mixId, mixTitle, ownerId));
-      dispatch(actions.initRemoveTopTracks(userId, ownerId));
       dispatch(actions.initGetTopTracks(mixId));
-
       props.navigation.navigate('RankingNavigator', {screen: 'MixScreen'});
     } else {
       getPlayingTrackService(mixId).then(resp => {

@@ -6,6 +6,7 @@ import {
   StyleSheet,
   Linking,
   Alert,
+  AppState,
 } from 'react-native';
 
 import Heartbeat from '../../Heartbeat';
@@ -17,6 +18,7 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import Clipboard from '@react-native-clipboard/clipboard';
 import IdleTimerManager from 'react-native-idle-timer';
 import MusicControl from 'react-native-music-control';
+import BackgroundFetch from 'react-native-background-fetch';
 
 import CustomModal from '../../components/UI/CustomModal';
 import PrimaryButton from '../../components/UI/PrimaryButton';
@@ -31,6 +33,7 @@ import Colors from '../../constants/Colors';
 import Sizes from '../../constants/Sizes';
 import MinMixDuration from '../../constants/MinMixDuration';
 import {updateQueueService} from '../../services/mix';
+import {getDataFromStorage, saveDataToStorage} from '../../services/storage';
 
 const icon = require('../../assets/icon.png');
 
@@ -42,6 +45,10 @@ const MixScreen = props => {
   const pressedPlay = useRef(false);
   const playbackCounter = useRef(0);
   const initialCurrTrack = useRef(false);
+
+  const appState = useRef(AppState.currentState);
+  const bckFetch = useRef(false);
+  const foregroundFetch = useRef(false);
 
   const mixId = useSelector(currState => currState.mix.mixId);
   const ownerId = useSelector(currState => currState.mix.ownerId);
@@ -58,6 +65,85 @@ const MixScreen = props => {
   const profileURL = useSelector(currState => currState.app.profileURL);
 
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    console.log('Add event listener');
+    if (isPlaying) {
+      AppState.addEventListener('change', _handleAppStateChange);
+    } else {
+      AppState.removeEventListener('change', _handleAppStateChange);
+    }
+
+    return () => {
+      console.log('remove event listener');
+      AppState.removeEventListener('change', _handleAppStateChange);
+    };
+  }, [isPlaying, _handleAppStateChange]);
+
+  const _handleAppStateChange = useCallback(
+    nextAppState => {
+      if (
+        appState.current.match(/inactive|background/) &&
+        nextAppState === 'active'
+      ) {
+        getDataFromStorage('userId').then(userId => {
+          getDataFromStorage('mixId').then(currMixId => {
+            getDataFromStorage('ownerId').then(mixOwnerId => {
+              getDataFromStorage('mixTitle').then(mixTitle => {
+                getDataFromStorage('isPlaying').then(async currPlaying => {
+                  if (currMixId && mixOwnerId && mixTitle) {
+                    dispatch(
+                      actions.initGetMix(
+                        parseInt(currMixId),
+                        mixTitle,
+                        parseInt(mixOwnerId),
+                      ),
+                    );
+                    if (userId === mixOwnerId) {
+                      if (currPlaying === 'true') {
+                        if (!foregroundFetch.current) {
+                          console.log('UPDATE QUEUE FROM FOREGROUND');
+                          foregroundFetch.current = true;
+                          await updateQueueService(currMixId);
+                        }
+                        dispatch(actions.playTrack());
+                      }
+                    }
+                    dispatch(actions.initGetTopTracks(parseInt(currMixId)));
+                    try {
+                      props.navigation.navigate('RankingNavigator', {
+                        screen: 'MixScreen',
+                      });
+                    } catch (error) {
+                      console.log(error);
+                    }
+                    bckFetch.current = false;
+                  }
+                });
+              });
+            });
+          });
+        });
+      } else if (nextAppState === 'background') {
+        console.log('Background from wrapper: ' + nextAppState);
+        saveDataToStorage('isPlaying', isPlaying ? 'true' : 'false');
+        BackgroundFetch.stop();
+        if (isPlaying) {
+          console.log('ref: ' + bckFetch.current);
+          if (!bckFetch.current) {
+            console.log('Start background fetch!');
+            BackgroundFetch.start();
+            bckFetch.current = true;
+          }
+        }
+        foregroundFetch.current = false;
+      }
+
+      appState.current = nextAppState;
+      //console.log('AppState', appState.current);
+    },
+    [isPlaying],
+  );
 
   const navigation = props.navigation;
   useEffect(() => {
@@ -95,23 +181,26 @@ const MixScreen = props => {
     const unsubscribeBlur = navigation.addListener('blur', _blurHandler);
 
     return () => {
-      console.log('UNSUB FOCUS');
       unsubscribeFocus();
       unsubscribeBlur();
     };
-  }, [navigation, mixTitle, mixId]);
+  }, [
+    navigation,
+    mixTitle,
+    mixId,
+    _focusHandler,
+    _blurHandler,
+    shareMixHandler,
+  ]);
 
   const _focusHandler = useCallback(() => {
     if (mixId) {
-      console.log('[FOCUS]: GET TOP TRACKS');
       dispatch(actions.initGetTopTracks(mixId));
       dispatch(actions.initGetCurrentTrack(mixId));
     }
     if (isPlaying && !trackInterval.current) {
-      console.log('[FOCUS]: SET TOP TRACKS INTERVAL');
       clearInterval(trackInterval.current);
       const timeInterval = setInterval(() => {
-        console.log('[FOCUS]: CALL INIT TOP TRACKS');
         initialCurrTrack.current = false;
         dispatch(actions.initGetTopTracks(mixId));
       }, 5000);
@@ -120,39 +209,34 @@ const MixScreen = props => {
       clearInterval(trackInterval.current);
       trackInterval.current = undefined;
     }
-  }, [mixId, isPlaying, trackInterval]);
+  }, [mixId, isPlaying, trackInterval, dispatch]);
 
   const _blurHandler = useCallback(() => {
-    console.log('[BLUR]:CLEAR TRACK INTERVAL');
     clearInterval(trackInterval.current);
     trackInterval.current = undefined;
   }, []);
 
   useEffect(() => {
     if (mixId) {
-      console.log('[USE-EFFECT]: INITIAL GET TOP TRACKS');
       dispatch(actions.initGetTopTracks(mixId));
       dispatch(actions.initGetCurrentTrack(mixId));
     }
-  }, [mixId]);
+  }, [mixId, dispatch]);
 
   useEffect(() => {
     if (!pressedPlay.current && !initialCurrTrack.current) {
-      console.log('[USE-EFFECT]: GET CURR TRACK');
       dispatch(actions.initGetCurrentTrack(mixId));
       initialCurrTrack.current = true;
     }
     return () => {
       initialCurrTrack.current = false;
     };
-  }, [topTracks, mixId]);
+  }, [topTracks, mixId, dispatch]);
 
   useEffect(() => {
     if (isPlaying && !trackInterval.current) {
-      console.log('SET TOP TRACKS INTERVAL');
       clearInterval(trackInterval.current);
       const timeInterval = setInterval(() => {
-        console.log('CALL INIT TOP TRACKS');
         initialCurrTrack.current = false;
         dispatch(actions.initGetTopTracks(mixId));
       }, 5000);
@@ -165,14 +249,13 @@ const MixScreen = props => {
       clearInterval(trackInterval.current);
       trackInterval.current = undefined;
     };
-  }, [isPlaying]);
+  }, [isPlaying, dispatch, mixId]);
 
   useEffect(() => {
     if (isPlaying && !playbackInterval.current && userId === ownerId) {
       const newInterval = setInterval(() => {
         playbackCounter.current = playbackCounter.current + 5;
         if (playbackCounter.current >= 900) {
-          console.log('UPDATE QUEUE INTERVAL');
           updateQueueService(mixId);
           playbackCounter.current = 0;
           MusicControl.setNowPlaying({
@@ -190,24 +273,24 @@ const MixScreen = props => {
       clearInterval(playbackInterval.current);
       playbackInterval.current = undefined;
     };
-  }, [isPlaying, userId, ownerId]);
+  }, [isPlaying, userId, ownerId, mixId]);
 
   useEffect(() => {
     if (isPlaying && pressedPlay.current === true) {
       updateQueueService(mixId).then(resp => {
-        console.log('UPDATE QUEUE FROM PLAYING');
+        dispatch(actions.initGetMix(mixId, mixTitle, userId));
         dispatch(actions.initGetTopTracks(mixId));
         dispatch(actions.initGetCurrentTrack(mixId));
       });
       pressedPlay.current = false;
     }
-  }, [isPlaying]);
+  }, [isPlaying, dispatch, mixId]);
 
-  const shareMixHandler = () => {
+  const shareMixHandler = useCallback(() => {
     if (mixId && mixId > 0) {
       setShareModal(true);
     }
-  };
+  }, [mixId]);
   const copyMixCode = () => {
     if (mixId && mixId > 0) {
       setShareModal(false);
@@ -229,16 +312,23 @@ const MixScreen = props => {
 
   const onPressPlayHandler = () => {
     if (currTrack) {
-      pressedPlay.current = true;
-      IdleTimerManager.setIdleTimerDisabled(true);
-      if (checkMixDuration()) {
-        dispatch(actions.initPlayTrack(mixId, currTrack.externalId));
-      } else {
-        Alert.alert(
-          'Mix muito curta!',
-          'Por favor, adicione ao menos 30 minutos de música.',
-        );
-      }
+      saveDataToStorage('isPlaying', 'true').then(resp => {
+        MusicControl.setNowPlaying({
+          title: 'Hang the DJ',
+          artwork: icon, // URL or RN's image require()
+        });
+        pressedPlay.current = true;
+        IdleTimerManager.setIdleTimerDisabled(true);
+        if (checkMixDuration()) {
+          BackgroundFetch.start();
+          dispatch(actions.initPlayTrack(mixId, currTrack.externalId));
+        } else {
+          Alert.alert(
+            'Mix muito curta!',
+            'Por favor, adicione ao menos 30 minutos de música.',
+          );
+        }
+      });
     } else {
       dispatch(actions.initGetMix(mixId, mixTitle, ownerId));
       dispatch(actions.initGetTopTracks(mixId));
@@ -248,7 +338,9 @@ const MixScreen = props => {
 
   const onPressPauseHandler = () => {
     IdleTimerManager.setIdleTimerDisabled(false);
-    dispatch(actions.initStopPlayback());
+    saveDataToStorage('isPlaying', 'false').then(resp => {
+      dispatch(actions.initStopPlayback());
+    });
   };
 
   const votingHandler = () => {
