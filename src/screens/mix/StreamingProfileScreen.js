@@ -1,12 +1,7 @@
-import React, {useEffect, useState} from 'react';
-import {
-  View,
-  Linking,
-  Alert,
-  AppState,
-  DevSettings,
-  StyleSheet,
-} from 'react-native';
+import React, {useEffect, useRef} from 'react';
+import {View, Linking, Alert, AppState, StyleSheet} from 'react-native';
+
+import RNRestart from 'react-native-restart';
 
 import {useSelector, useDispatch} from 'react-redux';
 import * as actions from '../../store/actions';
@@ -18,6 +13,8 @@ import ScreenWrapper from '../../components/hoc/ScreenWrapper';
 import Colors from '../../constants/Colors';
 
 const StreamingProfileScreen = props => {
+  const appState = useRef(AppState.currentState);
+
   const profileURL = useSelector(currState => currState.app.profileURL);
   const loading = useSelector(currState => currState.app.loading);
 
@@ -35,14 +32,14 @@ const StreamingProfileScreen = props => {
 
   const _handleAppStateChange = nextAppState => {
     if (
-      (AppState.current.match(/inactive|background/) &&
+      (appState.current.match(/inactive|background/) &&
         nextAppState === 'active') ||
       !nextAppState
     ) {
       dispatch(actions.initGetProfile());
-      props.navigation.navigate('LoadingScreen');
-      DevSettings.reload();
+      RNRestart.Restart();
     }
+    appState.current = nextAppState;
   };
 
   const openLink = async () => {

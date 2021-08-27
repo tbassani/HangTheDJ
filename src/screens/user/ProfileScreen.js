@@ -22,12 +22,21 @@ const ProfileScreen = props => {
   const profile = useSelector(currState => currState.app.profile);
   const profileURL = useSelector(currState => currState.app.profileURL);
   const loading = useSelector(currState => currState.app.loading);
+  const isLoggedIn = useSelector(currState => {
+    return currState.auth.isLoggedIn;
+  });
 
   const appState = useRef(AppState.currentState);
 
   const dispatch = useDispatch();
 
   const navigation = props.navigation;
+
+  useEffect(() => {
+    if (!isLoggedIn) {
+      navigation.navigate('Auth');
+    }
+  }, [isLoggedIn, navigation]);
 
   useEffect(() => {
     const unsubscribeFocus = navigation.addListener('focus', () => {
@@ -97,6 +106,10 @@ const ProfileScreen = props => {
     }
   };
 
+  const handleLogout = () => {
+    dispatch(actions.initLogout());
+  };
+
   if (loading) {
     return (
       <View style={styles.mainContainer}>
@@ -108,9 +121,7 @@ const ProfileScreen = props => {
   return (
     <ScreenWrapper style={styles.mainContainer} navigation={props.navigation}>
       <View style={styles.buttonContainer}>
-        <PrimaryButton onPress={() => dispatch(actions.initLogout())}>
-          Logout
-        </PrimaryButton>
+        <PrimaryButton onPress={handleLogout}>Logout</PrimaryButton>
         <PrimaryButton
           onPress={() => {
             AppState.removeEventListener('change', _handleAppStateChange);

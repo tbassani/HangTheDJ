@@ -29,7 +29,7 @@ const AuthScreen = props => {
         const userId = await getDataFromStorage('userId');
         const email = await getDataFromStorage('email');
         const token = await getDataFromStorage('token');
-        if (!userId || !email || !token) {
+        if ((!userId || !email || !token) && !isLoggedIn) {
           navigation.navigate('Auth');
           return;
         }

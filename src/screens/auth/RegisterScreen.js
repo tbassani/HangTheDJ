@@ -1,5 +1,5 @@
-import React, {useState, useEffect, useReducer, useCallback} from 'react';
-import {SafeAreaView, View, Alert, StyleSheet} from 'react-native';
+import React, {useEffect, useReducer, useCallback} from 'react';
+import {View, Alert, StyleSheet} from 'react-native';
 
 import {useSelector, useDispatch} from 'react-redux';
 import * as actions from '../../store/actions';
@@ -60,10 +60,11 @@ const RegisterScreen = props => {
   const registerHandler = () => {
     const password = formState.inputValues.password;
     const confirmPassword = formState.inputValues.confirmPassword;
+    const code = formState.inputValues.code;
     if (password !== confirmPassword) {
       Alert.alert('Erro', 'As senhas não são iguais!');
     } else {
-      if (email) {
+      if (code) {
         dispatch(
           actions.initRegister(
             formState.inputValues.code,
@@ -72,6 +73,8 @@ const RegisterScreen = props => {
           ),
         );
         navigation.navigate('App');
+      } else {
+        Alert.alert('Erro', 'Por favor insira o código de verificação!');
       }
     }
   };
