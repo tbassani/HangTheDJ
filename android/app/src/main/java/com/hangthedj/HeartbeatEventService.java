@@ -1,4 +1,4 @@
-package com.hangthedj;
+package com.jukebox.hdj;
 
 import android.content.Intent;
 import android.os.Bundle;

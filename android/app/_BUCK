@@ -35,12 +35,12 @@ android_library(
 
 android_build_config(
     name = "build_config",
-    package = "com.hangthedj",
+    package = "com.jukebox.hdj",
 )
 
 android_resource(
     name = "res",
-    package = "com.hangthedj",
+    package = "com.jukebox.hdj",
     res = "src/main/res",
 )
 

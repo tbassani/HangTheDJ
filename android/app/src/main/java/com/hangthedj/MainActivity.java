@@ -1,4 +1,4 @@
-package com.hangthedj;
+package com.jukebox.hdj;
 
 import com.facebook.react.ReactActivity;
 import org.devio.rn.splashscreen.SplashScreen; // Import this.

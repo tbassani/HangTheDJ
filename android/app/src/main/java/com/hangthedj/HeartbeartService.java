@@ -1,4 +1,4 @@
-package com.hangthedj;
+package com.jukebox.hdj;
 
 import android.app.Notification;
 import android.app.PendingIntent;

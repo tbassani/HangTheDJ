@@ -1,4 +1,4 @@
-package com.hangthedj;
+package com.jukebox.hdj;
 
 import com.facebook.react.ReactPackage;
 import com.facebook.react.bridge.NativeModule;
