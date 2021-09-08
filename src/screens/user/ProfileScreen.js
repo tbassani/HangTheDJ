@@ -8,6 +8,8 @@ import {
   Platform,
 } from 'react-native';
 
+import Clipboard from '@react-native-clipboard/clipboard';
+
 import {useSelector, useDispatch} from 'react-redux';
 import * as actions from '../../store/actions';
 
@@ -88,12 +90,34 @@ const ProfileScreen = props => {
 
   const openLink = async () => {
     if (profileURL && profileURL.length > 0) {
-      const supported = await Linking.canOpenURL(profileURL);
-      if (supported) {
+      //const supported = await Linking.canOpenURL(profileURL);
+      //if (supported) {
+      try {
         await Linking.openURL(profileURL);
-      } else {
-        Alert.alert(`Don't know how to open this URL: ${profileURL}`);
+      } catch (error) {
+        Alert.alert(
+          'Erro',
+          'Copie e cole este link no seu navegador para prosseguir \n' +
+            profileURL,
+          [
+            {
+              text: 'Cancelar',
+              onPress: () => console.log('Cancel Pressed'),
+            },
+            {
+              text: 'Copiar',
+              onPress: () => {
+                Clipboard.setString(profileURL);
+                Alert.alert('Copiado!');
+              },
+            },
+          ],
+        );
       }
+
+      //} else {
+
+      //}
     }
   };
 
