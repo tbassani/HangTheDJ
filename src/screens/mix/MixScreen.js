@@ -280,6 +280,7 @@ const MixScreen = props => {
       updateQueueService(mixId).then(resp => {
         dispatch(actions.initGetMix(mixId, mixTitle, userId));
         dispatch(actions.initGetTopTracks(mixId));
+        BackgroundFetch.start();
       });
       pressedPlay.current = false;
     }
@@ -319,7 +320,6 @@ const MixScreen = props => {
         pressedPlay.current = true;
         IdleTimerManager.setIdleTimerDisabled(true);
         if (checkMixDuration()) {
-          BackgroundFetch.start();
           dispatch(actions.initPlayTrack(mixId, currTrack.externalId));
         } else {
           Alert.alert(
