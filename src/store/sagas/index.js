@@ -1,5 +1,5 @@
 import * as actionTypes from '../actions/actionTypes';
-import {takeEvery, all} from 'redux-saga/effects';
+import {all, takeLatest} from 'redux-saga/effects';
 
 import {
   initLoginSaga,
@@ -38,63 +38,46 @@ import {
 } from './mixSaga';
 
 export function* watchAuth() {
-  yield all([takeEvery(actionTypes.INIT_PLAY_TRACK, initPlayTrackSaga)]);
-  yield all([takeEvery(actionTypes.INIT_PAUSE_TRACK, initPauseTrackSaga)]);
-  yield all([takeEvery(actionTypes.INIT_LOGIN, initLoginSaga)]);
-  yield all([takeEvery(actionTypes.INIT_SIGNUP, initSignUpSaga)]);
-  yield all([takeEvery(actionTypes.INIT_LOGOUT, initLogoutSaga)]);
-  yield all([takeEvery(actionTypes.INIT_REGISTER, initRegisterSaga)]);
   yield all([
-    takeEvery(actionTypes.INIT_FORGOT_PASSWORD, initForgotPasswordSaga),
-  ]);
-  yield all([
-    takeEvery(actionTypes.INIT_RESET_PASSWORD, initResetPasswordSaga),
+    takeLatest(actionTypes.INIT_PLAY_TRACK, initPlayTrackSaga),
+    takeLatest(actionTypes.INIT_PAUSE_TRACK, initPauseTrackSaga),
+    takeLatest(actionTypes.INIT_LOGIN, initLoginSaga),
+    takeLatest(actionTypes.INIT_SIGNUP, initSignUpSaga),
+    takeLatest(actionTypes.INIT_LOGOUT, initLogoutSaga),
+    takeLatest(actionTypes.INIT_REGISTER, initRegisterSaga),
+    takeLatest(actionTypes.INIT_FORGOT_PASSWORD, initForgotPasswordSaga),
+    takeLatest(actionTypes.INIT_RESET_PASSWORD, initResetPasswordSaga),
   ]);
 }
 
 export function* watchApp() {
-  yield all([takeEvery(actionTypes.INIT_GET_MIXES, initGetMixesSaga)]);
-  yield all([takeEvery(actionTypes.INIT_ADD_TO_GROUP, initAddToGroupSaga)]);
   yield all([
-    takeEvery(actionTypes.INIT_GET_PROFILE_URL, initGetActiveProfileSaga),
-  ]);
-  yield all([takeEvery(actionTypes.INIT_GET_PROFILE, initGetProfileURLSaga)]);
-  yield all([
-    takeEvery(actionTypes.INIT_RESET_PASSWORD, initResetPasswordSaga),
-  ]);
-  yield all([
-    takeEvery(
+    takeLatest(actionTypes.INIT_GET_MIXES, initGetMixesSaga),
+    takeLatest(actionTypes.INIT_ADD_TO_GROUP, initAddToGroupSaga),
+    takeLatest(actionTypes.INIT_GET_PROFILE_URL, initGetActiveProfileSaga),
+    takeLatest(actionTypes.INIT_GET_PROFILE, initGetProfileURLSaga),
+    takeLatest(actionTypes.INIT_RESET_PASSWORD, initResetPasswordSaga),
+    takeLatest(
       actionTypes.INIT_GET_TRACKS_AND_PLAYLISTS,
       initGetTracksAndPlaylistsSaga,
     ),
+    takeLatest(actionTypes.INIT_CREATE_MIX, initCreateMixSaga),
+    takeLatest(actionTypes.INIT_REMOVE_MIX, initRemoveMixSaga),
   ]);
-  yield all([takeEvery(actionTypes.INIT_CREATE_MIX, initCreateMixSaga)]);
-  yield all([takeEvery(actionTypes.INIT_REMOVE_MIX, initRemoveMixSaga)]);
 }
 
 export function* watchMix() {
   yield all([
-    takeEvery(actionTypes.INIT_GET_RANKING_TRACKS, initGetRankingTracksSaga),
+    takeLatest(actionTypes.INIT_GET_RANKING_TRACKS, initGetRankingTracksSaga),
+    takeLatest(actionTypes.INIT_GET_MIX, initGetMixSaga),
+    takeLatest(actionTypes.INIT_ADD_TRACKS_TO_MIX, initAddTracksToMixSaga),
+    takeLatest(actionTypes.INIT_GET_CURRENT_TRACK, initGetCurrentTrackSaga),
+    takeLatest(actionTypes.INIT_GET_VOTING_TRACK, initGetVotingTrackSaga),
+    takeLatest(actionTypes.INIT_UPVOTE, initUpvoteSaga),
+    takeLatest(actionTypes.INIT_DOWNVOTE, initDownvoteSaga),
+    takeLatest(actionTypes.INIT_STOP_PLAYBACK, initStopPlaybackSaga),
+    takeLatest(actionTypes.INIT_REMOVE_TOP_TRACKS, initRemoveTopTracksSaga),
+    takeLatest(actionTypes.INIT_GET_TOP_TRACKS, initGetTopTracksSaga),
+    takeLatest(actionTypes.INIT_GET_DEVICES, initGetUserDevicesSaga),
   ]);
-  yield all([takeEvery(actionTypes.INIT_GET_MIX, initGetMixSaga)]);
-  yield all([
-    takeEvery(actionTypes.INIT_ADD_TRACKS_TO_MIX, initAddTracksToMixSaga),
-  ]);
-  yield all([
-    takeEvery(actionTypes.INIT_GET_CURRENT_TRACK, initGetCurrentTrackSaga),
-  ]);
-  yield all([
-    takeEvery(actionTypes.INIT_GET_VOTING_TRACK, initGetVotingTrackSaga),
-  ]);
-  yield all([takeEvery(actionTypes.INIT_UPVOTE, initUpvoteSaga)]);
-  yield all([takeEvery(actionTypes.INIT_DOWNVOTE, initDownvoteSaga)]);
-  // yield all([
-  //   takeEvery(actionTypes.INIT_BEGIN_PLAYBACK, initBeginPlaybackSaga),
-  // ]);
-  yield all([takeEvery(actionTypes.INIT_STOP_PLAYBACK, initStopPlaybackSaga)]);
-  yield all([
-    takeEvery(actionTypes.INIT_REMOVE_TOP_TRACKS, initRemoveTopTracksSaga),
-  ]);
-  yield all([takeEvery(actionTypes.INIT_GET_TOP_TRACKS, initGetTopTracksSaga)]);
-  yield all([takeEvery(actionTypes.INIT_GET_DEVICES, initGetUserDevicesSaga)]);
 }
